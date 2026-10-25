@@ -24,6 +24,8 @@ export const forms = pgTable("forms", {
   description: text("description"),
   status: formStatusEnum("status").notNull().default("draft"),
   sheetTab: text("sheet_tab"),
+  sheetGid: integer("sheet_gid"),
+  sheetHeader: jsonb("sheet_header").$type<string[]>(),
   publishedAt: timestamp("published_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()

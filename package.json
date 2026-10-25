@@ -18,7 +18,9 @@
     "fields:verify": "tsx scripts/verify-fields.ts",
     "reorder:verify": "tsx scripts/verify-reorder.ts",
     "status:verify": "tsx scripts/verify-status.ts",
-    "submit:verify": "tsx scripts/verify-submit.ts"
+    "submit:verify": "tsx scripts/verify-submit.ts",
+    "sheets:check": "tsx --env-file=.env.local scripts/sheets-check.ts",
+    "sheets:verify": "tsx --env-file=.env.local scripts/verify-sheets.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

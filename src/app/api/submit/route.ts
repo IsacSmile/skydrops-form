@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
 import { z } from "zod";
 import { getPublicFormBySlug } from "@/lib/forms-data";
 import { validateSubmission } from "@/lib/submission-validation";
@@ -123,12 +123,15 @@ export async function POST(request: Request) {
   try {
     const submission = await createSubmission(form.id, validation.data);
 
-    // Call afterSubmissionCreated hook (non-fatal, try-catch wrapped)
-    try {
-      await afterSubmissionCreated(submission);
-    } catch (hookErr) {
-      console.error("afterSubmissionCreated hook error:", hookErr);
-    }
+    // Run the hook via Next's after() so it executes after response is sent
+    // and is kept alive on serverless platforms (Vercel)
+    after(async () => {
+      try {
+        await afterSubmissionCreated(submission);
+      } catch (hookErr) {
+        console.error("afterSubmissionCreated hook error:", hookErr);
+      }
+    });
 
     return jsonResponse({ ok: true }, 200);
   } catch (err) {

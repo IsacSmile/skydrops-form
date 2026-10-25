@@ -1,13 +1,18 @@
 import type { Submission } from "./submissions-data";
+import { syncSubmission } from "./sheets-sync";
 
 /**
  * Post-submission hook called asynchronously after a submission is safely stored in Neon.
- *
- * NOTE: Currently a NO-OP.
- * Component C8 will implement the Google Sheets synchronization here, pushing
- * new rows to the designated sheet tab.
+ * Pushes the new submission row to the designated Google Sheets tab.
+ * Wrapped in try/catch so a hook failure can never fail the submission response.
  */
 export async function afterSubmissionCreated(submission: Submission): Promise<void> {
-  // NO-OP for C6. C8 will push the row to Google Sheets.
-  void submission;
+  try {
+    await syncSubmission(submission.id);
+  } catch (err: unknown) {
+    console.error(
+      "afterSubmissionCreated hook error:",
+      err instanceof Error ? err.message : String(err)
+    );
+  }
 }
