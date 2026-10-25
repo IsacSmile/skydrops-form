@@ -7,7 +7,7 @@ export default function PublicNotFound() {
       <div className="w-full max-w-xl mx-auto space-y-6 sm:space-y-8">
         {/* Brand Header */}
         <header className="flex justify-center">
-          <div className="relative w-[168px] sm:w-[200px] h-auto flex items-center justify-center">
+          <div className="relative w-42 sm:w-50 h-auto flex items-center justify-center">
             <Image
               src={brand.logo.lockup}
               alt="Skydrops"
@@ -29,10 +29,10 @@ export default function PublicNotFound() {
           />
 
           <div className="pt-2 space-y-2">
-            <h1 className="text-[26px] leading-[32px] sm:text-[30px] sm:leading-[36px] font-bold tracking-[-0.02em] text-[#111014]">
+            <h1 className="text-[26px] leading-8 sm:text-[30px] sm:leading-9 font-bold tracking-[-0.02em] text-[#111014]">
               Form not found
             </h1>
-            <p className="text-[15px] leading-[24px] text-[#5B6475]">
+            <p className="text-[15px] leading-6 text-[#5B6475]">
               This form does not exist or may have been removed.
             </p>
           </div>

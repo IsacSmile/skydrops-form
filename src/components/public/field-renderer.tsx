@@ -192,7 +192,7 @@ export function FieldRenderer({
                   return (
                     <div
                       key={i}
-                      className="min-h-[44px] flex items-center gap-3 py-1 cursor-pointer"
+                      className="min-h-11 flex items-center gap-3 py-1 cursor-pointer"
                     >
                       <RadioGroupItem value={opt} id={optId} />
                       <Label
@@ -218,7 +218,7 @@ export function FieldRenderer({
                   return (
                     <div
                       key={i}
-                      className="min-h-[44px] flex items-center gap-3 py-1 cursor-pointer"
+                      className="min-h-11 flex items-center gap-3 py-1 cursor-pointer"
                     >
                       <Checkbox
                         id={chkId}

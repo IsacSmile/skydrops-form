@@ -257,16 +257,16 @@ export function PublicForm({
         aria-hidden="true"
         value={website}
         onChange={(e) => setWebsite(e.target.value)}
-        className="absolute -left-[9999px] -top-[9999px] opacity-0 pointer-events-none"
+        className="absolute left-[-9999px] top-[-9999px] opacity-0 pointer-events-none"
       />
 
       {/* Form Header (Title & Description) */}
       <div className="space-y-2 border-b border-[#DCE6F5] pb-6">
-        <h1 className="text-[26px] leading-[32px] sm:text-[30px] sm:leading-[36px] font-bold tracking-[-0.02em] text-[#111014]">
+        <h1 className="text-[26px] leading-8 sm:text-[30px] sm:leading-9 font-bold tracking-[-0.02em] text-[#111014]">
           {title}
         </h1>
         {description && (
-          <p className="text-[15px] leading-[24px] text-[#5B6475] whitespace-pre-wrap">
+          <p className="text-[15px] leading-6 text-[#5B6475] whitespace-pre-wrap">
             {description}
           </p>
         )}
@@ -305,7 +305,7 @@ export function PublicForm({
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full h-[52px] rounded-xl text-base font-semibold text-white transition-colors duration-150 flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(11,91,255,0.35)] focus-visible:ring-offset-2"
+          className="w-full h-13 rounded-xl text-base font-semibold text-white transition-colors duration-150 flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(11,91,255,0.35)] focus-visible:ring-offset-2"
           style={{
             backgroundColor: isSubmitting ? brand.primaryHover : brand.primary,
             opacity: isSubmitting ? 0.85 : 1,
