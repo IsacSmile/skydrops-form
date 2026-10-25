@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import {
   SESSION_COOKIE_NAME,
   verifySessionToken,
@@ -32,6 +33,7 @@ export async function verifyPassword(input: string): Promise<boolean> {
 }
 
 export async function isAdmin(): Promise<boolean> {
+  await connection();
   // Validate SESSION_SECRET lazily if token is present
   const cookieStore = await cookies();
   const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
@@ -42,6 +44,7 @@ export async function isAdmin(): Promise<boolean> {
 }
 
 export async function requireAdmin(): Promise<void> {
+  await connection();
   const authorized = await isAdmin();
   if (!authorized) {
     redirect("/admin/login");

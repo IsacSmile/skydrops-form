@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { connection } from "next/server";
 import { getForm } from "@/lib/forms-data";
 import { Badge } from "@/components/ui/badge";
 
@@ -12,6 +13,7 @@ interface FormPageProps {
 export default async function AdminFormBuilderPlaceholderPage({
   params,
 }: FormPageProps) {
+  await connection();
   const { id } = await params;
   const form = await getForm(id);
 
