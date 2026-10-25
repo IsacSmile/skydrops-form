@@ -8,6 +8,7 @@ import type { Form, Field } from "@/types/form";
 import { isStructureLocked } from "@/types/form";
 import { reorderFieldsAction } from "@/app/admin/(protected)/forms/[id]/actions";
 import { BuilderHeader } from "./builder-header";
+import { PublishingCard } from "./publishing-card";
 import { FieldList } from "./field-list";
 import { FormPreview } from "@/components/public/form-preview";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -16,9 +17,10 @@ import { Badge } from "@/components/ui/badge";
 interface FormBuilderProps {
   form: Form;
   fields: Field[];
+  origin: string;
 }
 
-export function FormBuilder({ form, fields }: FormBuilderProps) {
+export function FormBuilder({ form, fields, origin }: FormBuilderProps) {
   // Optimistic fields state synced with server props
   const [fieldsState, setFieldsState] = useState(fields);
   const [prevFields, setPrevFields] = useState(fields);
@@ -115,6 +117,11 @@ export function FormBuilder({ form, fields }: FormBuilderProps) {
 
         {/* Tab 1: Build Mode */}
         <TabsContent value="build" className="space-y-6 outline-none">
+          <PublishingCard
+            form={form}
+            fieldsCount={fieldsState.length}
+            origin={origin}
+          />
           <BuilderHeader form={form} />
           <FieldList
             form={form}

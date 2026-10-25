@@ -1,7 +1,8 @@
-import { eq, desc, asc, sql } from "drizzle-orm";
+import { eq, and, desc, asc, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { forms, fields, submissions } from "@/db/schema";
-import type { Form } from "@/types/form";
+import type { Form, FormStatus } from "@/types/form";
+import { canTransition } from "./form-status";
 import { generateSlug } from "./slug";
 
 const UUID_REGEX =
@@ -248,4 +249,94 @@ export async function deleteForm(id: string): Promise<boolean> {
     .returning({ id: forms.id });
 
   return deleted.length > 0;
+}
+
+export type FormStatusResultCode =
+  | "FORM_NOT_FOUND"
+  | "INVALID_TRANSITION"
+  | "NO_FIELDS";
+
+export type FormStatusResult =
+  | { ok: true; form: Form }
+  | { ok: false; code: FormStatusResultCode; message: string };
+
+/**
+ * Transitions form status according to allowed transitions:
+ * - draft     -> published (Publish, requires at least 1 field)
+ * - published -> draft     (Unpublish)
+ * - published -> closed    (Close)
+ * - closed    -> published (Reopen, requires at least 1 field)
+ * - closed    -> draft     (Unpublish)
+ *
+ * publishedAt is set only the first time the form is published and never cleared.
+ * Slug never changes.
+ * Uses conditional update WHERE id = ? AND status = ? for concurrency safety.
+ */
+export async function setFormStatus(
+  formId: string,
+  targetStatus: FormStatus
+): Promise<FormStatusResult> {
+  if (!isValidUuid(formId)) {
+    return { ok: false, code: "FORM_NOT_FOUND", message: "Form not found" };
+  }
+
+  const currentForm = await getForm(formId);
+  if (!currentForm) {
+    return { ok: false, code: "FORM_NOT_FOUND", message: "Form not found" };
+  }
+
+  if (!canTransition(currentForm.status, targetStatus)) {
+    return {
+      ok: false,
+      code: "INVALID_TRANSITION",
+      message: `Cannot transition form from "${currentForm.status}" to "${targetStatus}"`,
+    };
+  }
+
+  // Publish and Reopen require at least 1 field
+  if (targetStatus === "published") {
+    const [countResult] = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(fields)
+      .where(eq(fields.formId, formId));
+
+    const fieldCount = Number(countResult?.count ?? 0);
+    if (fieldCount < 1) {
+      return {
+        ok: false,
+        code: "NO_FIELDS",
+        message: "Add at least one field before publishing.",
+      };
+    }
+  }
+
+  // Set publishedAt only the first time a form is published
+  const shouldSetPublishedAt =
+    targetStatus === "published" && currentForm.publishedAt === null;
+
+  const updateSet: Record<string, unknown> = {
+    status: targetStatus,
+    updatedAt: new Date(),
+  };
+
+  if (shouldSetPublishedAt) {
+    updateSet.publishedAt = new Date();
+  }
+
+  // Conditional update for concurrency safety
+  const [updated] = await db
+    .update(forms)
+    .set(updateSet)
+    .where(and(eq(forms.id, formId), eq(forms.status, currentForm.status)))
+    .returning();
+
+  if (!updated) {
+    return {
+      ok: false,
+      code: "INVALID_TRANSITION",
+      message: "Form status was concurrently updated by another process",
+    };
+  }
+
+  return { ok: true, form: updated };
 }

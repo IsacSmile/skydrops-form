@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
-import { updateForm } from "@/lib/forms-data";
+import { updateForm, setFormStatus } from "@/lib/forms-data";
 import { z } from "zod";
 import {
   addField,
@@ -16,7 +16,13 @@ import {
   createFieldSchema,
   updateFieldSchema,
 } from "@/lib/field-validation";
-import type { Field } from "@/types/form";
+import {
+  FORM_STATUSES,
+  type Field,
+  type Form,
+  type FormStatus,
+} from "@/types/form";
+import { buildShortLink, getAppOrigin } from "@/lib/short-link";
 
 export interface ActionResponse<T = unknown> {
   success?: boolean;
@@ -224,5 +230,65 @@ export async function reorderFieldsAction(
   } catch (err) {
     console.error("reorderFieldsAction error:", err);
     return { error: "Failed to reorder fields. Please try again." };
+  }
+}
+
+export interface StatusActionResponse extends ActionResponse<Form> {
+  status?: FormStatus;
+  shortLink?: string;
+}
+
+const setStatusSchema = z.object({
+  formId: z.string().uuid("Invalid form ID"),
+  targetStatus: z.enum(FORM_STATUSES, {
+    message: "Invalid target status",
+  }),
+});
+
+/**
+ * Transitions form status (draft -> published, published -> draft/closed, closed -> published/draft)
+ * and returns the updated status and public short link.
+ */
+export async function setFormStatusAction(
+  formId: string,
+  targetStatus: FormStatus
+): Promise<StatusActionResponse> {
+  await requireAdmin();
+
+  const validation = setStatusSchema.safeParse({ formId, targetStatus });
+  if (!validation.success) {
+    return {
+      error: validation.error.issues[0]?.message ?? "Invalid status request",
+    };
+  }
+
+  try {
+    const result = await setFormStatus(formId, targetStatus);
+    if (!result.ok) {
+      const message =
+        result.code === "FORM_NOT_FOUND"
+          ? "The requested form was not found."
+          : result.code === "NO_FIELDS"
+            ? result.message || "Add at least one field before publishing."
+            : result.message || "This status change is not allowed.";
+      return { error: message };
+    }
+
+    const origin = await getAppOrigin();
+    const shortLink = buildShortLink(result.form.slug, origin);
+
+    revalidatePath(`/admin/forms/${formId}`);
+    revalidatePath("/admin");
+    revalidatePath(`/f/${result.form.slug}`);
+
+    return {
+      success: true,
+      status: result.form.status,
+      shortLink,
+      data: result.form,
+    };
+  } catch (err) {
+    console.error("setFormStatusAction error:", err);
+    return { error: "Failed to update form status. Please try again." };
   }
 }

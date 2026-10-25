@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { getForm } from "@/lib/forms-data";
 import { listFields } from "@/lib/fields-data";
+import { getAppOrigin } from "@/lib/short-link";
 import { FormBuilder } from "@/components/admin/builder/form-builder";
 
 export const instant = false;
@@ -21,7 +22,10 @@ export default async function AdminFormBuilderPage({
     notFound();
   }
 
-  const fields = await listFields(id);
+  const [fields, origin] = await Promise.all([
+    listFields(id),
+    getAppOrigin(),
+  ]);
 
-  return <FormBuilder form={form} fields={fields} />;
+  return <FormBuilder form={form} fields={fields} origin={origin} />;
 }

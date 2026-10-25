@@ -13,8 +13,11 @@ import {
   ExternalLink,
   FileText,
   AlertTriangle,
+  Link2,
 } from "lucide-react";
 import type { FormListItem } from "@/lib/forms-data";
+import { buildShortLink } from "@/lib/short-link";
+import { copyToClipboard } from "@/lib/clipboard";
 import {
   createFormAction,
   updateFormAction,
@@ -60,7 +63,13 @@ function formatDate(date: Date | string): string {
   });
 }
 
-export function FormsManager({ forms }: { forms: FormListItem[] }) {
+export function FormsManager({
+  forms,
+  origin,
+}: {
+  forms: FormListItem[];
+  origin?: string;
+}) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
@@ -74,6 +83,16 @@ export function FormsManager({ forms }: { forms: FormListItem[] }) {
 
   // Delete form dialog state
   const [deleteTarget, setDeleteTarget] = useState<FormListItem | null>(null);
+
+  async function handleCopyLink(slug: string) {
+    const url = buildShortLink(slug, origin);
+    const ok = await copyToClipboard(url);
+    if (ok) {
+      toast.success("Short link copied to clipboard");
+    } else {
+      toast.error("Failed to copy link");
+    }
+  }
 
   // Handle form creation
   async function handleCreate(formData: FormData) {
@@ -273,6 +292,15 @@ export function FormsManager({ forms }: { forms: FormListItem[] }) {
                             <ExternalLink className="size-4" />
                             Edit
                           </DropdownMenuItem>
+                          {form.status === "published" && (
+                            <DropdownMenuItem
+                              onClick={() => handleCopyLink(form.slug)}
+                              className="gap-2 cursor-pointer"
+                            >
+                              <Link2 className="size-4" />
+                              Copy link
+                            </DropdownMenuItem>
+                          )}
                           <DropdownMenuItem
                             onClick={() => {
                               setRenameTarget(form);
@@ -370,6 +398,15 @@ export function FormsManager({ forms }: { forms: FormListItem[] }) {
                         <MoreVertical className="size-4" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
+                        {form.status === "published" && (
+                          <DropdownMenuItem
+                            onClick={() => handleCopyLink(form.slug)}
+                            className="gap-2 cursor-pointer"
+                          >
+                            <Link2 className="size-4" />
+                            Copy link
+                          </DropdownMenuItem>
+                        )}
                         <DropdownMenuItem
                           onClick={() => {
                             setRenameTarget(form);
