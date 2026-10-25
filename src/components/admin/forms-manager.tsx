@@ -14,6 +14,7 @@ import {
   FileText,
   AlertTriangle,
   Link2,
+  Inbox,
 } from "lucide-react";
 import type { FormListItem } from "@/lib/forms-data";
 import { buildShortLink } from "@/lib/short-link";
@@ -292,6 +293,13 @@ export function FormsManager({
                             <ExternalLink className="size-4" />
                             Edit
                           </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => router.push(`/admin/forms/${form.id}/submissions`)}
+                            className="gap-2 cursor-pointer"
+                          >
+                            <Inbox className="size-4" />
+                            Responses
+                          </DropdownMenuItem>
                           {form.status === "published" && (
                             <DropdownMenuItem
                               onClick={() => handleCopyLink(form.slug)}
@@ -398,6 +406,13 @@ export function FormsManager({
                         <MoreVertical className="size-4" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          onClick={() => router.push(`/admin/forms/${form.id}/submissions`)}
+                          className="gap-2 cursor-pointer"
+                        >
+                          <Inbox className="size-4" />
+                          Responses
+                        </DropdownMenuItem>
                         {form.status === "published" && (
                           <DropdownMenuItem
                             onClick={() => handleCopyLink(form.slug)}

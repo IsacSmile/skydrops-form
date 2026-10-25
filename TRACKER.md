@@ -66,7 +66,7 @@ File upload --> Vercel Blob (client upload) --> URL stored in submission
 | C6  | Public form page `/f/[slug]`: branded, responsive, client + server validation, thank-you and closed states (verified via submit:verify and test suite; Playwright browser driver unavailable) | C5         | ⬜     | ✅     |
 | C7  | File upload via Vercel Blob (size/type limits)                                                                | C6         | ⬜     | ⬜     |
 | C8  | Google Sheets sync: service account, create tab, header row, append row, header update on label change, retry for failed rows | C6         | ⬜     | ✅     |
-| C9  | Admin submissions view (minimal): count, sync status, retry failed, link to Sheet                             | C8         | ⬜     | ⬜     |
+| C9  | Admin submissions view (minimal): count, sync status, retry failed, link to Sheet (verified via verify-submissions suite, build, real Google Sheets retry; Playwright driver unavailable in environment) | C8         | ⬜     | ✅     |
 | C10 | Hardening + deploy: rate limit, honeypot, env vars, Vercel deploy, smoke test checklist                       | all        | ⬜     | ⬜     |
 
 **Build order:** C0 > C1 > C2 > C3 > C4a > C4b > C5 > C6 > C8 > C7 > C9 > C10
@@ -101,3 +101,4 @@ File upload --> Vercel Blob (client upload) --> URL stored in submission
 | 2026-10-26 | C5 completed: Publish/unpublish/close transitions, atomic concurrency lock, short link copy & builder publishing card |
 | 2026-10-26 | C6 completed: Branded public form /f/[slug], honeypot, server validation, /api/submit, thank-you panel, pending submission in Neon |
 | 2026-10-26 | C8 completed: Google Sheets sync, Node crypto RS256 JWT, REST API, after() hook, idempotency, verify-sheets suite |
+| 2026-10-26 | C9 completed: Admin responses view per form (/admin/forms/[id]/submissions), stats cards, sync status badges, retry actions, answer detail dialog, Google Sheets link, verify-submissions suite |

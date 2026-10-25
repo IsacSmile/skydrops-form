@@ -1,6 +1,7 @@
 import { eq, and, or, asc, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { forms, fields, submissions } from "@/db/schema";
+import { getSubmissionForForm } from "./submissions-data";
 import {
   readGoogleConfig,
   getSpreadsheetTabs,
@@ -320,3 +321,135 @@ export async function syncPendingSubmissions(
 
   return { total: pendingRows.length, synced, failed };
 }
+
+/**
+ * Pure function to check if a submission is eligible for retry:
+ * true if syncStatus is 'failed', OR 'pending' and created more than 2 minutes ago.
+ */
+export function isRetryable(
+  submission: { syncStatus: string; createdAt: Date | string },
+  now: Date = new Date()
+): boolean {
+  if (submission.syncStatus === "failed") {
+    return true;
+  }
+  if (submission.syncStatus === "pending") {
+    const createdMs = new Date(submission.createdAt).getTime();
+    const nowMs = now.getTime();
+    return nowMs - createdMs > 2 * 60 * 1000;
+  }
+  return false;
+}
+
+export type RetryResultCode =
+  | "NOT_FOUND"
+  | "NOT_RETRYABLE"
+  | "ALREADY_SYNCED"
+  | "SUCCESS"
+  | "FAILED";
+
+export interface RetrySubmissionResult {
+  ok: boolean;
+  code: RetryResultCode;
+  message?: string;
+  syncResult?: SyncResult;
+}
+
+export interface RetryFailedResult {
+  attempted: number;
+  synced: number;
+  failed: number;
+  remaining: number;
+}
+
+/**
+ * Retries a single submission for a form:
+ * - Verifies ownership via getSubmissionForForm
+ * - Checks if retryable via isRetryable
+ * - Calls syncSubmission
+ */
+export async function retrySubmission(
+  formId: string,
+  submissionId: string
+): Promise<RetrySubmissionResult> {
+  const sub = await getSubmissionForForm(formId, submissionId);
+  if (!sub) {
+    return { ok: false, code: "NOT_FOUND", message: "Submission not found" };
+  }
+
+  if (sub.syncStatus === "synced") {
+    return { ok: true, code: "ALREADY_SYNCED", message: "Submission is already synced" };
+  }
+
+  if (!isRetryable(sub)) {
+    return {
+      ok: false,
+      code: "NOT_RETRYABLE",
+      message: "Submission is still within the initial 2-minute sync window",
+    };
+  }
+
+  const syncRes = await syncSubmission(sub.id);
+  if (syncRes.ok) {
+    return { ok: true, code: "SUCCESS", syncResult: syncRes };
+  } else {
+    return {
+      ok: false,
+      code: "FAILED",
+      message: syncRes.error || "Google Sheets sync failed",
+      syncResult: syncRes,
+    };
+  }
+}
+
+/**
+ * Retries this form's retryable submissions oldest first, sequentially, never more than limit,
+ * and reports how many retryable ones remain.
+ */
+export async function retryFailedForForm(
+  formId: string,
+  limit: number = 20
+): Promise<RetryFailedResult> {
+  const twoMinutesAgo = new Date(Date.now() - 2 * 60 * 1000);
+
+  const retryableRows = await db
+    .select({
+      id: submissions.id,
+      createdAt: submissions.createdAt,
+      syncStatus: submissions.syncStatus,
+    })
+    .from(submissions)
+    .where(
+      and(
+        eq(submissions.formId, formId),
+        or(
+          eq(submissions.syncStatus, "failed"),
+          and(
+            eq(submissions.syncStatus, "pending"),
+            sql`${submissions.createdAt} < ${twoMinutesAgo}`
+          )
+        )
+      )
+    )
+    .orderBy(asc(submissions.createdAt));
+
+  const toProcess = retryableRows.slice(0, limit);
+  let synced = 0;
+  let failed = 0;
+
+  for (const row of toProcess) {
+    const res = await syncSubmission(row.id);
+    if (res.ok) {
+      synced++;
+    } else {
+      failed++;
+    }
+  }
+
+  const attempted = toProcess.length;
+  const unattempted = retryableRows.length - toProcess.length;
+  const remaining = unattempted + failed;
+
+  return { attempted, synced, failed, remaining };
+}
+

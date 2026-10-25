@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
@@ -12,6 +13,7 @@ import {
   RotateCcw,
   Archive,
   PowerOff,
+  Inbox,
 } from "lucide-react";
 import type { Form, FormStatus } from "@/types/form";
 import { buildShortLink } from "@/lib/short-link";
@@ -33,12 +35,14 @@ interface PublishingCardProps {
   form: Form;
   fieldsCount: number;
   origin: string;
+  submissionsCount?: number;
 }
 
 export function PublishingCard({
   form,
   fieldsCount,
   origin,
+  submissionsCount = 0,
 }: PublishingCardProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -271,6 +275,20 @@ export function PublishingCard({
           </p>
         </div>
       )}
+
+      {/* Responses row */}
+      <div className="pt-2 border-t flex items-center justify-between text-xs text-muted-foreground">
+        <span>
+          Responses: <strong className="text-foreground">{submissionsCount}</strong>
+        </span>
+        <Link
+          href={`/admin/forms/${form.id}/submissions`}
+          className="hover:underline font-medium text-foreground inline-flex items-center gap-1.5"
+        >
+          <Inbox className="size-3.5 text-muted-foreground" />
+          Responses ({submissionsCount}) &rarr;
+        </Link>
+      </div>
 
       {/* Confirm Unpublish Dialog */}
       <Dialog

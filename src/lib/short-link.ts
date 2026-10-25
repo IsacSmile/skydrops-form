@@ -57,3 +57,26 @@ export async function getAppOrigin(): Promise<string> {
   // 3. Fallback
   return "http://localhost:3000";
 }
+
+/**
+ * Builds a direct link to a Google Sheet tab:
+ * https://docs.google.com/spreadsheets/d/{sheetId}/edit#gid={gid}
+ * Returns null if either sheetId or gid is missing or empty.
+ */
+export function getSheetUrl(
+  sheetId?: string | null,
+  gid?: number | string | null
+): string | null {
+  if (!sheetId || sheetId.trim().length === 0) {
+    return null;
+  }
+  if (gid === undefined || gid === null || String(gid).trim().length === 0) {
+    return null;
+  }
+
+  const cleanSheetId = sheetId.trim();
+  const cleanGid = String(gid).trim();
+
+  return `https://docs.google.com/spreadsheets/d/${encodeURIComponent(cleanSheetId)}/edit#gid=${encodeURIComponent(cleanGid)}`;
+}
+

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
-import { ArrowLeft, Hammer, Eye, Lock } from "lucide-react";
+import { ArrowLeft, Hammer, Eye, Lock, Inbox } from "lucide-react";
 import type { Form, Field } from "@/types/form";
 import { isStructureLocked } from "@/types/form";
 import { reorderFieldsAction } from "@/app/admin/(protected)/forms/[id]/actions";
@@ -13,14 +13,21 @@ import { FieldList } from "./field-list";
 import { FormPreview } from "@/components/public/form-preview";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
 
 interface FormBuilderProps {
   form: Form;
   fields: Field[];
   origin: string;
+  submissionsCount?: number;
 }
 
-export function FormBuilder({ form, fields, origin }: FormBuilderProps) {
+export function FormBuilder({
+  form,
+  fields,
+  origin,
+  submissionsCount = 0,
+}: FormBuilderProps) {
   // Optimistic fields state synced with server props
   const [fieldsState, setFieldsState] = useState(fields);
   const [prevFields, setPrevFields] = useState(fields);
@@ -91,8 +98,19 @@ export function FormBuilder({ form, fields, origin }: FormBuilderProps) {
             </TabsTrigger>
           </TabsList>
 
-          {/* Form Status & Lock Badges */}
-          <div className="flex items-center gap-2">
+          {/* Form Responses, Status & Lock Badges */}
+          <div className="flex flex-wrap items-center gap-2">
+            <Link
+              href={`/admin/forms/${form.id}/submissions`}
+              className={buttonVariants({
+                variant: "outline",
+                size: "sm",
+                className: "gap-1.5 h-8 text-xs font-medium",
+              })}
+            >
+              <Inbox className="size-3.5 text-muted-foreground" />
+              Responses ({submissionsCount})
+            </Link>
             <Badge
               variant={badgeVariant}
               className={`capitalize ${
@@ -121,6 +139,7 @@ export function FormBuilder({ form, fields, origin }: FormBuilderProps) {
             form={form}
             fieldsCount={fieldsState.length}
             origin={origin}
+            submissionsCount={submissionsCount}
           />
           <BuilderHeader form={form} />
           <FieldList

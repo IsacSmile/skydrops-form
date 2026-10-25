@@ -142,6 +142,27 @@ export function formatSubmittedAt(date: Date, timeZone: string = SHEET_TIMEZONE)
 }
 
 /**
+ * Formats a submission date for display in the admin responses view:
+ * e.g. "25 Oct 2026, 21:11" in SHEET_TIMEZONE.
+ */
+export function formatResponseDate(
+  date: Date | string,
+  timeZone: string = SHEET_TIMEZONE
+): string {
+  const d = new Date(date);
+  return new Intl.DateTimeFormat("en-GB", {
+    timeZone,
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(d);
+}
+
+
+/**
  * Builds the data row array for appending to the Google Sheet tab:
  * [submittedAt, submissionId, ...cells in buildColumns order]
  * Cell rules:
