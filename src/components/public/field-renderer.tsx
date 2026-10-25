@@ -73,7 +73,7 @@ export function FieldRenderer({
                 disabled={disabled}
                 aria-invalid={!!error}
                 rows={4}
-                className="resize-y min-h-[100px]"
+                className="resize-y min-h-25"
               />
             );
 
