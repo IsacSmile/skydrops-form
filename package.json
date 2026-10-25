@@ -17,7 +17,8 @@
     "forms:verify": "tsx scripts/verify-forms.ts",
     "fields:verify": "tsx scripts/verify-fields.ts",
     "reorder:verify": "tsx scripts/verify-reorder.ts",
-    "status:verify": "tsx scripts/verify-status.ts"
+    "status:verify": "tsx scripts/verify-status.ts",
+    "submit:verify": "tsx scripts/verify-submit.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

@@ -1,9 +1,10 @@
 import { eq, and, desc, asc, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { forms, fields, submissions } from "@/db/schema";
-import type { Form, FormStatus } from "@/types/form";
+import type { Form, FormStatus, Field } from "@/types/form";
 import { canTransition } from "./form-status";
 import { generateSlug } from "./slug";
+import { FILE_UPLOADS_ENABLED } from "./feature-flags";
 
 const UUID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -339,4 +340,64 @@ export async function setFormStatus(
   }
 
   return { ok: true, form: updated };
+}
+
+export const SLUG_REGEX = /^[a-z2-9]{8}$/;
+
+export interface PublicFormPayload {
+  form: {
+    id: string;
+    title: string;
+    description: string | null;
+    status: FormStatus;
+  };
+  fields: Field[];
+}
+
+/**
+ * Loads a form and its fields by public short slug for public viewing/submission.
+ * Returns null if slug is malformed, form not found, or form is draft (never exposes draft forms).
+ * If status is 'published' or 'closed', returns public-safe form details and fields in position order.
+ * Excludes file fields while FILE_UPLOADS_ENABLED is false.
+ */
+export async function getPublicFormBySlug(
+  slug: string
+): Promise<PublicFormPayload | null> {
+  if (typeof slug !== "string") {
+    return null;
+  }
+
+  const normalized = slug.trim().toLowerCase();
+  if (!SLUG_REGEX.test(normalized)) {
+    return null;
+  }
+
+  const [formRow] = await db
+    .select({
+      id: forms.id,
+      title: forms.title,
+      description: forms.description,
+      status: forms.status,
+    })
+    .from(forms)
+    .where(eq(forms.slug, normalized));
+
+  if (!formRow || formRow.status === "draft") {
+    return null;
+  }
+
+  const formFields = await db
+    .select()
+    .from(fields)
+    .where(eq(fields.formId, formRow.id))
+    .orderBy(asc(fields.position));
+
+  const filteredFields = FILE_UPLOADS_ENABLED
+    ? formFields
+    : formFields.filter((f) => f.type !== "file");
+
+  return {
+    form: formRow,
+    fields: filteredFields,
+  };
 }

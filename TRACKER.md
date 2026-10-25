@@ -63,7 +63,7 @@ File upload --> Vercel Blob (client upload) --> URL stored in submission
 | C4a | Form builder: add/edit/delete fields, all 10 types, options editor, required toggle (lock rules in data layer) | C3         | ⬜     | ✅     |
 | C4b | Reorder fields, live preview (verified via test suite; Playwright driver unavailable) | C4a        | ⬜     | ✅     |
 | C5  | Publish / unpublish / close + short link generation + copy button (verified via test suite; Playwright driver unavailable in environment) | C4b        | ⬜     | ✅     |
-| C6  | Public form page `/f/[slug]`: branded, responsive, client + server validation, thank-you and closed states    | C5         | ⬜     | ⬜     |
+| C6  | Public form page `/f/[slug]`: branded, responsive, client + server validation, thank-you and closed states (verified via submit:verify and test suite; Playwright browser driver unavailable) | C5         | ⬜     | ✅     |
 | C7  | File upload via Vercel Blob (size/type limits)                                                                | C6         | ⬜     | ⬜     |
 | C8  | Google Sheets sync: service account, create tab, header row, append row, header update on label change, retry for failed rows | C6         | ⬜     | ⬜     |
 | C9  | Admin submissions view (minimal): count, sync status, retry failed, link to Sheet                             | C8         | ⬜     | ⬜     |
@@ -99,3 +99,4 @@ File upload --> Vercel Blob (client upload) --> URL stored in submission
 | 2026-10-26 | C4a completed: Form builder field CRUD, 10 types, publish-lock rules |
 | 2026-10-26 | C4b completed: Move up/down field reordering, live preview tabs, shared FieldRenderer |
 | 2026-10-26 | C5 completed: Publish/unpublish/close transitions, atomic concurrency lock, short link copy & builder publishing card |
+| 2026-10-26 | C6 completed: Branded public form /f/[slug], honeypot, server validation, /api/submit, thank-you panel, pending submission in Neon |
