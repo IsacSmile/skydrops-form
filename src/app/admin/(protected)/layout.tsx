@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { requireAdmin } from "@/lib/auth";
 import { logout } from "@/app/admin/actions";
 import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/sonner";
 
 export const instant = false;
 
@@ -30,6 +31,7 @@ export default async function AdminProtectedLayout({
         </form>
       </header>
       <main className="flex-1 p-6">{children}</main>
+      <Toaster position="top-right" />
     </div>
   );
 }

@@ -13,7 +13,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "db:verify": "tsx scripts/verify-schema.ts",
-    "auth:verify": "tsx scripts/verify-auth.ts"
+    "auth:verify": "tsx scripts/verify-auth.ts",
+    "forms:verify": "tsx scripts/verify-forms.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
