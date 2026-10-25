@@ -11,6 +11,8 @@ export function isValidUuid(id: string): boolean {
   return typeof id === "string" && UUID_REGEX.test(id);
 }
 
+export { isStructureLocked } from "@/types/form";
+
 export interface FormListItem {
   id: string;
   slug: string;

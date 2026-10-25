@@ -60,15 +60,16 @@ File upload --> Vercel Blob (client upload) --> URL stored in submission
 | C1  | DB schema + migrations on Neon                                                                                                | C0         | ⬜     | ✅     |
 | C2  | Admin auth: shared password login, cookie session, route protection                                                           | C0         | ⬜     | ✅     |
 | C3  | Admin forms list: create, rename, duplicate, delete, status badges                                                            | C1, C2     | ⬜     | ✅     |
-| C4  | Form builder: add/edit/delete/reorder fields, all 10 types, options editor, required toggle, live preview, publish-lock rules | C3         | ⬜     | ⬜     |
-| C5  | Publish / unpublish / close + short link generation + copy button                                                             | C4         | ⬜     | ⬜     |
-| C6  | Public form page `/f/[slug]`: branded, responsive, client + server validation, thank-you and closed states                    | C5         | ⬜     | ⬜     |
-| C7  | File upload via Vercel Blob (size/type limits)                                                                                | C6         | ⬜     | ⬜     |
+| C4a | Form builder: add/edit/delete fields, all 10 types, options editor, required toggle (lock rules in data layer) | C3         | ⬜     | ✅     |
+| C4b | Reorder fields, live preview                                                                                 | C4a        | ⬜     | ⬜     |
+| C5  | Publish / unpublish / close + short link generation + copy button                                             | C4b        | ⬜     | ⬜     |
+| C6  | Public form page `/f/[slug]`: branded, responsive, client + server validation, thank-you and closed states    | C5         | ⬜     | ⬜     |
+| C7  | File upload via Vercel Blob (size/type limits)                                                                | C6         | ⬜     | ⬜     |
 | C8  | Google Sheets sync: service account, create tab, header row, append row, header update on label change, retry for failed rows | C6         | ⬜     | ⬜     |
-| C9  | Admin submissions view (minimal): count, sync status, retry failed, link to Sheet                                             | C8         | ⬜     | ⬜     |
-| C10 | Hardening + deploy: rate limit, honeypot, env vars, Vercel deploy, smoke test checklist                                       | all        | ⬜     | ⬜     |
+| C9  | Admin submissions view (minimal): count, sync status, retry failed, link to Sheet                             | C8         | ⬜     | ⬜     |
+| C10 | Hardening + deploy: rate limit, honeypot, env vars, Vercel deploy, smoke test checklist                       | all        | ⬜     | ⬜     |
 
-**Build order:** C0 > C1 > C2 > C3 > C4 > C5 > C6 > C8 > C7 > C9 > C10
+**Build order:** C0 > C1 > C2 > C3 > C4a > C4b > C5 > C6 > C8 > C7 > C9 > C10
 (Sheets before file upload, so the core flow works end to end first.)
 
 ## 5. Milestones
@@ -95,3 +96,4 @@ File upload --> Vercel Blob (client upload) --> URL stored in submission
 | 2026-10-25 | C1 completed: Database schema, migration, and types             |
 | 2026-10-25 | C2 completed: Admin auth, session tokens, and route protection  |
 | 2026-10-26 | C3 completed: Admin forms list, CRUD actions, and dialogs       |
+| 2026-10-26 | C4a completed: Form builder field CRUD, 10 types, publish-lock rules |
