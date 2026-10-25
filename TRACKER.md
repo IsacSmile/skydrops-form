@@ -58,7 +58,7 @@ File upload --> Vercel Blob (client upload) --> URL stored in submission
 | --- | ----------------------------------------------------------------------------------------------------------------------------- | ---------- | ------ | ------ |
 | C0  | Project setup: Next.js, Tailwind, shadcn, Drizzle, env handling, folder structure                                             | none       | ⬜     | ✅     |
 | C1  | DB schema + migrations on Neon                                                                                                | C0         | ⬜     | ✅     |
-| C2  | Admin auth: shared password login, cookie session, route protection                                                           | C0         | ⬜     | ⬜     |
+| C2  | Admin auth: shared password login, cookie session, route protection                                                           | C0         | ⬜     | ✅     |
 | C3  | Admin forms list: create, rename, duplicate, delete, status badges                                                            | C1, C2     | ⬜     | ⬜     |
 | C4  | Form builder: add/edit/delete/reorder fields, all 10 types, options editor, required toggle, live preview, publish-lock rules | C3         | ⬜     | ⬜     |
 | C5  | Publish / unpublish / close + short link generation + copy button                                                             | C4         | ⬜     | ⬜     |
@@ -93,3 +93,4 @@ File upload --> Vercel Blob (client upload) --> URL stored in submission
 | 2026-10-25 | Tracker created, decisions locked                               |
 | 2026-10-25 | C0 completed: Next.js + Tailwind + shadcn + Drizzle + env setup |
 | 2026-10-25 | C1 completed: Database schema, migration, and types             |
+| 2026-10-25 | C2 completed: Admin auth, session tokens, and route protection  |
