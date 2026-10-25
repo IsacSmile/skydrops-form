@@ -61,7 +61,7 @@ File upload --> Vercel Blob (client upload) --> URL stored in submission
 | C2  | Admin auth: shared password login, cookie session, route protection                                                           | C0         | ⬜     | ✅     |
 | C3  | Admin forms list: create, rename, duplicate, delete, status badges                                                            | C1, C2     | ⬜     | ✅     |
 | C4a | Form builder: add/edit/delete fields, all 10 types, options editor, required toggle (lock rules in data layer) | C3         | ⬜     | ✅     |
-| C4b | Reorder fields, live preview                                                                                 | C4a        | ⬜     | ⬜     |
+| C4b | Reorder fields, live preview (verified via test suite; Playwright driver unavailable) | C4a        | ⬜     | ✅     |
 | C5  | Publish / unpublish / close + short link generation + copy button                                             | C4b        | ⬜     | ⬜     |
 | C6  | Public form page `/f/[slug]`: branded, responsive, client + server validation, thank-you and closed states    | C5         | ⬜     | ⬜     |
 | C7  | File upload via Vercel Blob (size/type limits)                                                                | C6         | ⬜     | ⬜     |
@@ -97,3 +97,4 @@ File upload --> Vercel Blob (client upload) --> URL stored in submission
 | 2026-10-25 | C2 completed: Admin auth, session tokens, and route protection  |
 | 2026-10-26 | C3 completed: Admin forms list, CRUD actions, and dialogs       |
 | 2026-10-26 | C4a completed: Form builder field CRUD, 10 types, publish-lock rules |
+| 2026-10-26 | C4b completed: Move up/down field reordering, live preview tabs, shared FieldRenderer |

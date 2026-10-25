@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Plus, Layers, AlertCircle } from "lucide-react";
 import { type Form, type Field, isStructureLocked } from "@/types/form";
+import { moveItem } from "@/lib/reorder";
 import { FieldCard } from "./field-card";
 import { FieldDialog } from "./field-dialog";
 import { DeleteFieldDialog } from "./delete-field-dialog";
@@ -12,9 +13,16 @@ import { Button } from "@/components/ui/button";
 interface FieldListProps {
   form: Form;
   fields: Field[];
+  onReorder: (newFields: Field[]) => void;
+  isReordering?: boolean;
 }
 
-export function FieldList({ form, fields }: FieldListProps) {
+export function FieldList({
+  form,
+  fields,
+  onReorder,
+  isReordering = false,
+}: FieldListProps) {
   const router = useRouter();
   const locked = isStructureLocked(form);
 
@@ -27,6 +35,12 @@ export function FieldList({ form, fields }: FieldListProps) {
 
   function handleRefresh() {
     router.refresh();
+  }
+
+  function handleMove(index: number, direction: "up" | "down") {
+    if (isReordering) return;
+    const reordered = moveItem(fields, index, direction);
+    onReorder(reordered);
   }
 
   return (
@@ -82,7 +96,12 @@ export function FieldList({ form, fields }: FieldListProps) {
               key={field.id}
               field={field}
               index={idx}
+              isFirst={idx === 0}
+              isLast={idx === fields.length - 1}
               isLocked={locked}
+              isReordering={isReordering}
+              onMoveUp={() => handleMove(idx, "up")}
+              onMoveDown={() => handleMove(idx, "down")}
               onEdit={(f) => setEditingField(f)}
               onDelete={(f) => setDeletingField(f)}
             />

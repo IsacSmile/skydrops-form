@@ -3,10 +3,12 @@
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
 import { updateForm } from "@/lib/forms-data";
+import { z } from "zod";
 import {
   addField,
   updateField,
   deleteField,
+  reorderFields,
   type FieldResultCode,
 } from "@/lib/fields-data";
 import { formInputSchema } from "@/lib/validation";
@@ -182,5 +184,45 @@ export async function deleteFieldAction(
   } catch (err) {
     console.error("deleteFieldAction error:", err);
     return { error: "Failed to delete field. Please try again." };
+  }
+}
+
+const reorderSchema = z.object({
+  formId: z.string().uuid("Invalid form ID"),
+  orderedFieldIds: z
+    .array(z.string().uuid("Invalid field ID"))
+    .max(50, "Maximum 50 fields can be reordered"),
+});
+
+/**
+ * Reorders fields in a form by an ordered array of field IDs.
+ */
+export async function reorderFieldsAction(
+  formId: string,
+  orderedFieldIds: string[]
+): Promise<ActionResponse> {
+  await requireAdmin();
+
+  const validation = reorderSchema.safeParse({ formId, orderedFieldIds });
+  if (!validation.success) {
+    return {
+      error: validation.error.issues[0]?.message ?? "Invalid reorder data",
+    };
+  }
+
+  try {
+    const result = await reorderFields(formId, orderedFieldIds);
+    if (!result.ok) {
+      return {
+        error: mapResultCodeToMessage(result.code, result.message),
+      };
+    }
+
+    revalidatePath(`/admin/forms/${formId}`);
+    revalidatePath("/admin");
+    return { success: true };
+  } catch (err) {
+    console.error("reorderFieldsAction error:", err);
+    return { error: "Failed to reorder fields. Please try again." };
   }
 }

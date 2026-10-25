@@ -304,3 +304,74 @@ export async function deleteField(
 
   return { ok: true, field: deleted };
 }
+
+/**
+ * Reorders fields in a form.
+ * - Allowed whether or not the form is structure-locked.
+ * - Verifies that orderedFieldIds contains EXACTLY the set of current field IDs for this form.
+ * - Replaces positions with 0..n-1 atomically using db.batch.
+ * - Bumps forms.updated_at in the same batch.
+ */
+export async function reorderFields(
+  formId: string,
+  orderedFieldIds: string[]
+): Promise<FieldResult<{ reordered: boolean }>> {
+  if (!isValidUuid(formId)) {
+    return { ok: false, code: "FORM_NOT_FOUND", message: "Form not found" };
+  }
+
+  const form = await getForm(formId);
+  if (!form) {
+    return { ok: false, code: "FORM_NOT_FOUND", message: "Form not found" };
+  }
+
+  const existingFields = await listFields(formId);
+  if (orderedFieldIds.length !== existingFields.length) {
+    return {
+      ok: false,
+      code: "INVALID",
+      message:
+        "The reorder list does not match the number of fields in this form",
+    };
+  }
+
+  // Check for duplicates
+  const submittedSet = new Set(orderedFieldIds);
+  if (submittedSet.size !== orderedFieldIds.length) {
+    return {
+      ok: false,
+      code: "INVALID",
+      message: "Duplicate field IDs found in reorder list",
+    };
+  }
+
+  // Check that all submitted IDs belong to this form
+  const existingIdSet = new Set(existingFields.map((f) => f.id));
+  for (const id of orderedFieldIds) {
+    if (!isValidUuid(id) || !existingIdSet.has(id)) {
+      return {
+        ok: false,
+        code: "INVALID",
+        message: "Invalid or foreign field ID in reorder list",
+      };
+    }
+  }
+
+  // Atomic batch update of positions and forms.updated_at
+  const updates = orderedFieldIds.map((id, index) =>
+    db
+      .update(fields)
+      .set({ position: index })
+      .where(and(eq(fields.id, id), eq(fields.formId, formId)))
+  );
+
+  const bumpForm = db
+    .update(forms)
+    .set({ updatedAt: new Date() })
+    .where(eq(forms.id, formId));
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  await db.batch([bumpForm, ...updates] as unknown as [any, ...any[]]);
+
+  return { ok: true, field: { reordered: true } };
+}

@@ -1,15 +1,13 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { ArrowLeft, Lock, Check } from "lucide-react";
+import { Lock, Check } from "lucide-react";
 import type { Form } from "@/types/form";
 import { isStructureLocked } from "@/types/form";
 import { updateFormDetailsAction } from "@/app/admin/(protected)/forms/[id]/actions";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -32,13 +30,6 @@ export function BuilderHeader({ form }: BuilderHeaderProps) {
   const locked = isStructureLocked(form);
   const isDirty =
     title !== form.title || description !== (form.description ?? "");
-
-  const badgeVariant =
-    form.status === "published"
-      ? "default"
-      : form.status === "closed"
-        ? "outline"
-        : "secondary";
 
   function handleSave(e: React.FormEvent) {
     e.preventDefault();
@@ -68,36 +59,6 @@ export function BuilderHeader({ form }: BuilderHeaderProps) {
 
   return (
     <div className="space-y-4">
-      {/* Top navigation & status bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <Link
-          href="/admin"
-          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <ArrowLeft className="size-4" />
-          Back to forms
-        </Link>
-
-        <div className="flex items-center gap-2">
-          <Badge
-            variant={badgeVariant}
-            className={`capitalize ${
-              form.status === "published"
-                ? "bg-emerald-600 hover:bg-emerald-700 text-white"
-                : ""
-            }`}
-          >
-            {form.status}
-          </Badge>
-          {locked && (
-            <Badge variant="outline" className="gap-1 text-amber-600 dark:text-amber-400 border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950/40">
-              <Lock className="size-3" />
-              Structure locked
-            </Badge>
-          )}
-        </div>
-      </div>
-
       {/* Lock alert notice banner */}
       {locked && (
         <div className="flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50/80 p-3.5 text-sm text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-200">

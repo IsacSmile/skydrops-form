@@ -1,6 +1,6 @@
 "use client";
 
-import { Pencil, Trash2, Lock } from "lucide-react";
+import { Pencil, Trash2, Lock, ChevronUp, ChevronDown } from "lucide-react";
 import type { Field } from "@/types/form";
 import { getFieldTypeMeta } from "./field-types-meta";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,12 @@ import { Badge } from "@/components/ui/badge";
 interface FieldCardProps {
   field: Field;
   index: number;
+  isFirst: boolean;
+  isLast: boolean;
   isLocked: boolean;
+  isReordering?: boolean;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
   onEdit: (field: Field) => void;
   onDelete: (field: Field) => void;
 }
@@ -17,7 +22,12 @@ interface FieldCardProps {
 export function FieldCard({
   field,
   index,
+  isFirst,
+  isLast,
   isLocked,
+  isReordering = false,
+  onMoveUp,
+  onMoveDown,
   onEdit,
   onDelete,
 }: FieldCardProps) {
@@ -67,43 +77,73 @@ export function FieldCard({
         </div>
       </div>
 
-      {/* Right side: Action buttons */}
-      <div className="flex items-center justify-end gap-1.5 shrink-0 self-end sm:self-center border-t sm:border-t-0 pt-2 sm:pt-0 w-full sm:w-auto">
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={() => onEdit(field)}
-          className="gap-1.5 h-8 text-xs"
-        >
-          <Pencil className="size-3.5" />
-          Edit
-        </Button>
+      {/* Right side: Reorder + Action buttons */}
+      <div className="flex items-center justify-between sm:justify-end gap-1.5 shrink-0 border-t sm:border-t-0 pt-2 sm:pt-0 w-full sm:w-auto">
+        {/* Reorder Buttons */}
+        <div className="flex items-center gap-1">
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            onClick={onMoveUp}
+            disabled={isFirst || isReordering}
+            aria-label="Move field up"
+            title="Move field up"
+            className="size-8 text-muted-foreground hover:text-foreground disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed"
+          >
+            <ChevronUp className="size-4" />
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            onClick={onMoveDown}
+            disabled={isLast || isReordering}
+            aria-label="Move field down"
+            title="Move field down"
+            className="size-8 text-muted-foreground hover:text-foreground disabled:opacity-30 cursor-pointer disabled:cursor-not-allowed"
+          >
+            <ChevronDown className="size-4" />
+          </Button>
+        </div>
 
-        {isLocked ? (
+        <div className="flex items-center gap-1.5">
           <Button
             type="button"
-            variant="ghost"
+            variant="outline"
             size="sm"
-            disabled
-            className="gap-1.5 h-8 text-xs text-muted-foreground opacity-50 cursor-not-allowed"
-            title="Fields cannot be deleted from a published form"
+            onClick={() => onEdit(field)}
+            className="gap-1.5 h-8 text-xs cursor-pointer"
           >
-            <Lock className="size-3.5" />
-            Locked
+            <Pencil className="size-3.5" />
+            Edit
           </Button>
-        ) : (
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => onDelete(field)}
-            className="gap-1.5 h-8 text-xs text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-          >
-            <Trash2 className="size-3.5" />
-            Delete
-          </Button>
-        )}
+
+          {isLocked ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              disabled
+              className="gap-1.5 h-8 text-xs text-muted-foreground opacity-50 cursor-not-allowed"
+              title="Fields cannot be deleted from a published form"
+            >
+              <Lock className="size-3.5" />
+              Locked
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => onDelete(field)}
+              className="gap-1.5 h-8 text-xs text-muted-foreground hover:text-destructive hover:bg-destructive/10 cursor-pointer"
+            >
+              <Trash2 className="size-3.5" />
+              Delete
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );
