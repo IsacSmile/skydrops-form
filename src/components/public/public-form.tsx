@@ -352,7 +352,7 @@ export function PublicForm({
                   alt=""
                   width={18}
                   height={25}
-                  className="w-4 h-auto object-contain shrink-0 transition-transform duration-200 ease-out group-hover:scale-110 group-hover:-translate-y-0.5 motion-reduce:transform-none"
+                  className="w-4 h-auto object-contain shrink-0 transition-transform duration-300 ease-out group-hover:scale-110 group-hover:-translate-y-0.5 motion-reduce:transform-none"
                   aria-hidden="true"
                 />
                 <span className="tracking-[0.12em] font-semibold">SUBMIT</span>
