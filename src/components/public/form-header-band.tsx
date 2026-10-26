@@ -34,29 +34,29 @@ export function FormHeaderBand({
       <div className="sk-header-overlay" aria-hidden="true" />
 
       {/* Header Content */}
-      <div className="relative z-2 px-5 pt-6 pb-7 sm:px-10 sm:pt-10 sm:pb-11">
-        {/* On desktop text column has max-width 62% to preserve drop and clouds on the right */}
-        <div className="w-full sm:max-w-[62%]">
+      <div className="relative z-2 px-5 pt-5 pb-5 sm:px-9 sm:pt-7 sm:pb-7">
+        {/* On desktop text column has max-width 64% to preserve drop and clouds on the right */}
+        <div className="w-full sm:max-w-[64%]">
           {/* 1. Full-colour Horizontal Brand Logo */}
-          <div className="mb-7 sm:mb-10">
+          <div className="mb-4 sm:mb-5">
             <Image
               src={brand.logo.horizontal}
               alt="Skydrops, Sustainable Water Technologies"
               width={1400}
               height={429}
               priority={priorityLogo}
-              className="w-58 sm:w-70 h-auto object-contain"
+              className="w-48 sm:w-56 h-auto object-contain"
             />
           </div>
 
           {/* 2. Form Title (h1) */}
-          <h1 className="sk-title font-bold text-[30px] leading-9 sm:text-[42px] sm:leading-12 text-(--ink) tracking-tight m-0">
+          <h1 className="sk-title font-bold text-2xl leading-8 sm:text-3xl sm:leading-10 text-(--ink) tracking-tight m-0">
             {title}
           </h1>
 
           {/* 3. Form Description (if provided) */}
           {description && (
-            <p className="sk-desc font-normal text-[15px] leading-5.75 sm:text-[17px] sm:leading-6.75 text-(--text-soft) mt-3.5 max-w-136 whitespace-pre-wrap">
+            <p className="sk-desc font-normal text-sm leading-5.5 sm:text-[15px] sm:leading-6 text-(--text-soft) mt-2 sm:mt-2.5 max-w-136 whitespace-pre-wrap">
               {description}
             </p>
           )}
