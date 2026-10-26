@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { brand } from "@/lib/brand";
 import { BrandFooter } from "@/components/public/brand-footer";
+import "@/components/public/sk-form.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -25,33 +26,18 @@ export default function PublicFormLayout({
 }) {
   return (
     <div
-      className={`${plusJakartaSans.className} min-h-screen antialiased flex flex-col justify-between`}
-      style={
-        {
-          colorScheme: "light",
-          "--background": brand.background,
-          "--foreground": brand.foreground,
-          "--card": brand.card,
-          "--card-foreground": brand.foreground,
-          "--popover": brand.card,
-          "--popover-foreground": brand.foreground,
-          "--primary": brand.primary,
-          "--primary-foreground": brand.primaryForeground,
-          "--ring": brand.ring,
-          "--border": brand.border,
-          "--input": brand.border,
-          "--muted-foreground": brand.muted,
-          "--destructive": brand.danger,
-          "--radius": brand.radius,
-          backgroundColor: brand.background,
-          backgroundImage:
-            "radial-gradient(circle at 50% 0%, rgba(31, 161, 255, 0.12) 0%, transparent 65%)",
-          backgroundRepeat: "no-repeat",
-        } as React.CSSProperties
-      }
+      className={`${plusJakartaSans.className} sk-form min-h-screen antialiased flex flex-col justify-between`}
+      style={{
+        backgroundColor: "#F5F7FB",
+        backgroundImage:
+          "radial-gradient(900px 420px at 50% -80px, rgba(31, 161, 255, 0.14), transparent 70%)",
+        backgroundRepeat: "no-repeat",
+      }}
     >
-      <div className="flex-1 flex flex-col">{children}</div>
-      <BrandFooter />
+      <div className="w-full max-w-[640px] mx-auto px-4 sm:px-6 pt-8 sm:pt-14 pb-12 flex-1 flex flex-col justify-between">
+        <main className="flex-1 flex flex-col">{children}</main>
+        <BrandFooter />
+      </div>
     </div>
   );
 }

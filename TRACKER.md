@@ -78,6 +78,7 @@ File upload --> Vercel Blob (client upload) --> URL stored in submission
 | ID  | Component                                                                                                                                           | Status |
 | --- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | U1  | Parent brands footer: replace "Powered by" with semantic "Our brands" footer displaying Skydrops Water and Skydrops Technologies on all `/f/*` pages | ✅     |
+| U2  | Premium public form redesign ("Deep sky" direction): scoped `.sk-form` tokens, integrated header band with white logo lockup and watermark, 12px radius card, 8px controls, option cards, redesigned upload dropzone, unified thank-you/closed/not-found states, contained footer (verified via design:verify, submit:verify, uploads:verify, footer:verify, auth:verify, typecheck, lint, build; Playwright browser driver unavailable in sandbox, visual screenshots not automated) | ✅     |
 
 ## 5. Milestones
 
@@ -112,4 +113,5 @@ File upload --> Vercel Blob (client upload) --> URL stored in submission
 | 2026-10-26 | C7 completed: Vercel Blob client upload, upload route, server validation + head check, progress bar & file picker, warning banner, best-effort blob deletion, uploads:verify suite |
 | 2026-10-26 | C10a completed: Rate limiting in Neon, cron maintenance job, orphan blob cleanup, security headers, robots.txt, predeploy checks, verify-hardening suite |
 | 2026-10-26 | U1 completed: Parent brands footer with Skydrops Water and Skydrops Technologies links, responsive layout, verify-footer suite |
+| 2026-10-26 | U2 completed: Premium "Deep sky" public form redesign, scoped tokens, header band, option cards, design:verify suite |
 

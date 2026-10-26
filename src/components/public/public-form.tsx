@@ -1,12 +1,10 @@
 "use client";
 
 import { useState, useRef } from "react";
-import Image from "next/image";
-import { Loader2, AlertCircle, RotateCcw } from "lucide-react";
+import { Loader2, AlertCircle, RotateCcw, Check } from "lucide-react";
 import type { Field } from "@/types/form";
 import { FieldRenderer } from "./field-renderer";
-import { Button } from "@/components/ui/button";
-import { brand } from "@/lib/brand";
+import { FormHeaderBand } from "./form-header-band";
 
 interface PublicFormProps {
   slug: string;
@@ -30,6 +28,8 @@ export function PublicForm({
   const visibleFields = fileUploadsEnabled
     ? fields
     : fields.filter((f) => f.type !== "file");
+
+  const hasRequiredField = visibleFields.some((f) => f.required);
 
   // Initialize values
   const [answers, setAnswers] = useState<Record<string, unknown>>(() => {
@@ -224,45 +224,33 @@ export function PublicForm({
   // -------------------------------------------------------------------------
   if (isSuccess) {
     return (
-      <div className="relative rounded-2xl sm:rounded-[20px] border border-[#DCE6F5] bg-card p-6 sm:p-10 shadow-[0_1px_2px_rgba(17,16,20,0.04),0_12px_32px_-12px_rgba(11,91,255,0.18)] text-center space-y-6 overflow-hidden">
-        {/* Decorative top gradient strip */}
-        <div
-          className="absolute top-0 left-0 right-0 h-1"
-          style={{ background: brand.gradient }}
-          aria-hidden="true"
+      <div className="sk-card w-full">
+        {/* Header Band */}
+        <FormHeaderBand
+          title="Thank you"
+          description="Your response has been recorded."
         />
 
-        <div className="pt-4 flex flex-col items-center space-y-4">
-          <div className="size-14 relative flex items-center justify-center">
-            <Image
-              src={brand.logo.mark}
-              alt="Skydrops"
-              width={56}
-              height={78}
-              className="h-14 w-auto object-contain"
-            />
+        {/* Success Body */}
+        <div className="px-5 pt-8 pb-10 sm:px-10 sm:pt-10 sm:pb-12 text-center flex flex-col items-center space-y-5">
+          <div className="size-14 rounded-full bg-[var(--success-soft)] flex items-center justify-center">
+            <Check className="size-7 text-[var(--success)]" strokeWidth={2.5} />
           </div>
 
-          <div className="space-y-1.5">
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111014]">
-              Thank you!
-            </h2>
-            <p className="text-base text-[#5B6475]">
-              Your response has been recorded.
-            </p>
-          </div>
-        </div>
+          <p className="text-[15px] text-[var(--muted)]">
+            Thank you for taking the time to complete this form.
+          </p>
 
-        <div className="pt-2">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleReset}
-            className="h-11 px-6 rounded-xl text-sm font-semibold border-[#DCE6F5] text-[#111014] hover:bg-[#F4F8FF] gap-2"
-          >
-            <RotateCcw className="size-4 text-[#5B6475]" />
-            Submit another response
-          </Button>
+          <div className="pt-2">
+            <button
+              type="button"
+              onClick={handleReset}
+              className="h-11 px-6 rounded-lg border border-[var(--border)] text-sm font-semibold text-[var(--text)] hover:bg-[var(--primary-soft)] hover:border-[var(--border-hover)] flex items-center gap-2 cursor-pointer transition-colors"
+            >
+              <RotateCcw className="size-4 text-[var(--muted)]" />
+              Submit another response
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -275,14 +263,10 @@ export function PublicForm({
     <form
       onSubmit={handleSubmit}
       noValidate
-      className="relative rounded-2xl sm:rounded-[20px] border border-[#DCE6F5] bg-card p-6 sm:p-10 shadow-[0_1px_2px_rgba(17,16,20,0.04),0_12px_32px_-12px_rgba(11,91,255,0.18)] space-y-8 overflow-hidden"
+      className="sk-card w-full"
     >
-      {/* 4px Decorative top gradient strip (never text on it) */}
-      <div
-        className="absolute top-0 left-0 right-0 h-1"
-        style={{ background: brand.gradient }}
-        aria-hidden="true"
-      />
+      {/* Header Band with Title & Description */}
+      <FormHeaderBand title={title} description={description} />
 
       {/* Honeypot field (hidden offscreen, tabIndex -1, NOT display:none) */}
       <input
@@ -296,89 +280,79 @@ export function PublicForm({
         className="absolute left-[-9999px] top-[-9999px] opacity-0 pointer-events-none"
       />
 
-      {/* Form Header (Title & Description) */}
-      <div className="space-y-2 border-b border-[#DCE6F5] pb-6">
-        <h1 className="text-[26px] leading-8 sm:text-[30px] sm:leading-9 font-bold tracking-[-0.02em] text-[#111014]">
-          {title}
-        </h1>
-        {description && (
-          <p className="text-[15px] leading-6 text-[#5B6475] whitespace-pre-wrap">
-            {description}
-          </p>
+      {/* Form Body */}
+      <div className="px-5 pt-6 pb-7 sm:px-10 sm:pt-9 sm:pb-10 bg-white space-y-6 sm:space-y-7">
+        {/* Required indicator caption at top right */}
+        {hasRequiredField && (
+          <div className="flex justify-end -mt-1 mb-6">
+            <span className="text-xs text-[var(--muted)] font-normal">
+              <span className="text-[var(--danger)] mr-1">*</span>Required
+            </span>
+          </div>
         )}
-      </div>
 
-      {/* Global Error Banner */}
-      {(submitError || Object.keys(errors).length > 0) && (
-        <div
-          ref={errorSummaryRef}
-          role="alert"
-          className="rounded-xl border border-[#D92D20]/20 bg-[#D92D20]/10 p-4 text-[13px] text-[#D92D20] flex items-start gap-2.5 leading-relaxed"
-        >
-          <AlertCircle className="size-4 shrink-0 mt-0.5" />
-          <span>
-            {submitError || "Please check the highlighted fields below."}
-          </span>
+        {/* Global Error Banner */}
+        {(submitError || Object.keys(errors).length > 0) && (
+          <div
+            ref={errorSummaryRef}
+            role="alert"
+            className="rounded-lg border border-[var(--danger-border)] bg-[var(--danger-soft)] p-3 sm:p-3.5 text-[14px] text-[var(--danger-text)] flex items-start gap-2.5 leading-relaxed"
+          >
+            <AlertCircle className="size-4 shrink-0 mt-0.5 text-[var(--danger)]" />
+            <div>
+              <p className="font-semibold text-[var(--danger-text)]">
+                Please fix the highlighted fields
+              </p>
+              {submitError && (
+                <p className="text-xs text-[var(--danger-text)]/90 mt-0.5">
+                  {submitError}
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Form Fields */}
+        <div className="space-y-6 sm:space-y-7">
+          {visibleFields.map((field) => (
+            <FieldRenderer
+              key={field.id}
+              field={field}
+              value={answers[field.key]}
+              onChange={(val) => handleFieldChange(field.key, val)}
+              error={errors[field.key]}
+              disabled={isSubmitting}
+              slug={slug}
+              formId={formId}
+              onUploadingChange={(uploading) =>
+                handleUploadingChange(field.key, uploading)
+              }
+            />
+          ))}
         </div>
-      )}
 
-      {/* Form Fields */}
-      <div className="space-y-6">
-        {visibleFields.map((field) => (
-          <FieldRenderer
-            key={field.id}
-            field={field}
-            value={answers[field.key]}
-            onChange={(val) => handleFieldChange(field.key, val)}
-            error={errors[field.key]}
-            disabled={isSubmitting}
-            slug={slug}
-            formId={formId}
-            onUploadingChange={(uploading) =>
-              handleUploadingChange(field.key, uploading)
-            }
-          />
-        ))}
-      </div>
-
-      {/* Submit Button */}
-      <div className="pt-2">
-        <button
-          type="submit"
-          disabled={isSubmitting || isAnyFileUploading}
-          className="w-full h-13 rounded-xl text-base font-semibold text-white transition-colors duration-150 flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(11,91,255,0.35)] focus-visible:ring-offset-2"
-          style={{
-            backgroundColor:
-              isSubmitting || isAnyFileUploading
-                ? brand.primaryHover
-                : brand.primary,
-            opacity: isSubmitting || isAnyFileUploading ? 0.8 : 1,
-          }}
-          onMouseEnter={(e) => {
-            if (!isSubmitting && !isAnyFileUploading) {
-              e.currentTarget.style.backgroundColor = brand.primaryHover;
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (!isSubmitting && !isAnyFileUploading) {
-              e.currentTarget.style.backgroundColor = brand.primary;
-            }
-          }}
-        >
-          {isSubmitting ? (
-            <>
-              <Loader2 className="size-4 animate-spin" />
-              <span>Submitting...</span>
-            </>
-          ) : (
-            <span>Submit</span>
+        {/* Submit Button */}
+        <div className="pt-2 mt-8">
+          <button
+            type="submit"
+            disabled={isSubmitting || isAnyFileUploading}
+            className="sk-submit-btn"
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="size-4 animate-spin" />
+                <span>Submitting...</span>
+              </>
+            ) : (
+              <span>Submit</span>
+            )}
+          </button>
+          {isAnyFileUploading && (
+            <p className="text-[13px] text-[var(--muted)] text-center mt-2 font-medium">
+              Wait for the upload to finish
+            </p>
           )}
-        </button>
-        {isAnyFileUploading && (
-          <p className="text-xs text-[#5B6475] text-center mt-2 font-medium">
-            Wait for the upload to finish
-          </p>
-        )}
+        </div>
       </div>
     </form>
   );

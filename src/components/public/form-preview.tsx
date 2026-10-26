@@ -3,9 +3,9 @@
 import { useState } from "react";
 import type { Form, Field } from "@/types/form";
 import { FieldRenderer } from "./field-renderer";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { FormHeaderBand } from "./form-header-band";
 import { Layers } from "lucide-react";
+import "./sk-form.css";
 
 interface FormPreviewProps {
   form: Form;
@@ -23,34 +23,39 @@ export function FormPreview({ form, fields }: FormPreviewProps) {
     }));
   }
 
-  return (
-    <div className="w-full max-w-2xl mx-auto space-y-4">
-      {/* Live Form Preview Card */}
-      <Card className="shadow-xs border bg-card">
-        <CardHeader className="space-y-2 pb-6 border-b">
-          <CardTitle className="text-2xl font-bold tracking-tight">
-            {form.title || "Untitled Form"}
-          </CardTitle>
-          {form.description && (
-            <CardDescription className="text-sm whitespace-pre-wrap leading-relaxed">
-              {form.description}
-            </CardDescription>
-          )}
-        </CardHeader>
+  const hasRequiredField = fields.some((f) => f.required);
 
-        <CardContent className="pt-6 space-y-6">
+  return (
+    <div className="sk-form w-full max-w-2xl mx-auto">
+      {/* Live Form Preview Card styled in Deep Sky */}
+      <div className="sk-card w-full">
+        <FormHeaderBand
+          title={form.title || "Untitled Form"}
+          description={form.description}
+          priorityLogo={false}
+        />
+
+        <div className="px-5 pt-6 pb-7 sm:px-10 sm:pt-9 sm:pb-10 bg-white space-y-6 sm:space-y-7">
+          {hasRequiredField && (
+            <div className="flex justify-end -mt-1 mb-6">
+              <span className="text-xs text-[var(--muted)] font-normal">
+                <span className="text-[var(--danger)] mr-1">*</span>Required
+              </span>
+            </div>
+          )}
+
           {fields.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 text-center text-muted-foreground space-y-3">
-              <div className="p-3 bg-muted rounded-full">
-                <Layers className="size-6 text-muted-foreground" />
+            <div className="flex flex-col items-center justify-center py-12 text-center text-[var(--muted)] space-y-3">
+              <div className="p-3 bg-[var(--page)] rounded-full">
+                <Layers className="size-6 text-[var(--muted)]" />
               </div>
-              <p className="text-sm font-medium">No fields yet</p>
-              <p className="text-xs text-muted-foreground max-w-xs">
+              <p className="text-sm font-medium text-[var(--text)]">No fields yet</p>
+              <p className="text-xs text-[var(--muted)] max-w-xs">
                 Add fields in the Build tab to preview how respondents will experience your form.
               </p>
             </div>
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-6 sm:space-y-7">
               {fields.map((field) => (
                 <FieldRenderer
                   key={field.id}
@@ -61,19 +66,19 @@ export function FormPreview({ form, fields }: FormPreviewProps) {
                 />
               ))}
 
-              <div className="pt-4 border-t">
-                <Button
+              <div className="pt-2 mt-8">
+                <button
                   type="button"
                   disabled
-                  className="w-full sm:w-auto px-8 font-semibold cursor-not-allowed opacity-80"
+                  className="sk-submit-btn opacity-80 cursor-not-allowed"
                 >
                   Submit
-                </Button>
+                </button>
               </div>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }
