@@ -343,7 +343,7 @@ export function PublicForm({
             {isSubmitting ? (
               <>
                 <Loader2 className="size-4 animate-spin shrink-0" />
-                <span>Submitting...</span>
+                <span className="tracking-[0.12em] font-semibold">SUBMITTING...</span>
               </>
             ) : (
               <>
@@ -355,7 +355,7 @@ export function PublicForm({
                   className="w-4 h-auto object-contain shrink-0 transition-transform duration-200 ease-out group-hover:scale-110 group-hover:-translate-y-0.5 motion-reduce:transform-none"
                   aria-hidden="true"
                 />
-                <span>Submit</span>
+                <span className="tracking-[0.12em] font-semibold">SUBMIT</span>
               </>
             )}
           </button>

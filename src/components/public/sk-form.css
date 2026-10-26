@@ -186,8 +186,9 @@
   border-radius: var(--radius-control);
   background-color: var(--primary);
   color: #FFFFFF;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
+  letter-spacing: 0.12em;
   box-shadow: var(--shadow-button);
   width: 100%;
   display: flex;

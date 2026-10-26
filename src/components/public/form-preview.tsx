@@ -82,7 +82,7 @@ export function FormPreview({ form, fields }: FormPreviewProps) {
                     className="w-4 h-auto object-contain shrink-0"
                     aria-hidden="true"
                   />
-                  <span>Submit</span>
+                  <span className="tracking-[0.12em] font-semibold">SUBMIT</span>
                 </button>
               </div>
             </div>
