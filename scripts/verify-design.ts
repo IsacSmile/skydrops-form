@@ -123,7 +123,9 @@ async function run() {
     });
     const html = await resPublished.text();
 
-    const hasWhiteLockup = html.includes("skydrops-logo-lockup-white.png");
+    const hasHeaderLogo =
+      html.includes("skydrops-logo-full.png") ||
+      html.includes("skydrops-logo-lockup-white.png");
     const hasSkFormClass = html.includes("sk-form");
     const hasRequiredCaption =
       html.includes("* Required") ||
@@ -135,7 +137,7 @@ async function run() {
 
     const passChecks =
       resPublished.status === 200 &&
-      hasWhiteLockup &&
+      hasHeaderLogo &&
       hasSkFormClass &&
       hasRequiredCaption &&
       hasOptionCards &&
@@ -146,14 +148,14 @@ async function run() {
         2,
         "Published page Deep Sky design assertions",
         "PASS",
-        "White lockup logo, .sk-form, '* Required', .sk-option-card present; old floating logo absent"
+        "Header logo, .sk-form, '* Required', .sk-option-card present; old floating logo absent"
       );
     } else {
       record(
         2,
         "Published page Deep Sky design assertions",
         "FAIL",
-        `WhiteLockup: ${hasWhiteLockup}, skForm: ${hasSkFormClass}, RequiredCaption: ${hasRequiredCaption}, OptionCards: ${hasOptionCards}, OldLogoAbsent: ${!hasOldFloatingLogo}`
+        `HeaderLogo: ${hasHeaderLogo}, skForm: ${hasSkFormClass}, RequiredCaption: ${hasRequiredCaption}, OptionCards: ${hasOptionCards}, OldLogoAbsent: ${!hasOldFloatingLogo}`
       );
     }
 
@@ -169,14 +171,15 @@ async function run() {
     const closedHasBand =
       htmlClosed.includes("sk-header-band") &&
       htmlClosed.includes("This form is closed") &&
-      htmlClosed.includes("skydrops-logo-lockup-white.png");
+      (htmlClosed.includes("skydrops-logo-full.png") ||
+        htmlClosed.includes("skydrops-logo-lockup-white.png"));
 
     if (resClosed.status === 200 && closedHasBand) {
       record(
         3,
         "Closed form page header band assertion",
         "PASS",
-        "Contains .sk-header-band, 'This form is closed', and white lockup logo"
+        "Contains .sk-header-band, 'This form is closed', and brand logo"
       );
     } else {
       record(

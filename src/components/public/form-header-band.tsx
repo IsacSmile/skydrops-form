@@ -45,15 +45,15 @@ export function FormHeaderBand({
 
       {/* Content */}
       <div className="relative z-10">
-        {/* Top row: White Lockup Logo */}
+        {/* Top row: Full Brand Logo */}
         <div className="mb-6 sm:mb-7 flex items-center">
           <Image
-            src={brand.logo.lockupWhite}
+            src={brand.logo.full}
             alt="Skydrops"
-            width={1000}
-            height={726}
+            width={1200}
+            height={999}
             priority={priorityLogo}
-            className="w-26 sm:w-31 h-auto object-contain"
+            className="w-32 sm:w-36 h-auto object-contain"
           />
         </div>
 
