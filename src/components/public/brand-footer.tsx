@@ -18,7 +18,7 @@ export function BrandFooter() {
         <div className="relative grid grid-cols-1 min-[520px]:grid-cols-2 gap-3 min-[520px]:gap-4 items-stretch">
           {/* Centered vertical divider between columns on >= 520px */}
           <div
-            className="hidden min-[520px]:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-10 bg-(--border) pointer-events-none z-10"
+            className="hidden min-[520px]:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-10 bg-border pointer-events-none z-10"
             aria-hidden="true"
           />
 
@@ -31,7 +31,7 @@ export function BrandFooter() {
               className="sk-brand-card group"
             >
               {/* Fixed 56x40 Logo Slot */}
-              <div className="w-[56px] h-[40px] relative shrink-0 flex items-center justify-start">
+              <div className="w-14 h-10 relative shrink-0 flex items-center justify-start">
                 <Image
                   src={b.logo}
                   alt=""
@@ -60,7 +60,7 @@ export function BrandFooter() {
       </nav>
 
       {/* Static Copyright without year or new Date() */}
-      <p className="mt-6 text-center text-[13px] text-(--muted) select-none">
+      <p className="mt-6 text-center text-[13px] text-muted select-none">
         © Skydrops. All rights reserved.
       </p>
     </footer>

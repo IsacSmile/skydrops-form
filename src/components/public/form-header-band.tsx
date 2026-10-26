@@ -26,7 +26,7 @@ export function FormHeaderBand({
         priority={priorityLogo}
         quality={80}
         sizes="(min-width: 640px) 640px, 100vw"
-        className="object-cover z-0 object-[72%_top] sm:object-[right_top]"
+        className="object-cover z-0 object-[72%_top] sm:object-top-right"
         aria-hidden="true"
       />
 
@@ -45,18 +45,18 @@ export function FormHeaderBand({
               width={1400}
               height={429}
               priority={priorityLogo}
-              className="w-[232px] sm:w-[280px] h-auto object-contain"
+              className="w-58 sm:w-70 h-auto object-contain"
             />
           </div>
 
           {/* 2. Form Title (h1) */}
-          <h1 className="sk-title font-bold text-[30px] leading-9 sm:text-[42px] sm:leading-12 text-(--ink) tracking-[-0.025em] m-0">
+          <h1 className="sk-title font-bold text-[30px] leading-9 sm:text-[42px] sm:leading-12 text-(--ink) tracking-tight m-0">
             {title}
           </h1>
 
           {/* 3. Form Description (if provided) */}
           {description && (
-            <p className="sk-desc font-normal text-[15px] leading-[23px] sm:text-[17px] sm:leading-[27px] text-(--text-soft) mt-3.5 max-w-[34rem] whitespace-pre-wrap">
+            <p className="sk-desc font-normal text-[15px] leading-5.75 sm:text-[17px] sm:leading-6.75 text-(--text-soft) mt-3.5 max-w-136 whitespace-pre-wrap">
               {description}
             </p>
           )}

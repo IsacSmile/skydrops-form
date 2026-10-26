@@ -30,7 +30,7 @@ export function FormPreview({ form, fields }: FormPreviewProps) {
 
   return (
     <div
-      className={`${plusJakartaSans.variable} ${plusJakartaSans.className} sk-form w-full max-w-[640px] mx-auto`}
+      className={`${plusJakartaSans.variable} ${plusJakartaSans.className} sk-form w-full max-w-160 mx-auto`}
     >
       {/* Live Form Preview Card styled in Light & Airy U3 */}
       <div className="sk-card w-full">
@@ -43,19 +43,19 @@ export function FormPreview({ form, fields }: FormPreviewProps) {
         <div className="px-5 pt-6 pb-7 sm:px-10 sm:pt-9 sm:pb-10 bg-white">
           {hasRequiredField && (
             <div className="flex justify-end mb-5">
-              <span className="text-[13px] text-(--muted) font-normal">
+              <span className="text-[13px] text-muted font-normal">
                 <span className="text-(--danger) mr-1">*</span>Required
               </span>
             </div>
           )}
 
           {fields.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 text-center text-(--muted) space-y-3">
+            <div className="flex flex-col items-center justify-center py-12 text-center text-muted space-y-3">
               <div className="p-3 bg-(--page) rounded-full">
-                <Layers className="size-6 text-(--muted)" />
+                <Layers className="size-6 text-muted" />
               </div>
               <p className="text-sm font-medium text-(--ink)">No fields yet</p>
-              <p className="text-xs text-(--muted) max-w-xs">
+              <p className="text-xs text-muted max-w-xs">
                 Add fields in the Build tab to preview how respondents will experience your form.
               </p>
             </div>

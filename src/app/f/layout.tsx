@@ -42,7 +42,7 @@ export default function PublicFormLayout({
       className={`${plusJakartaSans.variable} ${plusJakartaSans.className} sk-form min-h-screen antialiased flex flex-col justify-between`}
       style={{ backgroundColor: brand.page }}
     >
-      <div className="w-full max-w-[640px] mx-auto px-4 sm:px-6 pt-6 sm:pt-10 pb-10 flex-1 flex flex-col justify-between">
+      <div className="w-full max-w-160 mx-auto px-4 sm:px-6 pt-6 sm:pt-10 pb-10 flex-1 flex flex-col justify-between">
         <main className="flex-1 flex flex-col">{children}</main>
         <BrandFooter />
       </div>

@@ -239,7 +239,7 @@ export function PublicForm({
             <Check className="size-7 text-(--success)" strokeWidth={2.5} />
           </div>
 
-          <p className="text-[15px] text-(--muted)">
+          <p className="text-[15px] text-muted">
             Thank you for taking the time to complete this form.
           </p>
 
@@ -247,9 +247,9 @@ export function PublicForm({
             <button
               type="button"
               onClick={handleReset}
-              className="h-11 px-6 rounded-lg border border-(--border) text-sm font-semibold text-(--ink) hover:bg-(--primary-soft) hover:border-(--border-hover) flex items-center gap-2 cursor-pointer transition-colors"
+              className="h-11 px-6 rounded-lg border border-border text-sm font-semibold text-(--ink) hover:bg-(--primary-soft) hover:border-(--border-hover) flex items-center gap-2 cursor-pointer transition-colors"
             >
-              <RotateCcw className="size-4 text-(--muted)" />
+              <RotateCcw className="size-4 text-muted" />
               Submit another response
             </button>
           </div>
@@ -287,7 +287,7 @@ export function PublicForm({
         {/* Required indicator caption at top right (13px, color var(--muted), asterisk in danger) */}
         {hasRequiredField && (
           <div className="flex justify-end mb-5">
-            <span className="text-[13px] text-(--muted) font-normal">
+            <span className="text-[13px] text-muted font-normal">
               <span className="text-(--danger) mr-1">*</span>Required
             </span>
           </div>
@@ -365,7 +365,7 @@ export function PublicForm({
             )}
           </button>
           {isAnyFileUploading && (
-            <p className="text-[13px] text-(--muted) text-center mt-2 font-medium">
+            <p className="text-[13px] text-muted text-center mt-2 font-medium">
               Wait for the upload to finish
             </p>
           )}

@@ -111,16 +111,16 @@ function FileFieldControl({
   if (isPreview) {
     return (
       <div className="space-y-1.5">
-        <div className="rounded-lg border-[1.5px] border-dashed border-(--border) p-2.5 sm:p-3.5 bg-[#F8FAFE] opacity-75 cursor-not-allowed flex items-center justify-between gap-2.5 sm:gap-3">
+        <div className="rounded-lg border-[1.5px] border-dashed border-border p-2.5 sm:p-3.5 bg-[#F8FAFE] opacity-75 cursor-not-allowed flex items-center justify-between gap-2.5 sm:gap-3">
           <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
-            <div className="size-9 sm:size-10 rounded-lg bg-(--primary-soft) text-(--primary) flex items-center justify-center shrink-0">
+            <div className="size-9 sm:size-10 rounded-lg bg-(--primary-soft) text-primary flex items-center justify-center shrink-0">
               <UploadCloud className="size-4.5 sm:size-5" />
             </div>
             <div className="min-w-0 flex-1">
               <span className="text-sm sm:text-[15px] font-semibold text-(--ink) block leading-snug truncate">
                 Choose a file
               </span>
-              <span className="text-xs sm:text-[13px] text-(--muted) block leading-snug truncate">
+              <span className="text-xs sm:text-[13px] text-muted block leading-snug truncate">
                 <span className="sm:hidden">Max 5 MB &bull; PDF, PNG, JPG</span>
                 <span className="hidden sm:inline">JPG, PNG, WebP, PDF, DOC or DOCX &bull; Max 5 MB</span>
               </span>
@@ -129,7 +129,7 @@ function FileFieldControl({
           <button
             type="button"
             disabled
-            className="h-8 sm:h-9 px-3 sm:px-4 rounded-lg border border-(--border) bg-white text-xs sm:text-[13px] font-semibold text-(--muted) cursor-not-allowed shrink-0"
+            className="h-8 sm:h-9 px-3 sm:px-4 rounded-lg border border-border bg-white text-xs sm:text-[13px] font-semibold text-muted cursor-not-allowed shrink-0"
           >
             Browse
           </button>
@@ -261,18 +261,18 @@ function FileFieldControl({
       {/* Uploading State */}
       {status === "uploading" && (
         <div className="p-3.5 rounded-lg border border-(--divider) bg-white space-y-2.5">
-          <div className="flex items-center justify-between text-xs text-(--muted)">
+          <div className="flex items-center justify-between text-xs text-muted">
             <span className="font-medium text-(--ink) truncate max-w-50 sm:max-w-xs">
               Uploading {fileMeta?.name}...
             </span>
             <div className="flex items-center gap-3">
-              <span className="font-semibold text-(--primary)">
+              <span className="font-semibold text-primary">
                 {Math.round(progress)}%
               </span>
               <button
                 type="button"
                 onClick={handleCancel}
-                className="text-xs font-semibold text-(--muted) hover:text-(--danger) cursor-pointer"
+                className="text-xs font-semibold text-muted hover:text-(--danger) cursor-pointer"
               >
                 Cancel
               </button>
@@ -280,7 +280,7 @@ function FileFieldControl({
           </div>
           <div className="w-full bg-[#E6ECF5] rounded-[3px] h-1.5 overflow-hidden">
             <div
-              className="h-full bg-(--primary) transition-all duration-150 ease-out rounded-[3px]"
+              className="h-full bg-primary transition-all duration-150 ease-out rounded-[3px]"
               style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
             />
           </div>
@@ -299,7 +299,7 @@ function FileFieldControl({
                 {fileMeta?.name ?? "Uploaded file"}
               </p>
               {fileMeta?.size && (
-                <p className="text-xs text-(--muted)">
+                <p className="text-xs text-muted">
                   {formatBytes(fileMeta.size)}
                 </p>
               )}
@@ -310,7 +310,7 @@ function FileFieldControl({
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={disabled}
-              className="text-xs font-semibold text-(--primary) hover:underline cursor-pointer disabled:opacity-50"
+              className="text-xs font-semibold text-primary hover:underline cursor-pointer disabled:opacity-50"
             >
               Replace
             </button>
@@ -346,7 +346,7 @@ function FileFieldControl({
                 setStatus("idle");
                 fileInputRef.current?.click();
               }}
-              className="text-xs font-semibold text-(--primary) hover:underline shrink-0 cursor-pointer"
+              className="text-xs font-semibold text-primary hover:underline shrink-0 cursor-pointer"
             >
               Try again
             </button>
@@ -390,19 +390,19 @@ function FileFieldControl({
           }}
           className={`rounded-lg border-[1.5px] border-dashed p-2.5 sm:p-3.5 flex items-center justify-between gap-2.5 sm:gap-3 cursor-pointer transition-all ${
             isDragging
-              ? "border-(--primary) bg-(--primary-soft)"
-              : "border-(--border) bg-[#F8FAFE] hover:border-(--primary) hover:bg-(--primary-soft)"
+              ? "border-primary bg-(--primary-soft)"
+              : "border-border bg-[#F8FAFE] hover:border-primary hover:bg-(--primary-soft)"
           } ${error ? "border-(--danger)" : ""}`}
         >
           <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
-            <div className="size-9 sm:size-10 rounded-lg bg-(--primary-soft) text-(--primary) flex items-center justify-center shrink-0">
+            <div className="size-9 sm:size-10 rounded-lg bg-(--primary-soft) text-primary flex items-center justify-center shrink-0">
               <UploadCloud className="size-4.5 sm:size-5" />
             </div>
             <div className="min-w-0 flex-1">
               <span className="text-sm sm:text-[15px] font-semibold text-(--ink) block leading-snug truncate">
                 Choose a file
               </span>
-              <span className="text-xs sm:text-[13px] text-(--muted) block leading-snug truncate">
+              <span className="text-xs sm:text-[13px] text-muted block leading-snug truncate">
                 <span className="sm:hidden">Max 5 MB &bull; PDF, PNG, JPG</span>
                 <span className="hidden sm:inline">JPG, PNG, WebP, PDF, DOC or DOCX &bull; Max 5 MB</span>
               </span>
@@ -411,7 +411,7 @@ function FileFieldControl({
           <button
             type="button"
             tabIndex={-1}
-            className="h-8 sm:h-9 px-3 sm:px-4 rounded-lg border border-(--border) bg-white text-xs sm:text-[13px] font-semibold text-(--ink) hover:border-(--border-hover) hover:bg-(--primary-soft) pointer-events-none transition-colors shrink-0 shadow-xs"
+            className="h-8 sm:h-9 px-3 sm:px-4 rounded-lg border border-border bg-white text-xs sm:text-[13px] font-semibold text-(--ink) hover:border-(--border-hover) hover:bg-(--primary-soft) pointer-events-none transition-colors shrink-0 shadow-xs"
           >
             Browse
           </button>
@@ -443,7 +443,7 @@ export function FieldRenderer({
       {/* Field Label with Required Asterisk */}
       <label
         htmlFor={inputId}
-        className="block text-[15px] leading-[22px] font-semibold text-(--ink) mb-2"
+        className="block text-[15px] leading-5.5 font-semibold text-(--ink) mb-2"
       >
         <span>{field.label}</span>
         {field.required && (
@@ -635,12 +635,12 @@ export function FieldRenderer({
                     />
                   </SelectPrimitive.Trigger>
                 </div>
-                <SelectContent className="bg-white border border-(--border) rounded-lg shadow-[0_12px_32px_-8px_rgba(8,24,76,0.18)] p-1 max-h-70">
+                <SelectContent className="bg-white border border-border rounded-lg shadow-[0_12px_32px_-8px_rgba(8,24,76,0.18)] p-1 max-h-70">
                   {options.map((opt, i) => (
                     <SelectItem
                       key={i}
                       value={opt}
-                      className="h-10 rounded-md text-sm text-(--ink) focus:bg-(--primary-soft) focus:text-(--primary) cursor-pointer"
+                      className="h-10 rounded-md text-sm text-(--ink) focus:bg-(--primary-soft) focus:text-primary cursor-pointer"
                     >
                       {opt}
                     </SelectItem>
@@ -686,13 +686,13 @@ export function FieldRenderer({
                         <span
                           className={`size-4.5 shrink-0 rounded-full border flex items-center justify-center transition-colors ${
                             isSelected
-                              ? "border-(--primary) border-[1.5px] bg-white"
+                              ? "border-primary border-[1.5px] bg-white"
                               : "border-(--border-hover) border-[1.5px] bg-white"
                           }`}
                           aria-hidden="true"
                         >
                           {isSelected && (
-                            <span className="size-2 rounded-full bg-(--primary)" />
+                            <span className="size-2 rounded-full bg-primary" />
                           )}
                         </span>
                         <span className="text-[15px] font-medium text-(--ink) flex-1 leading-snug">
@@ -751,7 +751,7 @@ export function FieldRenderer({
                           style={{ borderRadius: "4px" }}
                           className={`size-4.5 shrink-0 border flex items-center justify-center transition-colors ${
                             isChecked
-                              ? "bg-(--primary) border-(--primary)"
+                              ? "bg-primary border-primary"
                               : "border-(--border-hover) border-[1.5px] bg-white"
                           }`}
                           aria-hidden="true"
