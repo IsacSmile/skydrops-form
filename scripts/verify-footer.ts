@@ -108,7 +108,9 @@ async function run() {
     const hasTechDisplay = htmlPublished.includes("skydropstechnologies.com");
     const hasBrandsHeadingOrLogos =
       htmlPublished.includes("OUR BRANDS") ||
-      (htmlPublished.includes("skydrops-water-logo.png") &&
+      ((htmlPublished.includes("skydrops-water-logo.png") ||
+        htmlPublished.includes("Product%20Logo") ||
+        htmlPublished.includes("Product Logo")) &&
         htmlPublished.includes("skydrops-tech-logo.png"));
     const hasBlank = htmlPublished.includes('target="_blank"');
     const hasNoopener = htmlPublished.includes("noopener");
@@ -198,7 +200,9 @@ async function run() {
       notFoundFooterMatches.length === 1 ||
       htmlNotFound.includes('["$","footer"') ||
       htmlNotFound.includes("OUR BRANDS") ||
-      htmlNotFound.includes("skydrops-water-logo.png");
+      htmlNotFound.includes("skydrops-water-logo.png") ||
+      htmlNotFound.includes("Product%20Logo") ||
+      htmlNotFound.includes("Product Logo");
 
     if (notFoundHasWater && notFoundHasTech && notFoundHasFooterElement) {
       record(

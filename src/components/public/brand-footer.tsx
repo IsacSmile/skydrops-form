@@ -20,13 +20,13 @@ export function BrandFooter() {
               href={b.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative flex items-center gap-3.5 sm:gap-4 px-5 py-3 sm:px-6 sm:py-3.5 rounded-full bg-white border border-[#E0EAFA] shadow-[0_2px_14px_rgba(31,161,255,0.08),0_1px_3px_rgba(8,24,76,0.04)] hover:border-[#1FA1FF]/60 hover:shadow-[0_6px_22px_rgba(31,161,255,0.18)] hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--primary-ring) transition-all duration-200 motion-reduce:transition-none"
+              className="group relative flex items-center gap-3.5 sm:gap-4 px-5 py-3 sm:px-6 sm:py-3.5 rounded-[10px] bg-white border border-[#E0EAFA] shadow-[0_2px_14px_rgba(31,161,255,0.08),0_1px_3px_rgba(8,24,76,0.04)] hover:border-[#1FA1FF]/60 hover:shadow-[0_6px_22px_rgba(31,161,255,0.18)] hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--primary-ring) transition-all duration-200 motion-reduce:transition-none"
             >
               {/* Brand Logo */}
               <div
                 className={
                   b.name === "Skydrops Water"
-                    ? "w-20 sm:w-24 h-11 sm:h-12 flex items-center justify-center shrink-0"
+                    ? "w-22 sm:w-26 h-11 sm:h-12 flex items-center justify-center shrink-0"
                     : "w-12 sm:w-14 h-11 sm:h-12 flex items-center justify-center shrink-0"
                 }
               >
@@ -37,7 +37,7 @@ export function BrandFooter() {
                   height={b.logoHeight}
                   className={
                     b.name === "Skydrops Water"
-                      ? "h-5 sm:h-6 w-auto max-w-[85px] sm:max-w-[100px] object-contain transition-transform duration-200 group-hover:scale-105"
+                      ? "h-5.5 sm:h-6.5 w-auto max-w-[100px] sm:max-w-[120px] object-contain transition-transform duration-200 group-hover:scale-105"
                       : "h-9 sm:h-10 w-auto max-w-[48px] sm:max-w-[54px] object-contain transition-transform duration-200 group-hover:scale-105"
                   }
                 />

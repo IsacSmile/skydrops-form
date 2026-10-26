@@ -97,9 +97,9 @@ export const brand = {
       titleLine2: "Product website",
       href: "https://skydropswater.com/",
       display: "skydropswater.com",
-      logo: "/brand/skydrops-water-logo.png",
-      logoWidth: 410,
-      logoHeight: 109,
+      logo: "/brand/Product%20Logo%20(Royal%20Navy%20Blue).png",
+      logoWidth: 532,
+      logoHeight: 126,
     },
   ] as const,
 } as const;
