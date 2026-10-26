@@ -22,6 +22,7 @@ import {
   isAllowedFile,
 } from "@/lib/upload-policy";
 import { getFieldIconName, FIELD_ICON_COMPONENTS } from "@/lib/field-icons";
+import { plusJakartaSans } from "@/lib/fonts";
 
 export interface FieldRendererProps {
   field: Field;
@@ -635,12 +636,14 @@ export function FieldRenderer({
                     />
                   </SelectPrimitive.Trigger>
                 </div>
-                <SelectContent className="bg-white border border-border rounded-lg shadow-[0_12px_32px_-8px_rgba(8,24,76,0.18)] p-1 max-h-70">
+                <SelectContent
+                  className={`${plusJakartaSans.variable} ${plusJakartaSans.className} sk-form sk-select-popover bg-white border border-border rounded-lg shadow-[0_12px_32px_-8px_rgba(8,24,76,0.18)] p-1 max-h-70 font-sans`}
+                >
                   {options.map((opt, i) => (
                     <SelectItem
                       key={i}
                       value={opt}
-                      className="h-10 rounded-md text-sm text-(--ink) focus:bg-(--primary-soft) focus:text-primary cursor-pointer"
+                      className="h-10 rounded-md text-sm text-(--ink) focus:bg-(--primary-soft) focus:text-primary cursor-pointer font-medium font-sans"
                     >
                       {opt}
                     </SelectItem>

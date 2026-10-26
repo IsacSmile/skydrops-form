@@ -386,3 +386,21 @@
     transform: none !important;
   }
 }
+
+/* Dropdown Popover Menu (portalled to body outside .sk-form) */
+.sk-select-popover,
+.sk-select-popover *,
+[data-slot="select-content"],
+[data-slot="select-content"] *,
+[data-slot="select-item"],
+[data-slot="select-item"] * {
+  font-family: var(--font-jakarta), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+}
+
+.sk-select-popover [data-slot="select-item"],
+[data-slot="select-item"] {
+  color: var(--ink, #0B1B4A);
+  font-weight: 500;
+}
+
