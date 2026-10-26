@@ -37,18 +37,18 @@ export function BrandFooter() {
                   height={b.logoHeight}
                   className={
                     b.name === "Skydrops Water"
-                      ? "h-5.5 sm:h-6.5 w-auto max-w-[100px] sm:max-w-[120px] object-contain transition-transform duration-200 group-hover:scale-105"
-                      : "h-9 sm:h-10 w-auto max-w-[48px] sm:max-w-[54px] object-contain transition-transform duration-200 group-hover:scale-105"
+                      ? "h-5.5 sm:h-6.5 w-auto max-w-25 sm:max-w-30 object-contain transition-transform duration-200 group-hover:scale-105"
+                      : "h-9 sm:h-10 w-auto max-w-12 sm:max-w-13.5 object-contain transition-transform duration-200 group-hover:scale-105"
                   }
                 />
               </div>
 
               {/* Brand Title (2 lines) */}
               <div className="flex flex-col text-left justify-center min-w-0">
-                <span className="text-[13px] sm:text-[14px] font-bold text-[#071642] group-hover:text-primary transition-colors leading-[1.25]">
+                <span className="text-[13px] sm:text-sm font-bold text-[#071642] group-hover:text-primary transition-colors leading-tight">
                   {b.titleLine1}
                 </span>
-                <span className="text-[13px] sm:text-[14px] font-bold text-[#071642] group-hover:text-primary transition-colors leading-[1.25]">
+                <span className="text-[13px] sm:text-sm font-bold text-[#071642] group-hover:text-primary transition-colors leading-tight">
                   {b.titleLine2}
                 </span>
                 <span className="sr-only">
