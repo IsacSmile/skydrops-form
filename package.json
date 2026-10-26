@@ -22,7 +22,9 @@
     "sheets:check": "tsx --env-file=.env.local scripts/sheets-check.ts",
     "sheets:verify": "tsx --env-file=.env.local scripts/verify-sheets.ts",
     "submissions:verify": "tsx --env-file=.env.local scripts/verify-submissions.ts",
-    "uploads:verify": "tsx --env-file=.env.local scripts/verify-uploads.ts"
+    "uploads:verify": "tsx --env-file=.env.local scripts/verify-uploads.ts",
+    "predeploy": "tsx --env-file=.env.local scripts/predeploy-check.ts",
+    "hardening:verify": "tsx --env-file=.env.local scripts/verify-hardening.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

@@ -13,6 +13,8 @@ const envSchema = z.object({
   GOOGLE_SHEET_ID: z.string().optional(),
   BLOB_READ_WRITE_TOKEN: z.string().optional(),
   NEXT_PUBLIC_APP_URL: z.string().optional(),
+  // generate with: openssl rand -hex 32
+  CRON_SECRET: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

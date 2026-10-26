@@ -7,6 +7,9 @@ import {
   MAX_FILE_BYTES,
   buildUploadPrefix,
 } from "@/lib/upload-policy";
+import { getClientIp } from "@/lib/client-ip";
+import { hitRateLimit } from "@/lib/rate-limit";
+import { RATE_LIMIT_CONFIG } from "@/lib/rate-limit-config";
 
 const clientPayloadSchema = z.object({
   slug: z.string().min(1, "Slug is required"),
@@ -30,6 +33,31 @@ export async function POST(request: Request): Promise<NextResponse> {
       {
         status: 503,
         headers: { "Cache-Control": "no-store" },
+      }
+    );
+  }
+
+  const clientIp = getClientIp(request.headers);
+  const rateLimitResult = await hitRateLimit({
+    scope: "upload",
+    identifier: clientIp,
+    limit: RATE_LIMIT_CONFIG.upload.limit,
+    windowSeconds: RATE_LIMIT_CONFIG.upload.windowSeconds,
+    failMode: RATE_LIMIT_CONFIG.upload.failMode,
+  });
+
+  if (!rateLimitResult.allowed) {
+    return NextResponse.json(
+      {
+        ok: false,
+        message: "Too many attempts. Please wait a few minutes and try again.",
+      },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(rateLimitResult.retryAfterSeconds),
+          "Cache-Control": "no-store",
+        },
       }
     );
   }

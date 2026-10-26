@@ -7,6 +7,9 @@ import { createSubmission } from "@/lib/submissions-data";
 import { afterSubmissionCreated } from "@/lib/submission-hooks";
 import { isFileUploadsEnabled } from "@/lib/feature-flags";
 import { MAX_FILE_BYTES, ALL_ALLOWED_MIME_TYPES } from "@/lib/upload-policy";
+import { getClientIp } from "@/lib/client-ip";
+import { hitRateLimit } from "@/lib/rate-limit";
+import { RATE_LIMIT_CONFIG } from "@/lib/rate-limit-config";
 
 const MAX_BODY_BYTES = 100 * 1024; // 100 KB
 
@@ -77,13 +80,39 @@ export async function POST(request: Request) {
   }
 
   const { slug, answers, website } = parsed.data;
+  const clientIp = getClientIp(request.headers);
 
-  // 4. Honeypot check: silently accept without storing
+  // 4. Rate limiting: 10 requests per 10 minutes per IP per form slug
+  const rateLimitResult = await hitRateLimit({
+    scope: `submit:${slug}`,
+    identifier: clientIp,
+    limit: RATE_LIMIT_CONFIG.submit.limit,
+    windowSeconds: RATE_LIMIT_CONFIG.submit.windowSeconds,
+    failMode: RATE_LIMIT_CONFIG.submit.failMode,
+  });
+
+  if (!rateLimitResult.allowed) {
+    return NextResponse.json(
+      {
+        ok: false,
+        message: "Too many attempts. Please wait a few minutes and try again.",
+      },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(rateLimitResult.retryAfterSeconds),
+          "Cache-Control": "no-store",
+        },
+      }
+    );
+  }
+
+  // 5. Honeypot check: silently accept without storing (still counted towards rate limit)
   if (typeof website === "string" && website.trim().length > 0) {
     return jsonResponse({ ok: true }, 200);
   }
 
-  // 5. Load public form by slug
+  // 6. Load public form by slug
   let publicForm;
   try {
     publicForm = await getPublicFormBySlug(slug);

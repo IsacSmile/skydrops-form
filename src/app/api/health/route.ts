@@ -7,6 +7,9 @@ export async function GET() {
     await db.execute(sql`select 1`);
     return NextResponse.json({ ok: true });
   } catch (error) {
+    if (process.env.NODE_ENV === "production") {
+      return NextResponse.json({ ok: false }, { status: 500 });
+    }
     const message = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json({ ok: false, error: message }, { status: 500 });
   }

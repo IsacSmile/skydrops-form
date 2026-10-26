@@ -187,6 +187,11 @@ export function PublicForm({
         setSubmitError("This form is closed and no longer accepting submissions.");
       } else if (res.status === 404) {
         setSubmitError("This form could not be found.");
+      } else if (res.status === 429) {
+        setSubmitError(
+          data?.message ||
+            "Too many attempts. Please wait a few minutes and try again."
+        );
       } else {
         setSubmitError(
           data?.message || "Something went wrong. Please check your connection and try again."

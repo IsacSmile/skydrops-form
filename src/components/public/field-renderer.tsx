@@ -158,6 +158,32 @@ function FileFieldControl({
     const controller = new AbortController();
     abortControllerRef.current = controller;
 
+    let serverErrorMessage: string | null = null;
+    const originalFetch = typeof window !== "undefined" ? window.fetch : null;
+    if (originalFetch) {
+      window.fetch = async (...args) => {
+        const res = await originalFetch(...args);
+        const urlStr =
+          typeof args[0] === "string"
+            ? args[0]
+            : args[0] instanceof Request
+            ? args[0].url
+            : "";
+        if (urlStr.includes("/api/upload") && !res.ok) {
+          try {
+            const cloned = res.clone();
+            const json = await cloned.json();
+            if (json && typeof json.message === "string") {
+              serverErrorMessage = json.message;
+            }
+          } catch {
+            // Ignore parse errors
+          }
+        }
+        return res;
+      };
+    }
+
     try {
       const cleanName = sanitizeFileName(file.name);
       const pathname = `${buildUploadPrefix(formId, field.key)}${cleanName}`;
@@ -184,9 +210,12 @@ function FileFieldControl({
         onChange?.("");
         return;
       }
-      setErrorMessage("Upload failed. Please try again.");
+      setErrorMessage(serverErrorMessage || "Upload failed. Please try again.");
       setStatus("error");
     } finally {
+      if (originalFetch && typeof window !== "undefined") {
+        window.fetch = originalFetch;
+      }
       abortControllerRef.current = null;
     }
   }

@@ -6,6 +6,7 @@ import {
   jsonb,
   pgEnum,
   pgTable,
+  primaryKey,
   text,
   timestamp,
   unique,
@@ -84,6 +85,19 @@ export const submissions = pgTable(
       table.createdAt
     ),
     index("submissions_sync_status_idx").on(table.syncStatus),
+  ]
+);
+
+export const rateLimits = pgTable(
+  "rate_limits",
+  {
+    key: text("key").notNull(),
+    windowStart: timestamp("window_start", { withTimezone: true }).notNull(),
+    count: integer("count").notNull().default(0),
+  },
+  (table) => [
+    primaryKey({ columns: [table.key, table.windowStart] }),
+    index("rate_limits_window_start_idx").on(table.windowStart),
   ]
 );
 

@@ -67,9 +67,10 @@ File upload --> Vercel Blob (client upload) --> URL stored in submission
 | C7  | File upload via Vercel Blob (size/type limits) (verified via uploads:verify suite with real Vercel Blob & Google Sheets; Playwright browser driver unavailable in environment) | C6         | ⬜     | ✅     |
 | C8  | Google Sheets sync: service account, create tab, header row, append row, header update on label change, retry for failed rows | C6         | ⬜     | ✅     |
 | C9  | Admin submissions view (minimal): count, sync status, retry failed, link to Sheet (verified via verify-submissions suite, build, real Google Sheets retry; Playwright driver unavailable in environment) | C8         | ⬜     | ✅     |
-| C10 | Hardening + deploy: rate limit, honeypot, env vars, Vercel deploy, smoke test checklist                       | all        | ⬜     | ⬜     |
+| C10a| Production hardening in code: atomic rate limiting in Neon, cron maintenance runner (/api/cron/maintenance), orphan blob cleanup, security headers, robots.txt, predeploy checks (verified via 18-step verify-hardening suite) | all        | ⬜     | ✅     |
+| C10b| Deploy to Vercel: user steps                                                                  | C10a       | ⬜     | ⬜     |
 
-**Build order:** C0 > C1 > C2 > C3 > C4a > C4b > C5 > C6 > C8 > C7 > C9 > C10
+**Build order:** C0 > C1 > C2 > C3 > C4a > C4b > C5 > C6 > C8 > C7 > C9 > C10a > C10b
 (Sheets before file upload, so the core flow works end to end first.)
 
 ## 5. Milestones
@@ -77,7 +78,7 @@ File upload --> Vercel Blob (client upload) --> URL stored in submission
 - **M1: Admin can create a form with fields** (C0-C4)
 - **M2: Publish and fill a form via short link** (C5-C6)
 - **M3: Submissions appear in Google Sheet** (C8)
-- **M4: Files, submissions view, production deploy** (C7, C9, C10)
+- **M4: Files, submissions view, production deploy** (C7, C9, C10a, C10b)
 
 ## 6. Per-component workflow
 
@@ -103,3 +104,4 @@ File upload --> Vercel Blob (client upload) --> URL stored in submission
 | 2026-10-26 | C8 completed: Google Sheets sync, Node crypto RS256 JWT, REST API, after() hook, idempotency, verify-sheets suite |
 | 2026-10-26 | C9 completed: Admin responses view per form (/admin/forms/[id]/submissions), stats cards, sync status badges, retry actions, answer detail dialog, Google Sheets link, verify-submissions suite |
 | 2026-10-26 | C7 completed: Vercel Blob client upload, upload route, server validation + head check, progress bar & file picker, warning banner, best-effort blob deletion, uploads:verify suite |
+| 2026-10-26 | C10a completed: Rate limiting in Neon, cron maintenance job, orphan blob cleanup, security headers, robots.txt, predeploy checks, verify-hardening suite |
