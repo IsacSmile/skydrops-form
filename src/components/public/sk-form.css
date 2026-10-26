@@ -1,26 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@1..144,1..1000&display=swap');
-
 /**
- * Deep Sky form design system - scoped to .sk-form wrapper
+ * Skydrops U3 Public Form Design System - scoped to .sk-form wrapper
+ * Light, airy & premium aesthetic with Plus Jakarta Sans typography.
  */
 .sk-form {
-  --navy-900: #071642;
-  --navy-800: #08184C;
-  --navy-700: #0A2A8A;
+  /* Tokens */
+  --ink: #0B1B4A;
+  --text-soft: #2B3A5C;
+  --muted: #5B6475;
+  --placeholder: #7B879B;
+  --icon: #5F6F8F;
+  --icon-strong: #34456B;
+  --border: #C9D6EA;
+  --border-hover: #A9BAD6;
+  --card-border: #E3EAF5;
+  --divider: #E6ECF5;
   --primary: #0B5BFF;
   --primary-hover: #0A4FDB;
   --primary-soft: #F2F7FF;
-  --primary-ring: rgba(11, 91, 255, 0.18);
-  --sky: #1FA1FF;
-  --ink: #111014;
-  --text: #1B2433;
-  --muted: #5B6475;
-  --placeholder: #8A94A6;
-  --border: #D5DEEC;
-  --border-hover: #A9BAD6;
-  --divider: #E6ECF5;
+  --primary-ring: rgba(11, 91, 255, 0.16);
+  --page: #F4F7FB;
   --surface: #FFFFFF;
-  --page: #F5F7FB;
+
+  /* Feedback Tokens */
   --danger: #D92D20;
   --danger-soft: #FEF3F2;
   --danger-border: #FECDCA;
@@ -28,18 +29,34 @@
   --success: #12B76A;
   --success-soft: #ECFDF3;
 
+  /* Strict Radii */
   --radius-card: 12px;
   --radius-control: 8px;
+  --radius-link-card: 12px;
   --radius-chip: 6px;
   --radius-checkbox: 4px;
   --radius-radio: 9999px;
 
-  --shadow-card: 0 1px 2px rgba(8, 24, 76, 0.05), 0 16px 40px -16px rgba(8, 24, 76, 0.18);
-  --shadow-button: 0 1px 2px rgba(8, 24, 76, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.14);
-  --shadow-popover: 0 12px 32px -8px rgba(8, 24, 76, 0.18);
+  /* Shadows */
+  --shadow-card: 0 1px 2px rgba(8, 24, 76, 0.05), 0 12px 32px -14px rgba(8, 24, 76, 0.14);
+  --shadow-button: 0 6px 16px -6px rgba(11, 91, 255, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  --shadow-input: 0 1px 0 rgba(8, 24, 76, 0.03);
+  --shadow-link-card: 0 1px 2px rgba(8, 24, 76, 0.04);
+  --shadow-link-card-hover: 0 4px 12px -2px rgba(8, 24, 76, 0.08);
 
-  color: var(--text);
-  font-family: var(--font-jakarta), system-ui, sans-serif;
+  color: var(--ink);
+  font-family: var(--font-jakarta), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Font Bug Fix: Controls and options inherit font explicitly */
+.sk-form input,
+.sk-form textarea,
+.sk-form select,
+.sk-form button,
+.sk-form .sk-option-card,
+.sk-form label {
+  font: inherit;
 }
 
 /* Typography wraps */
@@ -54,31 +71,87 @@
 /* Card */
 .sk-form .sk-card {
   background-color: var(--surface);
-  border: 1px solid var(--divider);
+  border: 1px solid var(--card-border);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-card);
   overflow: hidden;
 }
 
-/* Header Band */
-.sk-form .sk-header-band {
-  background: linear-gradient(135deg, #071642 0%, #0A2A8A 58%, #0B5BFF 130%);
+/* Header Container */
+.sk-form .sk-header-container {
   position: relative;
+  isolation: isolate;
   overflow: hidden;
+  background-color: #EAF3FF;
+  background-image: linear-gradient(180deg, #DCEBFF 0%, #F3F8FF 100%);
 }
 
-/* Inputs & Textareas */
+/* Header Legibility Overlay */
+.sk-form .sk-header-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(255, 255, 255, 0.82) 62%,
+    rgba(255, 255, 255, 0.40) 100%
+  );
+}
+
+@media (min-width: 640px) {
+  .sk-form .sk-header-overlay {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.94) 0%,
+      rgba(255, 255, 255, 0.86) 38%,
+      rgba(255, 255, 255, 0.35) 62%,
+      rgba(255, 255, 255, 0) 82%
+    );
+  }
+}
+
+/* Input Wrappers & Leading Icons */
+.sk-form .sk-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.sk-form .sk-input-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: var(--icon);
+  pointer-events: none;
+  z-index: 2;
+  transition: color 120ms ease;
+}
+
+.sk-form .sk-input-wrapper:focus-within .sk-input-icon {
+  color: var(--primary);
+}
+
+/* Text Inputs, Select Trigger, Date */
 .sk-form .sk-input {
-  height: 48px;
-  padding: 0 14px;
+  height: 52px;
+  padding: 0 16px;
   background-color: #FFFFFF;
   border: 1px solid var(--border);
   border-radius: var(--radius-control);
   font-size: 16px;
-  color: var(--text);
+  color: var(--ink);
   outline: none;
   width: 100%;
+  box-shadow: var(--shadow-input);
   transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.sk-form .sk-input.sk-input-with-icon {
+  padding-left: 48px;
 }
 
 .sk-form .sk-input::placeholder {
@@ -89,7 +162,8 @@
   border-color: var(--border-hover);
 }
 
-.sk-form .sk-input:focus-visible {
+.sk-form .sk-input:focus-visible,
+.sk-form .sk-input-wrapper:focus-within .sk-input {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px var(--primary-ring);
   outline: none;
@@ -102,41 +176,48 @@
 }
 
 .sk-form .sk-input:disabled {
-  background-color: #F5F7FB;
+  background-color: #F8FAFE;
   color: var(--muted);
   cursor: not-allowed;
 }
 
 /* Textarea specifically */
 .sk-form .sk-textarea {
-  min-height: 120px;
-  padding: 12px 14px;
+  min-height: 128px;
+  padding: 14px 16px;
   resize: vertical;
   height: auto;
+  line-height: 1.5;
 }
 
 /* Select Trigger */
 .sk-form .sk-select-trigger {
-  height: 48px;
-  padding: 0 14px;
+  height: 52px;
+  padding: 0 16px;
   background-color: #FFFFFF;
   border: 1px solid var(--border);
   border-radius: var(--radius-control);
   font-size: 16px;
-  color: var(--text);
+  color: var(--ink);
   outline: none;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-shadow: var(--shadow-input);
   transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.sk-form .sk-select-trigger.sk-select-with-icon {
+  padding-left: 48px;
 }
 
 .sk-form .sk-select-trigger:hover:not([data-disabled]) {
   border-color: var(--border-hover);
 }
 
-.sk-form .sk-select-trigger:focus-visible {
+.sk-form .sk-select-trigger:focus-visible,
+.sk-form .sk-select-trigger[data-popup-open="true"] {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px var(--primary-ring);
   outline: none;
@@ -145,6 +226,20 @@
 .sk-form .sk-select-trigger[aria-invalid="true"] {
   border-color: var(--danger);
   box-shadow: 0 0 0 3px rgba(217, 45, 32, 0.14);
+}
+
+/* Select Chevron rotating on open */
+.sk-form .sk-select-chevron {
+  width: 18px;
+  height: 18px;
+  color: var(--icon-strong);
+  transition: transform 120ms ease;
+  flex-shrink: 0;
+}
+
+.sk-form .sk-select-trigger[data-popup-open="true"] .sk-select-chevron,
+.sk-form .sk-select-trigger[aria-expanded="true"] .sk-select-chevron {
+  transform: rotate(180deg);
 }
 
 /* Option Cards (Radio & Checkbox rows) */
@@ -161,6 +256,7 @@
   width: 100%;
   text-align: left;
   user-select: none;
+  color: var(--ink);
   transition: border-color 120ms ease, background-color 120ms ease, box-shadow 120ms ease;
 }
 
@@ -184,20 +280,12 @@
 
 /* Submit Button */
 .sk-form .sk-submit-btn {
-  height: 52px;
+  height: 54px;
   border-radius: var(--radius-control);
   background-color: var(--primary);
   color: #FFFFFF;
-  font-family: "Google Sans Flex", sans-serif;
-  font-optical-sizing: auto;
-  font-style: normal;
-  font-variation-settings:
-    "slnt" 0,
-    "wdth" 100,
-    "ROND" 0;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 600;
-  letter-spacing: 0.12em;
   box-shadow: var(--shadow-button);
   width: 100%;
   display: flex;
@@ -206,48 +294,25 @@
   gap: 10px;
   border: none;
   cursor: pointer;
+  margin-top: 28px;
   position: relative;
-  overflow: hidden;
-  will-change: transform, box-shadow;
-  transition: background-color 300ms cubic-bezier(0.16, 1, 0.3, 1),
-              transform 300ms cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 300ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Subtle Shimmer highlight on hover */
-.sk-form .sk-submit-btn::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 20%,
-    rgba(255, 255, 255, 0.16) 45%,
-    rgba(255, 255, 255, 0.32) 50%,
-    rgba(255, 255, 255, 0.16) 55%,
-    transparent 80%
-  );
-  transform: translateX(-100%);
-  opacity: 0;
-  transition: transform 650ms cubic-bezier(0.4, 0, 0.2, 1), opacity 300ms ease;
-  pointer-events: none;
+  transition: background-color 120ms ease, transform 120ms ease, box-shadow 120ms ease;
 }
 
 .sk-form .sk-submit-btn:hover:not(:disabled) {
   background-color: var(--primary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 28px -4px rgba(11, 91, 255, 0.42), 0 4px 10px -2px rgba(11, 91, 255, 0.24);
 }
 
-.sk-form .sk-submit-btn:hover:not(:disabled)::after {
-  transform: translateX(100%);
-  opacity: 1;
+.sk-form .sk-submit-btn:hover:not(:disabled) .sk-submit-arrow {
+  transform: translateX(2px);
+}
+
+.sk-form .sk-submit-arrow {
+  transition: transform 120ms ease;
 }
 
 .sk-form .sk-submit-btn:active:not(:disabled) {
-  transform: translateY(0.5px) scale(0.99);
-  box-shadow: 0 2px 8px rgba(11, 91, 255, 0.28);
-  transition: transform 120ms ease, box-shadow 120ms ease;
+  transform: translateY(1px);
 }
 
 .sk-form .sk-submit-btn:focus-visible {
@@ -263,10 +328,61 @@
   transform: none;
 }
 
+/* Brand Link Cards (Outside Form Card) */
+.sk-form .sk-brand-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 72px;
+  padding: 14px 18px;
+  background-color: #FFFFFF;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-link-card);
+  box-shadow: var(--shadow-link-card);
+  text-decoration: none;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.sk-form .sk-brand-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-link-card-hover);
+}
+
+.sk-form .sk-brand-card:hover .sk-brand-card-label {
+  color: var(--primary);
+}
+
+.sk-form .sk-brand-card:hover .sk-brand-card-arrow {
+  transform: translateX(2px);
+}
+
+.sk-form .sk-brand-card:focus-visible {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-ring);
+}
+
+.sk-form .sk-brand-card-label {
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--ink);
+  transition: color 120ms ease;
+}
+
+.sk-form .sk-brand-card-arrow {
+  width: 18px;
+  height: 18px;
+  color: var(--icon-strong);
+  flex-shrink: 0;
+  transition: transform 120ms ease;
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .sk-form * {
     transition: none !important;
     animation: none !important;
+    transform: none !important;
   }
 }

@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { ArrowRight, Layers } from "lucide-react";
 import type { Form, Field } from "@/types/form";
 import { brand } from "@/lib/brand";
+import { plusJakartaSans } from "@/lib/fonts";
 import { FieldRenderer } from "./field-renderer";
 import { FormHeaderBand } from "./form-header-band";
-import { Layers } from "lucide-react";
 import "./sk-form.css";
 
 interface FormPreviewProps {
@@ -28,8 +29,10 @@ export function FormPreview({ form, fields }: FormPreviewProps) {
   const hasRequiredField = fields.some((f) => f.required);
 
   return (
-    <div className="sk-form w-full max-w-2xl mx-auto">
-      {/* Live Form Preview Card styled in Deep Sky */}
+    <div
+      className={`${plusJakartaSans.variable} ${plusJakartaSans.className} sk-form w-full max-w-[640px] mx-auto`}
+    >
+      {/* Live Form Preview Card styled in Light & Airy U3 */}
       <div className="sk-card w-full">
         <FormHeaderBand
           title={form.title || "Untitled Form"}
@@ -37,52 +40,59 @@ export function FormPreview({ form, fields }: FormPreviewProps) {
           priorityLogo={false}
         />
 
-        <div className="px-5 pt-6 pb-7 sm:px-10 sm:pt-9 sm:pb-10 bg-white space-y-6 sm:space-y-7">
+        <div className="px-5 pt-6 pb-7 sm:px-10 sm:pt-9 sm:pb-10 bg-white">
           {hasRequiredField && (
-            <div className="flex justify-end -mt-1 mb-6">
-              <span className="text-xs text-muted font-normal">
+            <div className="flex justify-end mb-5">
+              <span className="text-[13px] text-(--muted) font-normal">
                 <span className="text-(--danger) mr-1">*</span>Required
               </span>
             </div>
           )}
 
           {fields.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 text-center text-muted space-y-3">
+            <div className="flex flex-col items-center justify-center py-12 text-center text-(--muted) space-y-3">
               <div className="p-3 bg-(--page) rounded-full">
-                <Layers className="size-6 text-muted" />
+                <Layers className="size-6 text-(--muted)" />
               </div>
-              <p className="text-sm font-medium text-(--text)">No fields yet</p>
-              <p className="text-xs text-muted max-w-xs">
+              <p className="text-sm font-medium text-(--ink)">No fields yet</p>
+              <p className="text-xs text-(--muted) max-w-xs">
                 Add fields in the Build tab to preview how respondents will experience your form.
               </p>
             </div>
           ) : (
-            <div className="space-y-6 sm:space-y-7">
-              {fields.map((field) => (
-                <FieldRenderer
-                  key={field.id}
-                  field={field}
-                  value={values[field.id]}
-                  onChange={(val) => handleFieldChange(field.id, val)}
-                  disabled={false}
-                />
-              ))}
+            <div>
+              <div className="space-y-6">
+                {fields.map((field) => (
+                  <FieldRenderer
+                    key={field.id}
+                    field={field}
+                    value={values[field.id]}
+                    onChange={(val) => handleFieldChange(field.id, val)}
+                    disabled={false}
+                  />
+                ))}
+              </div>
 
-              <div className="pt-2 mt-8">
+              <div className="pt-2">
                 <button
                   type="button"
                   disabled
-                  className="sk-submit-btn opacity-80 cursor-not-allowed group"
+                  className="sk-submit-btn opacity-80 cursor-not-allowed"
                 >
                   <Image
                     src={brand.logo.markWhite}
                     alt=""
-                    width={18}
-                    height={25}
+                    width={16}
+                    height={22}
                     className="w-4 h-auto object-contain shrink-0"
                     aria-hidden="true"
                   />
-                  <span className="tracking-[0.12em] font-semibold">SUBMIT</span>
+                  <span>Submit</span>
+                  <ArrowRight
+                    className="sk-submit-arrow size-4.5 shrink-0"
+                    strokeWidth={2}
+                    aria-hidden="true"
+                  />
                 </button>
               </div>
             </div>

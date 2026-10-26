@@ -1,13 +1,14 @@
 /**
- * Verification script for U1: Brand Footer.
+ * Verification script for Brand Footer and Brand Link Cards (U3).
  *
  * Verifies:
- * 1. Published form page contains exact links, names, domains, OUR BRANDS,
- *    target="_blank", rel with noopener/noreferrer, and exactly one <footer>.
- * 2. Closed form page contains the footer with both links.
- * 3. 404 /f/zzzzzzzz page contains the footer with both links.
- * 4. Admin login page contains NEITHER brand link.
- * 5. "Powered by" does not appear on public pages.
+ * 1. Published form page contains exact links, labels ("Skydrops Technologies website",
+ *    "Skydrops Water website"), target="_blank", rel with noopener/noreferrer, exactly one <footer>/brand nav,
+ *    and static "© Skydrops".
+ * 2. Closed form page contains the header and the brand link cards.
+ * 3. 404 /f/zzzzzzzz page contains the header and the brand link cards.
+ * 4. Admin login page contains NEITHER brand link card.
+ * 5. NO "OUR BRANDS", NO "Powered by" on public pages.
  * 6. Cleans up test forms reliably.
  *
  * Usage:
@@ -49,7 +50,7 @@ function uniqueIp(): string {
 
 async function run() {
   console.log("\n=======================================================");
-  console.log("  U1 BRAND FOOTER VERIFICATION SUITE");
+  console.log("  U3 BRAND FOOTER / LINK CARDS VERIFICATION SUITE");
   console.log("=======================================================\n");
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
@@ -76,7 +77,7 @@ async function run() {
     // -------------------------------------------------------------------------
     const form = await createForm({
       title: `Footer Test Form ${runId}`,
-      description: "Testing parent brand footer",
+      description: "Testing parent brand link cards and copyright",
     });
     createdFormIds.push(form.id);
 
@@ -102,50 +103,42 @@ async function run() {
     const hasTechHref = htmlPublished.includes(
       "https://www.skydropstechnologies.com/"
     );
-    const hasWaterName = htmlPublished.includes("Skydrops Water");
-    const hasTechName = htmlPublished.includes("Skydrops Technologies");
-    const hasWaterDisplay = htmlPublished.includes("skydropswater.com");
-    const hasTechDisplay = htmlPublished.includes("skydropstechnologies.com");
-    const hasBrandsHeadingOrLogos =
-      htmlPublished.includes("OUR BRANDS") ||
-      ((htmlPublished.includes("skydrops-water-logo.png") ||
-        htmlPublished.includes("Product%20Logo") ||
-        htmlPublished.includes("Product Logo")) &&
-        htmlPublished.includes("skydrops-tech-logo.png"));
+    const hasWaterLabel = htmlPublished.includes("Skydrops Water website");
+    const hasTechLabel = htmlPublished.includes("Skydrops Technologies website");
     const hasBlank = htmlPublished.includes('target="_blank"');
     const hasNoopener = htmlPublished.includes("noopener");
     const hasNoreferrer = htmlPublished.includes("noreferrer");
+    const hasCopyright = htmlPublished.includes("© Skydrops");
 
     const footerMatches = htmlPublished.match(/<footer[\s>]/gi) || [];
-    const exactlyOneFooter = footerMatches.length === 1;
+    const navMatches = htmlPublished.match(/aria-label=["']Skydrops websites["']/gi) || [];
+    const exactlyOneFooterOrNav = footerMatches.length === 1 || navMatches.length === 1;
 
     const step2Pass =
       resPublished.status === 200 &&
       hasWaterHref &&
       hasTechHref &&
-      hasWaterName &&
-      hasTechName &&
-      hasWaterDisplay &&
-      hasTechDisplay &&
-      hasBrandsHeadingOrLogos &&
+      hasWaterLabel &&
+      hasTechLabel &&
       hasBlank &&
       hasNoopener &&
       hasNoreferrer &&
-      exactlyOneFooter;
+      hasCopyright &&
+      exactlyOneFooterOrNav;
 
     if (step2Pass) {
       record(
         2,
         "Published page /f/<slug> footer elements",
         "PASS",
-        "Both hrefs, names, displays, brand logos, target=_blank, rel=noopener noreferrer, exactly 1 footer"
+        "Both hrefs, exact labels, target=_blank, rel=noopener noreferrer, © Skydrops, exactly 1 footer/nav"
       );
     } else {
       record(
         2,
         "Published page /f/<slug> footer elements",
         "FAIL",
-        `Status: ${resPublished.status}, Footers: ${footerMatches.length}, WaterHref: ${hasWaterHref}, TechHref: ${hasTechHref}`
+        `Status: ${resPublished.status}, Footers: ${footerMatches.length}, WaterHref: ${hasWaterHref}, TechHref: ${hasTechHref}, WaterLabel: ${hasWaterLabel}, TechLabel: ${hasTechLabel}`
       );
     }
 
@@ -158,26 +151,30 @@ async function run() {
     });
     const htmlClosed = await resClosed.text();
 
+    const closedHasHeader =
+      htmlClosed.includes("header-background-image") &&
+      htmlClosed.includes("This form is closed");
     const closedHasWater = htmlClosed.includes("https://skydropswater.com/");
     const closedHasTech = htmlClosed.includes(
       "https://www.skydropstechnologies.com/"
     );
-    const closedFooterMatches = htmlClosed.match(/<footer[\s>]/gi) || [];
-    const closedOneFooter = closedFooterMatches.length === 1;
+    const closedHasCards =
+      htmlClosed.includes("Skydrops Technologies website") &&
+      htmlClosed.includes("Skydrops Water website");
 
-    if (closedHasWater && closedHasTech && closedOneFooter) {
+    if (resClosed.status === 200 && closedHasHeader && closedHasWater && closedHasTech && closedHasCards) {
       record(
         3,
-        "Closed form page /f/<slug> footer elements",
+        "Closed form page /f/<slug> header and link cards",
         "PASS",
-        "Contains both brand links and exactly 1 footer"
+        "Contains header and both brand link cards"
       );
     } else {
       record(
         3,
-        "Closed form page /f/<slug> footer elements",
+        "Closed form page /f/<slug> header and link cards",
         "FAIL",
-        `Water: ${closedHasWater}, Tech: ${closedHasTech}, Footers: ${closedFooterMatches.length}`
+        `Header: ${closedHasHeader}, Water: ${closedHasWater}, Tech: ${closedHasTech}`
       );
     }
 
@@ -189,39 +186,37 @@ async function run() {
     });
     const htmlNotFound = await resNotFound.text();
 
+    const notFoundHasHeader =
+      htmlNotFound.includes("header-background-image") ||
+      htmlNotFound.includes("Form not found");
     const notFoundHasWater = htmlNotFound.includes(
       "https://skydropswater.com/"
     );
     const notFoundHasTech = htmlNotFound.includes(
       "https://www.skydropstechnologies.com/"
     );
-    const notFoundFooterMatches = htmlNotFound.match(/<footer[\s>]/gi) || [];
-    const notFoundHasFooterElement =
-      notFoundFooterMatches.length === 1 ||
-      htmlNotFound.includes('["$","footer"') ||
-      htmlNotFound.includes("OUR BRANDS") ||
-      htmlNotFound.includes("skydrops-water-logo.png") ||
-      htmlNotFound.includes("Product%20Logo") ||
-      htmlNotFound.includes("Product Logo");
+    const notFoundHasCards =
+      htmlNotFound.includes("Skydrops Technologies website") &&
+      htmlNotFound.includes("Skydrops Water website");
 
-    if (notFoundHasWater && notFoundHasTech && notFoundHasFooterElement) {
+    if (notFoundHasHeader && notFoundHasWater && notFoundHasTech && notFoundHasCards) {
       record(
         4,
-        "Not-found page /f/zzzzzzzz footer elements",
+        "Not-found page /f/zzzzzzzz header and link cards",
         "PASS",
-        "Contains both brand links and footer component"
+        "Contains header and both brand link cards"
       );
     } else {
       record(
         4,
-        "Not-found page /f/zzzzzzzz footer elements",
+        "Not-found page /f/zzzzzzzz header and link cards",
         "FAIL",
-        `Water: ${notFoundHasWater}, Tech: ${notFoundHasTech}, FooterElement: ${notFoundHasFooterElement}`
+        `Header: ${notFoundHasHeader}, Water: ${notFoundHasWater}, Tech: ${notFoundHasTech}, Cards: ${notFoundHasCards}`
       );
     }
 
     // -------------------------------------------------------------------------
-    // Step 5: GET /admin/login contains NEITHER brand link
+    // Step 5: GET /admin/login contains NEITHER brand link nor header
     // -------------------------------------------------------------------------
     const resAdmin = await fetch(`${baseUrl}/admin/login`, {
       headers: { "x-forwarded-for": uniqueIp() },
@@ -232,43 +227,45 @@ async function run() {
     const adminHasTech = htmlAdmin.includes(
       "https://www.skydropstechnologies.com/"
     );
+    const adminHasHeaderImg = htmlAdmin.includes("header-background-image");
 
-    if (!adminHasWater && !adminHasTech) {
+    if (!adminHasWater && !adminHasTech && !adminHasHeaderImg) {
       record(
         5,
-        "Admin /admin/login footer isolation",
+        "Admin /admin/login isolation",
         "PASS",
-        "Contains neither brand link; admin is completely unaffected"
+        "Contains neither brand link nor header; admin is completely unaffected"
       );
     } else {
       record(
         5,
-        "Admin /admin/login footer isolation",
+        "Admin /admin/login isolation",
         "FAIL",
-        `Admin leaked links: Water=${adminHasWater}, Tech=${adminHasTech}`
+        `Admin leaked: Water=${adminHasWater}, Tech=${adminHasTech}, HeaderImg=${adminHasHeaderImg}`
       );
     }
 
     // -------------------------------------------------------------------------
-    // Step 6: "Powered by" no longer appears on public pages
+    // Step 6: Assert NO "OUR BRANDS", NO "Powered by"
     // -------------------------------------------------------------------------
+    const publishedHasOurBrands = htmlPublished.includes("OUR BRANDS");
     const publishedHasPowered = htmlPublished.includes("Powered by");
+    const closedHasOurBrands = htmlClosed.includes("OUR BRANDS");
     const closedHasPowered = htmlClosed.includes("Powered by");
-    const notFoundHasPowered = htmlNotFound.includes("Powered by");
 
-    if (!publishedHasPowered && !closedHasPowered && !notFoundHasPowered) {
+    if (!publishedHasOurBrands && !publishedHasPowered && !closedHasOurBrands && !closedHasPowered) {
       record(
         6,
-        "Removal of old 'Powered by' line",
+        "Removal of old 'OUR BRANDS' and 'Powered by'",
         "PASS",
-        "'Powered by' line is absent on published, closed, and not-found pages"
+        "Neither phrase appears on public pages"
       );
     } else {
       record(
         6,
-        "Removal of old 'Powered by' line",
+        "Removal of old 'OUR BRANDS' and 'Powered by'",
         "FAIL",
-        `Published: ${publishedHasPowered}, Closed: ${closedHasPowered}, NotFound: ${notFoundHasPowered}`
+        `OurBrands: ${publishedHasOurBrands || closedHasOurBrands}, PoweredBy: ${publishedHasPowered || closedHasPowered}`
       );
     }
   } catch (err: unknown) {

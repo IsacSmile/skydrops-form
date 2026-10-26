@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
-import { Loader2, AlertCircle, RotateCcw, Check } from "lucide-react";
+import { Loader2, AlertCircle, RotateCcw, Check, ArrowRight } from "lucide-react";
 import type { Field } from "@/types/form";
 import { brand } from "@/lib/brand";
 import { FieldRenderer } from "./field-renderer";
@@ -239,7 +239,7 @@ export function PublicForm({
             <Check className="size-7 text-(--success)" strokeWidth={2.5} />
           </div>
 
-          <p className="text-[15px] text-muted">
+          <p className="text-[15px] text-(--muted)">
             Thank you for taking the time to complete this form.
           </p>
 
@@ -247,9 +247,9 @@ export function PublicForm({
             <button
               type="button"
               onClick={handleReset}
-              className="h-11 px-6 rounded-lg border border-border text-sm font-semibold text-(--text) hover:bg-(--primary-soft) hover:border-(--border-hover) flex items-center gap-2 cursor-pointer transition-colors"
+              className="h-11 px-6 rounded-lg border border-(--border) text-sm font-semibold text-(--ink) hover:bg-(--primary-soft) hover:border-(--border-hover) flex items-center gap-2 cursor-pointer transition-colors"
             >
-              <RotateCcw className="size-4 text-muted" />
+              <RotateCcw className="size-4 text-(--muted)" />
               Submit another response
             </button>
           </div>
@@ -282,12 +282,12 @@ export function PublicForm({
         className="absolute left-[-9999px] top-[-9999px] opacity-0 pointer-events-none"
       />
 
-      {/* Form Body */}
-      <div className="px-5 pt-6 pb-7 sm:px-10 sm:pt-9 sm:pb-10 bg-white space-y-6 sm:space-y-7">
-        {/* Required indicator caption at top right */}
+      {/* Form Body: 24px 20px 28px mobile / 36px 40px 40px desktop */}
+      <div className="px-5 pt-6 pb-7 sm:px-10 sm:pt-9 sm:pb-10 bg-white">
+        {/* Required indicator caption at top right (13px, color var(--muted), asterisk in danger) */}
         {hasRequiredField && (
-          <div className="flex justify-end -mt-1 mb-6">
-            <span className="text-xs text-muted font-normal">
+          <div className="flex justify-end mb-5">
+            <span className="text-[13px] text-(--muted) font-normal">
               <span className="text-(--danger) mr-1">*</span>Required
             </span>
           </div>
@@ -298,7 +298,7 @@ export function PublicForm({
           <div
             ref={errorSummaryRef}
             role="alert"
-            className="rounded-lg border border-(--danger-border) bg-(--danger-soft) p-3 sm:p-3.5 text-[14px] text-(--danger-text) flex items-start gap-2.5 leading-relaxed"
+            className="rounded-lg border border-(--danger-border) bg-(--danger-soft) p-3 sm:p-3.5 text-[14px] text-(--danger-text) flex items-start gap-2.5 leading-relaxed mb-6"
           >
             <AlertCircle className="size-4 shrink-0 mt-0.5 text-(--danger)" />
             <div>
@@ -314,8 +314,8 @@ export function PublicForm({
           </div>
         )}
 
-        {/* Form Fields */}
-        <div className="space-y-6 sm:space-y-7">
+        {/* Form Fields: Gap between fields 24px */}
+        <div className="space-y-6">
           {visibleFields.map((field) => (
             <FieldRenderer
               key={field.id}
@@ -333,34 +333,39 @@ export function PublicForm({
           ))}
         </div>
 
-        {/* Submit Button */}
-        <div className="pt-2 mt-8">
+        {/* Submit Button: Full width, height 54px, radius 8px, margin-top 28px */}
+        <div className="pt-2">
           <button
             type="submit"
             disabled={isSubmitting || isAnyFileUploading}
-            className="sk-submit-btn group"
+            className="sk-submit-btn"
           >
             {isSubmitting ? (
               <>
                 <Loader2 className="size-4 animate-spin shrink-0" />
-                <span className="tracking-[0.12em] font-semibold">SUBMITTING...</span>
+                <span>Submitting...</span>
               </>
             ) : (
               <>
                 <Image
                   src={brand.logo.markWhite}
                   alt=""
-                  width={18}
-                  height={25}
-                  className="w-4 h-auto object-contain shrink-0 transition-transform duration-300 ease-out group-hover:scale-110 group-hover:-translate-y-0.5 motion-reduce:transform-none"
+                  width={16}
+                  height={22}
+                  className="w-4 h-auto object-contain shrink-0"
                   aria-hidden="true"
                 />
-                <span className="tracking-[0.12em] font-semibold">SUBMIT</span>
+                <span>Submit</span>
+                <ArrowRight
+                  className="sk-submit-arrow size-4.5 shrink-0"
+                  strokeWidth={2}
+                  aria-hidden="true"
+                />
               </>
             )}
           </button>
           {isAnyFileUploading && (
-            <p className="text-[13px] text-muted text-center mt-2 font-medium">
+            <p className="text-[13px] text-(--muted) text-center mt-2 font-medium">
               Wait for the upload to finish
             </p>
           )}

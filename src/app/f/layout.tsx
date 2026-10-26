@@ -1,15 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { plusJakartaSans } from "@/lib/fonts";
 import { brand } from "@/lib/brand";
 import { BrandFooter } from "@/components/public/brand-footer";
 import "@/components/public/sk-form.css";
-
-const plusJakartaSans = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  display: "swap",
-  variable: "--font-jakarta",
-});
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -39,16 +32,17 @@ export default function PublicFormLayout({
   children: React.ReactNode;
 }) {
   return (
+    /*
+     * Font bug fix:
+     * Next/font's variable `--font-jakarta` is only exposed when `plusJakartaSans.variable`
+     * is in the className. We attach both `plusJakartaSans.variable` and `plusJakartaSans.className`
+     * here on the `.sk-form` ancestor so all children inherit the font variable and class.
+     */
     <div
-      className={`${plusJakartaSans.className} sk-form min-h-screen antialiased flex flex-col justify-between`}
-      style={{
-        backgroundColor: "#F5F7FB",
-        backgroundImage:
-          "radial-gradient(900px 420px at 50% -80px, rgba(31, 161, 255, 0.14), transparent 70%)",
-        backgroundRepeat: "no-repeat",
-      }}
+      className={`${plusJakartaSans.variable} ${plusJakartaSans.className} sk-form min-h-screen antialiased flex flex-col justify-between`}
+      style={{ backgroundColor: brand.page }}
     >
-      <div className="w-full max-w-160 mx-auto px-4 sm:px-6 pt-8 sm:pt-14 pb-12 flex-1 flex flex-col justify-between">
+      <div className="w-full max-w-[640px] mx-auto px-4 sm:px-6 pt-6 sm:pt-10 pb-10 flex-1 flex flex-col justify-between">
         <main className="flex-1 flex flex-col">{children}</main>
         <BrandFooter />
       </div>

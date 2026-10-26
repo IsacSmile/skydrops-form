@@ -5,15 +5,15 @@ import {
   UploadCloud,
   AlertCircle,
   Check,
+  ChevronDown,
 } from "lucide-react";
+import { Select as SelectPrimitive } from "@base-ui/react/select";
 import { upload } from "@vercel/blob/client";
 import type { Field } from "@/types/form";
 import {
   Select,
   SelectContent,
   SelectItem,
-  SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
 import {
   ACCEPT_ATTR,
@@ -21,6 +21,7 @@ import {
   sanitizeFileName,
   isAllowedFile,
 } from "@/lib/upload-policy";
+import { getFieldIconName, FIELD_ICON_COMPONENTS } from "@/lib/field-icons";
 
 export interface FieldRendererProps {
   field: Field;
@@ -110,16 +111,16 @@ function FileFieldControl({
   if (isPreview) {
     return (
       <div className="space-y-1.5">
-        <div className="rounded-lg border-[1.5px] border-dashed border-[#BFD0EA] p-2.5 sm:p-3.5 bg-[#F8FAFE] opacity-75 cursor-not-allowed flex items-center justify-between gap-2.5 sm:gap-3">
+        <div className="rounded-lg border-[1.5px] border-dashed border-(--border) p-2.5 sm:p-3.5 bg-[#F8FAFE] opacity-75 cursor-not-allowed flex items-center justify-between gap-2.5 sm:gap-3">
           <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
-            <div className="size-9 sm:size-10 rounded-lg bg-(--primary-soft,#F2F7FF) text-(--primary,#0B5BFF) flex items-center justify-center shrink-0">
+            <div className="size-9 sm:size-10 rounded-lg bg-(--primary-soft) text-(--primary) flex items-center justify-center shrink-0">
               <UploadCloud className="size-4.5 sm:size-5" />
             </div>
             <div className="min-w-0 flex-1">
-              <span className="text-sm sm:text-[15px] font-semibold text-(--text,#1B2433) block leading-snug truncate">
+              <span className="text-sm sm:text-[15px] font-semibold text-(--ink) block leading-snug truncate">
                 Choose a file
               </span>
-              <span className="text-xs sm:text-[13px] text-(--muted,#5B6475) block leading-snug truncate">
+              <span className="text-xs sm:text-[13px] text-(--muted) block leading-snug truncate">
                 <span className="sm:hidden">Max 5 MB &bull; PDF, PNG, JPG</span>
                 <span className="hidden sm:inline">JPG, PNG, WebP, PDF, DOC or DOCX &bull; Max 5 MB</span>
               </span>
@@ -128,7 +129,7 @@ function FileFieldControl({
           <button
             type="button"
             disabled
-            className="h-8 sm:h-9 px-3 sm:px-4 rounded-lg border border-(--border,#D5DEEC) bg-white text-xs sm:text-[13px] font-semibold text-(--muted,#5B6475) cursor-not-allowed shrink-0"
+            className="h-8 sm:h-9 px-3 sm:px-4 rounded-lg border border-(--border) bg-white text-xs sm:text-[13px] font-semibold text-(--muted) cursor-not-allowed shrink-0"
           >
             Browse
           </button>
@@ -259,19 +260,19 @@ function FileFieldControl({
 
       {/* Uploading State */}
       {status === "uploading" && (
-        <div className="p-3.5 rounded-lg border border-(--divider,#E6ECF5) bg-white space-y-2.5">
-          <div className="flex items-center justify-between text-xs text-(--muted,#5B6475)">
-            <span className="font-medium text-(--text,#1B2433) truncate max-w-50 sm:max-w-xs">
+        <div className="p-3.5 rounded-lg border border-(--divider) bg-white space-y-2.5">
+          <div className="flex items-center justify-between text-xs text-(--muted)">
+            <span className="font-medium text-(--ink) truncate max-w-50 sm:max-w-xs">
               Uploading {fileMeta?.name}...
             </span>
             <div className="flex items-center gap-3">
-              <span className="font-semibold text-(--primary,#0B5BFF)">
+              <span className="font-semibold text-(--primary)">
                 {Math.round(progress)}%
               </span>
               <button
                 type="button"
                 onClick={handleCancel}
-                className="text-xs font-semibold text-(--muted,#5B6475) hover:text-(--danger,#D92D20) cursor-pointer"
+                className="text-xs font-semibold text-(--muted) hover:text-(--danger) cursor-pointer"
               >
                 Cancel
               </button>
@@ -279,7 +280,7 @@ function FileFieldControl({
           </div>
           <div className="w-full bg-[#E6ECF5] rounded-[3px] h-1.5 overflow-hidden">
             <div
-              className="h-full bg-(--primary,#0B5BFF) transition-all duration-150 ease-out rounded-[3px]"
+              className="h-full bg-(--primary) transition-all duration-150 ease-out rounded-[3px]"
               style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
             />
           </div>
@@ -288,17 +289,17 @@ function FileFieldControl({
 
       {/* Uploaded State */}
       {status === "uploaded" && (
-        <div className="flex items-center justify-between p-3.5 rounded-lg border border-[#ABEFC6] bg-(--success-soft,#ECFDF3)">
+        <div className="flex items-center justify-between p-3.5 rounded-lg border border-[#ABEFC6] bg-(--success-soft)">
           <div className="flex items-center gap-2.5 min-w-0 pr-2">
             <div className="size-8 rounded-full bg-white flex items-center justify-center shrink-0 shadow-xs">
-              <Check className="size-4 text-(--success,#12B76A) stroke-[2.5]" />
+              <Check className="size-4 text-(--success) stroke-[2.5]" />
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-medium text-(--text,#1B2433) truncate">
+              <p className="text-sm font-medium text-(--ink) truncate">
                 {fileMeta?.name ?? "Uploaded file"}
               </p>
               {fileMeta?.size && (
-                <p className="text-xs text-(--muted,#5B6475)">
+                <p className="text-xs text-(--muted)">
                   {formatBytes(fileMeta.size)}
                 </p>
               )}
@@ -309,18 +310,18 @@ function FileFieldControl({
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={disabled}
-              className="text-xs font-semibold text-(--primary,#0B5BFF) hover:underline cursor-pointer disabled:opacity-50"
+              className="text-xs font-semibold text-(--primary) hover:underline cursor-pointer disabled:opacity-50"
             >
               Replace
             </button>
-            <span className="text-(--divider,#E6ECF5)" aria-hidden="true">
+            <span className="text-(--divider)" aria-hidden="true">
               |
             </span>
             <button
               type="button"
               onClick={handleRemove}
               disabled={disabled}
-              className="text-xs font-semibold text-(--danger-text,#B42318) hover:underline cursor-pointer disabled:opacity-50"
+              className="text-xs font-semibold text-(--danger-text) hover:underline cursor-pointer disabled:opacity-50"
             >
               Remove
             </button>
@@ -330,11 +331,11 @@ function FileFieldControl({
 
       {/* Error State */}
       {status === "error" && (
-        <div className="p-3.5 rounded-lg border border-(--danger-border,#FECDCA) bg-(--danger-soft,#FEF3F2) space-y-2">
+        <div className="p-3.5 rounded-lg border border-(--danger-border) bg-(--danger-soft) space-y-2">
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-start gap-2">
-              <AlertCircle className="size-4 text-(--danger,#D92D20) shrink-0 mt-0.5" />
-              <span className="text-xs text-(--danger-text,#B42318) font-medium leading-relaxed">
+              <AlertCircle className="size-4 text-(--danger) shrink-0 mt-0.5" />
+              <span className="text-xs text-(--danger-text) font-medium leading-relaxed">
                 {errorMessage || "Upload failed."}
               </span>
             </div>
@@ -345,7 +346,7 @@ function FileFieldControl({
                 setStatus("idle");
                 fileInputRef.current?.click();
               }}
-              className="text-xs font-semibold text-(--primary,#0B5BFF) hover:underline shrink-0 cursor-pointer"
+              className="text-xs font-semibold text-(--primary) hover:underline shrink-0 cursor-pointer"
             >
               Try again
             </button>
@@ -389,19 +390,19 @@ function FileFieldControl({
           }}
           className={`rounded-lg border-[1.5px] border-dashed p-2.5 sm:p-3.5 flex items-center justify-between gap-2.5 sm:gap-3 cursor-pointer transition-all ${
             isDragging
-              ? "border-(--primary,#0B5BFF) bg-(--primary-soft,#F2F7FF)"
-              : "border-[#BFD0EA] bg-[#F8FAFE] hover:border-(--primary,#0B5BFF) hover:bg-(--primary-soft,#F2F7FF)"
-          } ${error ? "border-(--danger,#D92D20)" : ""}`}
+              ? "border-(--primary) bg-(--primary-soft)"
+              : "border-(--border) bg-[#F8FAFE] hover:border-(--primary) hover:bg-(--primary-soft)"
+          } ${error ? "border-(--danger)" : ""}`}
         >
           <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
-            <div className="size-9 sm:size-10 rounded-lg bg-(--primary-soft,#F2F7FF) text-(--primary,#0B5BFF) flex items-center justify-center shrink-0">
+            <div className="size-9 sm:size-10 rounded-lg bg-(--primary-soft) text-(--primary) flex items-center justify-center shrink-0">
               <UploadCloud className="size-4.5 sm:size-5" />
             </div>
             <div className="min-w-0 flex-1">
-              <span className="text-sm sm:text-[15px] font-semibold text-(--text,#1B2433) block leading-snug truncate">
+              <span className="text-sm sm:text-[15px] font-semibold text-(--ink) block leading-snug truncate">
                 Choose a file
               </span>
-              <span className="text-xs sm:text-[13px] text-(--muted,#5B6475) block leading-snug truncate">
+              <span className="text-xs sm:text-[13px] text-(--muted) block leading-snug truncate">
                 <span className="sm:hidden">Max 5 MB &bull; PDF, PNG, JPG</span>
                 <span className="hidden sm:inline">JPG, PNG, WebP, PDF, DOC or DOCX &bull; Max 5 MB</span>
               </span>
@@ -410,7 +411,7 @@ function FileFieldControl({
           <button
             type="button"
             tabIndex={-1}
-            className="h-8 sm:h-9 px-3 sm:px-4 rounded-lg border border-(--border,#D5DEEC) bg-white text-xs sm:text-[13px] font-semibold text-(--text,#1B2433) hover:border-(--border-hover,#A9BAD6) hover:bg-(--primary-soft,#F2F7FF) pointer-events-none transition-colors shrink-0 shadow-xs"
+            className="h-8 sm:h-9 px-3 sm:px-4 rounded-lg border border-(--border) bg-white text-xs sm:text-[13px] font-semibold text-(--ink) hover:border-(--border-hover) hover:bg-(--primary-soft) pointer-events-none transition-colors shrink-0 shadow-xs"
           >
             Browse
           </button>
@@ -433,17 +434,21 @@ export function FieldRenderer({
   const inputId = `field-${field.key || field.id}`;
   const options = field.options ?? [];
 
+  // Determine automatic field icon (aria-hidden)
+  const iconName = getFieldIconName(field);
+  const IconComponent = iconName ? FIELD_ICON_COMPONENTS[iconName] : null;
+
   return (
     <div className="space-y-2">
       {/* Field Label with Required Asterisk */}
       <label
         htmlFor={inputId}
-        className="block text-sm leading-5 font-semibold text-(--text,#1B2433) mb-2"
+        className="block text-[15px] leading-[22px] font-semibold text-(--ink) mb-2"
       >
         <span>{field.label}</span>
         {field.required && (
           <span
-            className="text-(--danger,#D92D20) font-normal ml-0.5"
+            className="text-(--danger) font-normal ml-1"
             aria-hidden="true"
           >
             *
@@ -456,17 +461,28 @@ export function FieldRenderer({
         switch (field.type) {
           case "short_text":
             return (
-              <input
-                id={inputId}
-                name={field.key}
-                type="text"
-                placeholder={field.placeholder ?? undefined}
-                value={typeof value === "string" ? value : ""}
-                onChange={(e) => onChange?.(e.target.value)}
-                disabled={disabled}
-                aria-invalid={!!error}
-                className="sk-input"
-              />
+              <div className="sk-input-wrapper">
+                {IconComponent && (
+                  <IconComponent
+                    className="sk-input-icon"
+                    strokeWidth={1.75}
+                    aria-hidden="true"
+                  />
+                )}
+                <input
+                  id={inputId}
+                  name={field.key}
+                  type="text"
+                  placeholder={field.placeholder ?? undefined}
+                  value={typeof value === "string" ? value : ""}
+                  onChange={(e) => onChange?.(e.target.value)}
+                  disabled={disabled}
+                  aria-invalid={!!error}
+                  className={`sk-input ${
+                    IconComponent ? "sk-input-with-icon" : ""
+                  }`}
+                />
+              </div>
             );
 
           case "long_text":
@@ -486,54 +502,87 @@ export function FieldRenderer({
 
           case "email":
             return (
-              <input
-                id={inputId}
-                name={field.key}
-                type="email"
-                inputMode="email"
-                placeholder={field.placeholder ?? undefined}
-                value={typeof value === "string" ? value : ""}
-                onChange={(e) => onChange?.(e.target.value)}
-                disabled={disabled}
-                aria-invalid={!!error}
-                className="sk-input"
-              />
+              <div className="sk-input-wrapper">
+                {IconComponent && (
+                  <IconComponent
+                    className="sk-input-icon"
+                    strokeWidth={1.75}
+                    aria-hidden="true"
+                  />
+                )}
+                <input
+                  id={inputId}
+                  name={field.key}
+                  type="email"
+                  inputMode="email"
+                  placeholder={field.placeholder ?? undefined}
+                  value={typeof value === "string" ? value : ""}
+                  onChange={(e) => onChange?.(e.target.value)}
+                  disabled={disabled}
+                  aria-invalid={!!error}
+                  className={`sk-input ${
+                    IconComponent ? "sk-input-with-icon" : ""
+                  }`}
+                />
+              </div>
             );
 
           case "phone":
             return (
-              <input
-                id={inputId}
-                name={field.key}
-                type="tel"
-                inputMode="tel"
-                placeholder={field.placeholder ?? undefined}
-                value={typeof value === "string" ? value : ""}
-                onChange={(e) => onChange?.(e.target.value)}
-                disabled={disabled}
-                aria-invalid={!!error}
-                className="sk-input"
-              />
+              <div className="sk-input-wrapper">
+                {IconComponent && (
+                  <IconComponent
+                    className="sk-input-icon"
+                    strokeWidth={1.75}
+                    aria-hidden="true"
+                  />
+                )}
+                <input
+                  id={inputId}
+                  name={field.key}
+                  type="tel"
+                  inputMode="tel"
+                  placeholder={field.placeholder ?? undefined}
+                  value={typeof value === "string" ? value : ""}
+                  onChange={(e) => onChange?.(e.target.value)}
+                  disabled={disabled}
+                  aria-invalid={!!error}
+                  className={`sk-input ${
+                    IconComponent ? "sk-input-with-icon" : ""
+                  }`}
+                />
+              </div>
             );
 
           case "number":
             return (
-              <input
-                id={inputId}
-                name={field.key}
-                type="number"
-                inputMode="numeric"
-                placeholder={field.placeholder ?? undefined}
-                value={
-                  typeof value === "number" || typeof value === "string"
-                    ? value
-                    : ""
-                }
-                onChange={(e) => onChange?.(e.target.value)}
-                disabled={disabled}
-                aria-invalid={!!error}
-                className="sk-input"
-              />
+              <div className="sk-input-wrapper">
+                {IconComponent && (
+                  <IconComponent
+                    className="sk-input-icon"
+                    strokeWidth={1.75}
+                    aria-hidden="true"
+                  />
+                )}
+                <input
+                  id={inputId}
+                  name={field.key}
+                  type="number"
+                  inputMode="numeric"
+                  placeholder={field.placeholder ?? undefined}
+                  value={
+                    typeof value === "number" || typeof value === "string"
+                      ? value
+                      : ""
+                  }
+                  onChange={(e) => onChange?.(e.target.value)}
+                  disabled={disabled}
+                  aria-invalid={!!error}
+                  className={`sk-input ${
+                    IconComponent ? "sk-input-with-icon" : ""
+                  }`}
+                />
+              </div>
             );
 
           case "date":
@@ -557,19 +606,41 @@ export function FieldRenderer({
                 onValueChange={(val) => onChange?.(val)}
                 disabled={disabled}
               >
-                <SelectTrigger
-                  id={inputId}
-                  aria-invalid={!!error}
-                  className="sk-select-trigger"
-                >
-                  <SelectValue placeholder={field.placeholder || "Select an option..."} />
-                </SelectTrigger>
-                <SelectContent className="bg-white border border-(--border,#D5DEEC) rounded-lg shadow-[0_12px_32px_-8px_rgba(8,24,76,0.18)] p-1 max-h-70">
+                <div className="sk-input-wrapper">
+                  {IconComponent && (
+                    <IconComponent
+                      className="sk-input-icon"
+                      strokeWidth={1.75}
+                      aria-hidden="true"
+                    />
+                  )}
+                  <SelectPrimitive.Trigger
+                    id={inputId}
+                    aria-invalid={!!error}
+                    className={`sk-select-trigger ${
+                      IconComponent ? "sk-select-with-icon" : ""
+                    }`}
+                  >
+                    <SelectPrimitive.Value
+                      placeholder={field.placeholder || "Select an option..."}
+                    />
+                    <SelectPrimitive.Icon
+                      render={
+                        <ChevronDown
+                          className="sk-select-chevron"
+                          strokeWidth={1.75}
+                          aria-hidden="true"
+                        />
+                      }
+                    />
+                  </SelectPrimitive.Trigger>
+                </div>
+                <SelectContent className="bg-white border border-(--border) rounded-lg shadow-[0_12px_32px_-8px_rgba(8,24,76,0.18)] p-1 max-h-70">
                   {options.map((opt, i) => (
                     <SelectItem
                       key={i}
                       value={opt}
-                      className="h-10 rounded-md text-sm text-(--text,#1B2433) focus:bg-(--primary-soft,#F2F7FF) focus:text-(--primary,#0B5BFF) cursor-pointer"
+                      className="h-10 rounded-md text-sm text-(--ink) focus:bg-(--primary-soft) focus:text-(--primary) cursor-pointer"
                     >
                       {opt}
                     </SelectItem>
@@ -615,16 +686,16 @@ export function FieldRenderer({
                         <span
                           className={`size-4.5 shrink-0 rounded-full border flex items-center justify-center transition-colors ${
                             isSelected
-                              ? "border-(--primary,#0B5BFF) border-[1.5px] bg-white"
-                              : "border-(--border-hover,#A9BAD6) border-[1.5px] bg-white"
+                              ? "border-(--primary) border-[1.5px] bg-white"
+                              : "border-(--border-hover) border-[1.5px] bg-white"
                           }`}
                           aria-hidden="true"
                         >
                           {isSelected && (
-                            <span className="size-2 rounded-full bg-(--primary,#0B5BFF)" />
+                            <span className="size-2 rounded-full bg-(--primary)" />
                           )}
                         </span>
-                        <span className="text-[15px] font-medium text-(--text,#1B2433) flex-1 leading-snug">
+                        <span className="text-[15px] font-medium text-(--ink) flex-1 leading-snug">
                           {opt}
                         </span>
                       </label>
@@ -680,8 +751,8 @@ export function FieldRenderer({
                           style={{ borderRadius: "4px" }}
                           className={`size-4.5 shrink-0 border flex items-center justify-center transition-colors ${
                             isChecked
-                              ? "bg-(--primary,#0B5BFF) border-(--primary,#0B5BFF)"
-                              : "border-(--border-hover,#A9BAD6) border-[1.5px] bg-white"
+                              ? "bg-(--primary) border-(--primary)"
+                              : "border-(--border-hover) border-[1.5px] bg-white"
                           }`}
                           aria-hidden="true"
                         >
@@ -689,7 +760,7 @@ export function FieldRenderer({
                             <Check className="size-3.5 text-white stroke-3" />
                           )}
                         </span>
-                        <span className="text-[15px] font-medium text-(--text,#1B2433) flex-1 leading-snug">
+                        <span className="text-[15px] font-medium text-(--ink) flex-1 leading-snug">
                           {opt}
                         </span>
                       </label>
@@ -721,8 +792,8 @@ export function FieldRenderer({
 
       {/* Error Message with Icon */}
       {error && (
-        <p className="text-[13px] leading-4.5 text-(--danger-text,#B42318) flex items-center gap-1.5 font-medium mt-1.5">
-          <AlertCircle className="size-3.5 shrink-0 text-(--danger,#D92D20)" />
+        <p className="text-[13px] leading-4.5 text-(--danger-text) flex items-center gap-1.5 font-medium mt-1.5">
+          <AlertCircle className="size-3.5 shrink-0 text-(--danger)" />
           <span>{error}</span>
         </p>
       )}

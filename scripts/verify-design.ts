@@ -1,14 +1,20 @@
 /**
- * Verification script for U2: Premium Public Form Redesign (Deep Sky).
+ * Verification script for U3: Visual Redesign of Public Form Pages & Admin Preview.
  *
- * Verifies:
- * 1. Published form page contains the white lockup image path (/brand/skydrops-logo-lockup-white.png).
- * 2. Contains the wrapper class .sk-form.
- * 3. Contains the "* Required" caption.
- * 4. Contains the option-card markup (.sk-option-card) for checkbox and radio fields.
- * 5. Does NOT contain the old floating-logo container.
- * 6. Closed form page contains the header band.
- * 7. Cleans up test forms reliably.
+ * Asserts on /f/<slug>:
+ * 1. The h1 with the form title.
+ * 2. The horizontal logo path (/brand/skydrops-logo-horizontal.png).
+ * 3. The header image (a next/image URL containing "header-background-image").
+ * 4. The "* Required" caption.
+ * 5. At least one svg icon inside an input wrapper.
+ * 6. The exact link labels "Skydrops Technologies website" and "Skydrops Water website"
+ *    with exact hrefs, target="_blank", rel containing noopener and noreferrer.
+ * 7. The text "© Skydrops".
+ * 8. NO "OUR BRANDS", NO "Powered by".
+ * 9. Exactly one <footer> or one brand nav.
+ * 10. On the closed page and on /f/zzzzzzzz assert the header and the link cards exist.
+ * 11. On /admin/login assert none of them exist.
+ * 12. Cleans up test forms reliably.
  *
  * Usage:
  *   npx tsx --env-file=.env.local scripts/verify-design.ts
@@ -49,7 +55,7 @@ function uniqueIp(): string {
 
 async function run() {
   console.log("\n=======================================================");
-  console.log("  U2 PREMIUM PUBLIC FORM DESIGN VERIFICATION");
+  console.log("  U3 PUBLIC FORM DESIGN & MARKUP VERIFICATION");
   console.log("=======================================================\n");
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
@@ -72,20 +78,20 @@ async function run() {
 
   try {
     // -------------------------------------------------------------------------
-    // Step 1: Create a published test form with one field of each type
+    // Step 1: Create a published test form with diverse field types
     // -------------------------------------------------------------------------
+    const formTitle = `U3 Design Test Form ${runId}`;
     const form = await createForm({
-      title: `Deep Sky Test Form ${runId}`,
-      description: "Testing premium Deep Sky styling, option cards and header band.",
+      title: formTitle,
+      description: "Testing U3 light header, field icons, and brand cards.",
     });
     createdFormIds.push(form.id);
 
     const fieldsToAdd = [
-      { label: "Your Full Name", type: "short_text" as const, required: true },
-      { label: "Detailed Notes", type: "long_text" as const, required: false },
+      { label: "Full Name", type: "short_text" as const, required: true },
       { label: "Work Email", type: "email" as const, required: false },
       { label: "Phone Number", type: "phone" as const, required: false },
-      { label: "Estimated Quantity", type: "number" as const, required: false },
+      { label: "Company Name", type: "short_text" as const, required: false },
       {
         label: "Department",
         type: "dropdown" as const,
@@ -93,18 +99,11 @@ async function run() {
         options: ["Engineering", "Operations", "Sustainability"],
       },
       {
-        label: "Facility Type",
-        type: "radio" as const,
-        required: false,
-        options: ["Commercial", "Industrial", "Residential", "Municipal", "Agricultural"],
-      },
-      {
         label: "Services Required",
         type: "checkbox" as const,
         required: false,
-        options: ["Purification", "Recycling", "Monitoring", "Maintenance"],
+        options: ["Purification", "Recycling"],
       },
-      { label: "Preferred Date", type: "date" as const, required: false },
     ];
 
     for (const f of fieldsToAdd) {
@@ -113,55 +112,94 @@ async function run() {
     }
 
     await setFormStatus(form.id, "published");
-    record(1, "Create published test form with all field types", "PASS", `Slug: ${form.slug}`);
+    record(1, "Create published test form with fields", "PASS", `Slug: ${form.slug}`);
 
     // -------------------------------------------------------------------------
-    // Step 2: GET /f/<slug> and assert Deep Sky design elements
+    // Step 2: GET /f/<slug> and assert U3 design elements
     // -------------------------------------------------------------------------
     const resPublished = await fetch(`${baseUrl}/f/${form.slug}`, {
       headers: { "x-forwarded-for": uniqueIp() },
     });
     const html = await resPublished.text();
 
-    const hasHeaderLogo =
-      html.includes("skydrops-logo-full-white.png") ||
-      html.includes("skydrops-logo-full.png") ||
-      html.includes("skydrops-logo-lockup-white.png");
-    const hasSkFormClass = html.includes("sk-form");
+    // 1. h1 with the form title
+    const hasH1Title =
+      html.includes(`<h1`) && html.includes(formTitle);
+
+    // 2. Horizontal logo path
+    const hasHorizontalLogo =
+      html.includes("skydrops-logo-horizontal.png");
+
+    // 3. Header background image
+    const hasHeaderBg =
+      html.includes("header-background-image");
+
+    // 4. "* Required" caption
     const hasRequiredCaption =
       html.includes("* Required") ||
       (html.includes("*") && html.includes("Required"));
-    const hasOptionCards = html.includes("sk-option-card");
-    const hasOldFloatingLogo =
-      html.includes('<header class="flex justify-center"') ||
-      html.includes("/brand/skydrops-logo-lockup.png");
 
-    const passChecks =
+    // 5. At least one svg icon inside an input wrapper
+    const hasInputLeadingIcon =
+      html.includes("sk-input-icon") ||
+      html.includes("sk-input-with-icon");
+
+    // 6. Exact link labels and hrefs
+    const hasTechLink =
+      html.includes("https://www.skydropstechnologies.com/") &&
+      html.includes("Skydrops Technologies website");
+    const hasWaterLink =
+      html.includes("https://skydropswater.com/") &&
+      html.includes("Skydrops Water website");
+    const hasTargetBlank = html.includes('target="_blank"');
+    const hasRelNoopener = html.includes("noopener") && html.includes("noreferrer");
+
+    // 7. Text "© Skydrops"
+    const hasCopyright = html.includes("© Skydrops");
+
+    // 8. NO "OUR BRANDS", NO "Powered by"
+    const hasNoOurBrands = !html.includes("OUR BRANDS");
+    const hasNoPoweredBy = !html.includes("Powered by");
+
+    // 9. Exactly one <footer> or one brand nav
+    const footerCount = (html.match(/<footer[\s>]/gi) || []).length;
+    const navCount = (html.match(/aria-label=["']Skydrops websites["']/gi) || []).length;
+    const hasOneFooterOrNav = footerCount === 1 || navCount === 1;
+
+    const allStep2Pass =
       resPublished.status === 200 &&
-      hasHeaderLogo &&
-      hasSkFormClass &&
+      hasH1Title &&
+      hasHorizontalLogo &&
+      hasHeaderBg &&
       hasRequiredCaption &&
-      hasOptionCards &&
-      !hasOldFloatingLogo;
+      hasInputLeadingIcon &&
+      hasTechLink &&
+      hasWaterLink &&
+      hasTargetBlank &&
+      hasRelNoopener &&
+      hasCopyright &&
+      hasNoOurBrands &&
+      hasNoPoweredBy &&
+      hasOneFooterOrNav;
 
-    if (passChecks) {
+    if (allStep2Pass) {
       record(
         2,
-        "Published page Deep Sky design assertions",
+        "Published page U3 assertions",
         "PASS",
-        "Header logo, .sk-form, '* Required', .sk-option-card present; old floating logo absent"
+        "h1 title, horizontal logo, header bg image, * Required, leading icon, brand cards, © Skydrops, no 'OUR BRANDS'/'Powered by'"
       );
     } else {
       record(
         2,
-        "Published page Deep Sky design assertions",
+        "Published page U3 assertions",
         "FAIL",
-        `HeaderLogo: ${hasHeaderLogo}, skForm: ${hasSkFormClass}, RequiredCaption: ${hasRequiredCaption}, OptionCards: ${hasOptionCards}, OldLogoAbsent: ${!hasOldFloatingLogo}`
+        `H1: ${hasH1Title}, Logo: ${hasHorizontalLogo}, HeaderBg: ${hasHeaderBg}, ReqCaption: ${hasRequiredCaption}, LeadingIcon: ${hasInputLeadingIcon}, Tech: ${hasTechLink}, Water: ${hasWaterLink}, Copyright: ${hasCopyright}, NoBrands: ${hasNoOurBrands}, NoPowered: ${hasNoPoweredBy}`
       );
     }
 
     // -------------------------------------------------------------------------
-    // Step 3: Close form and verify closed page contains the band
+    // Step 3: Close form and verify closed page contains header and link cards
     // -------------------------------------------------------------------------
     await setFormStatus(form.id, "closed");
     const resClosed = await fetch(`${baseUrl}/f/${form.slug}`, {
@@ -169,26 +207,87 @@ async function run() {
     });
     const htmlClosed = await resClosed.text();
 
-    const closedHasBand =
-      htmlClosed.includes("sk-header-band") &&
-      htmlClosed.includes("This form is closed") &&
-      (htmlClosed.includes("skydrops-logo-full-white.png") ||
-        htmlClosed.includes("skydrops-logo-full.png") ||
-        htmlClosed.includes("skydrops-logo-lockup-white.png"));
+    const closedHasHeader =
+      htmlClosed.includes("header-background-image") &&
+      htmlClosed.includes("This form is closed");
+    const closedHasLinkCards =
+      htmlClosed.includes("Skydrops Technologies website") &&
+      htmlClosed.includes("Skydrops Water website");
 
-    if (resClosed.status === 200 && closedHasBand) {
+    if (resClosed.status === 200 && closedHasHeader && closedHasLinkCards) {
       record(
         3,
-        "Closed form page header band assertion",
+        "Closed form page assertions",
         "PASS",
-        "Contains .sk-header-band, 'This form is closed', and brand logo"
+        "Contains U3 header and brand link cards"
       );
     } else {
       record(
         3,
-        "Closed form page header band assertion",
+        "Closed form page assertions",
         "FAIL",
-        `Status: ${resClosed.status}, closedHasBand: ${closedHasBand}`
+        `Header: ${closedHasHeader}, LinkCards: ${closedHasLinkCards}`
+      );
+    }
+
+    // -------------------------------------------------------------------------
+    // Step 4: GET /f/zzzzzzzz 404 page contains header and link cards
+    // -------------------------------------------------------------------------
+    const resNotFound = await fetch(`${baseUrl}/f/zzzzzzzz`, {
+      headers: { "x-forwarded-for": uniqueIp() },
+    });
+    const htmlNotFound = await resNotFound.text();
+
+    const notFoundHasHeader =
+      htmlNotFound.includes("header-background-image") ||
+      htmlNotFound.includes("Form not found");
+    const notFoundHasLinkCards =
+      htmlNotFound.includes("Skydrops Technologies website") &&
+      htmlNotFound.includes("Skydrops Water website");
+
+    if (notFoundHasHeader && notFoundHasLinkCards) {
+      record(
+        4,
+        "Not-found page assertions (/f/zzzzzzzz)",
+        "PASS",
+        "Contains U3 header and brand link cards"
+      );
+    } else {
+      record(
+        4,
+        "Not-found page assertions (/f/zzzzzzzz)",
+        "FAIL",
+        `Header: ${notFoundHasHeader}, LinkCards: ${notFoundHasLinkCards}`
+      );
+    }
+
+    // -------------------------------------------------------------------------
+    // Step 5: GET /admin/login contains NONE of them
+    // -------------------------------------------------------------------------
+    const resAdmin = await fetch(`${baseUrl}/admin/login`, {
+      headers: { "x-forwarded-for": uniqueIp() },
+    });
+    const htmlAdmin = await resAdmin.text();
+
+    const adminHasNone =
+      !htmlAdmin.includes("header-background-image") &&
+      !htmlAdmin.includes("skydrops-logo-horizontal.png") &&
+      !htmlAdmin.includes("Skydrops Technologies website") &&
+      !htmlAdmin.includes("Skydrops Water website");
+
+    if (adminHasNone) {
+      record(
+        5,
+        "Admin /admin/login isolation",
+        "PASS",
+        "Admin page contains none of the public form header/brand card elements"
+      );
+    } else {
+      record(
+        5,
+        "Admin /admin/login isolation",
+        "FAIL",
+        "Admin leaked public form header or brand card elements"
       );
     }
   } catch (err: unknown) {
@@ -196,7 +295,7 @@ async function run() {
     record(99, "Unhandled Exception", "FAIL", (err as Error)?.message);
   } finally {
     // -------------------------------------------------------------------------
-    // Step 4: Cleanup test forms always
+    // Step 6: Cleanup test forms always
     // -------------------------------------------------------------------------
     for (const formId of createdFormIds) {
       try {
@@ -205,7 +304,7 @@ async function run() {
         console.error(`Failed to delete test form ${formId}:`, (err as Error)?.message);
       }
     }
-    record(4, "Cleanup test forms", "PASS", "Test form cleaned up from Neon");
+    record(6, "Cleanup test forms", "PASS", "Test form cleaned up from Neon");
 
     console.log("\n=======================================================");
     console.log("  VERIFICATION RESULTS SUMMARY");

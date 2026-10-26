@@ -79,6 +79,7 @@ File upload --> Vercel Blob (client upload) --> URL stored in submission
 | --- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | U1  | Parent brands footer: replace "Powered by" with semantic "Our brands" footer displaying Skydrops Water and Skydrops Technologies on all `/f/*` pages | ✅     |
 | U2  | Premium public form redesign ("Deep sky" direction): scoped `.sk-form` tokens, integrated header band with white logo lockup and watermark, 12px radius card, 8px controls, option cards, redesigned upload dropzone, unified thank-you/closed/not-found states, contained footer (verified via design:verify, submit:verify, uploads:verify, footer:verify, auth:verify, typecheck, lint, build; Playwright browser driver unavailable in sandbox, visual screenshots not automated) | ✅     |
+| U3  | Light, airy public form redesign: sky-and-water header with full-colour horizontal logo, legibility overlay, automatic field leading icons, 54px primary submit button with ArrowRight, brand link cards with 56x40 logo slots and vertical divider, Plus Jakarta Sans font bug fix (verified via icons:verify, verify-font.ts, footer:verify, design:verify, submit:verify, uploads:verify, auth:verify, hardening:verify, typecheck, lint, build; Playwright browser driver unavailable in offline sandbox, manual visual checks required) | ✅     |
 
 ## 5. Milestones
 
@@ -114,4 +115,6 @@ File upload --> Vercel Blob (client upload) --> URL stored in submission
 | 2026-10-26 | C10a completed: Rate limiting in Neon, cron maintenance job, orphan blob cleanup, security headers, robots.txt, predeploy checks, verify-hardening suite |
 | 2026-10-26 | U1 completed: Parent brands footer with Skydrops Water and Skydrops Technologies links, responsive layout, verify-footer suite |
 | 2026-10-26 | U2 completed: Premium "Deep sky" public form redesign, scoped tokens, header band, option cards, design:verify suite |
+| 2026-10-26 | U3 completed: Header redesign, field icons, brand cards, font fix |
+
 

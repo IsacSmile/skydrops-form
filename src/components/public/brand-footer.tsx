@@ -1,74 +1,68 @@
 import Image from "next/image";
+import { ArrowRight } from "lucide-react";
 import { brand } from "@/lib/brand";
 
 /**
- * Public parent brands footer displaying Skydrops Technologies and Skydrops Product website.
- * Styled as pill-shaped cards with soft blue glow matching brand design.
+ * U3 Brand Link Cards Footer.
+ * Renders two parent brand link cards (Technologies, Water) with 56x40 logo slots,
+ * labels, ArrowRight, vertical divider from 520px, and static copyright line.
  */
 export function BrandFooter() {
   return (
     <footer
-      className="w-full mt-10 border-t border-(--divider) pt-7"
+      className="w-full mt-5"
       style={{ paddingBottom: "max(24px, env(safe-area-inset-bottom, 24px))" }}
     >
       {/* Brand Navigation */}
-      <nav aria-label="Skydrops brands" className="w-full">
-        <div className="grid grid-cols-2 gap-2 sm:gap-3.5 items-stretch">
+      <nav aria-label="Skydrops websites" className="w-full">
+        <div className="relative grid grid-cols-1 min-[520px]:grid-cols-2 gap-3 min-[520px]:gap-4 items-stretch">
+          {/* Centered vertical divider between columns on >= 520px */}
+          <div
+            className="hidden min-[520px]:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-10 bg-(--border) pointer-events-none z-10"
+            aria-hidden="true"
+          />
+
           {brand.parentBrands.map((b) => (
             <a
-              key={b.name}
+              key={b.key}
               href={b.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative flex items-center gap-2 sm:gap-3.5 px-2.5 py-2.5 sm:px-5 sm:py-3.5 rounded-[10px] bg-white border border-[#E0EAFA] shadow-[0_2px_14px_rgba(31,161,255,0.08),0_1px_3px_rgba(8,24,76,0.04)] hover:border-[#1FA1FF]/60 hover:shadow-[0_6px_22px_rgba(31,161,255,0.18)] hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--primary-ring) transition-all duration-200 motion-reduce:transition-none"
+              className="sk-brand-card group"
             >
-              {/* Brand Logo */}
-              <div
-                className={
-                  b.name === "Skydrops Water"
-                    ? "w-12 sm:w-22 h-9 sm:h-11 flex items-center justify-center shrink-0"
-                    : "w-8 sm:w-12 h-9 sm:h-11 flex items-center justify-center shrink-0"
-                }
-              >
+              {/* Fixed 56x40 Logo Slot */}
+              <div className="w-[56px] h-[40px] relative shrink-0 flex items-center justify-start">
                 <Image
                   src={b.logo}
                   alt=""
                   width={b.logoWidth}
                   height={b.logoHeight}
-                  className={
-                    b.name === "Skydrops Water"
-                      ? "h-4.5 sm:h-6.5 w-auto max-w-12 sm:max-w-25 object-contain transition-transform duration-200 group-hover:scale-105"
-                      : "h-7 sm:h-9.5 w-auto max-w-8 sm:max-w-12 object-contain transition-transform duration-200 group-hover:scale-105"
-                  }
+                  className="w-full h-full object-contain object-left"
                 />
               </div>
 
-              {/* Brand Title (2 lines) */}
-              <div className="flex flex-col text-left justify-center min-w-0">
-                <span className="text-[11px] sm:text-sm font-bold text-[#071642] group-hover:text-primary transition-colors leading-tight">
-                  {b.titleLine1}
-                </span>
-                <span className="text-[11px] sm:text-sm font-bold text-[#071642] group-hover:text-primary transition-colors leading-tight">
-                  {b.titleLine2}
-                </span>
-                <span className="sr-only">
-                  {b.name} ({b.display}) (opens in a new tab)
-                </span>
-              </div>
+              {/* Card Label (15px/20px weight 600 var(--ink)) */}
+              <span className="sk-brand-card-label flex-1 line-clamp-2">
+                {b.label}
+              </span>
+
+              {/* Lucide ArrowRight (18px, shifts 2px right on hover) */}
+              <ArrowRight
+                className="sk-brand-card-arrow"
+                strokeWidth={2}
+                aria-hidden="true"
+              />
+
+              <span className="sr-only"> (opens in a new tab)</span>
             </a>
           ))}
         </div>
       </nav>
 
-      {/* Copyright */}
-      <div className="mt-7 sm:mt-8 flex items-center justify-center select-none">
-        <p className="inline-flex items-center gap-2 text-[11.5px] sm:text-xs font-medium text-[#64748B] tracking-[0.02em]">
-          <span>&copy; 2026</span>
-          <span className="font-semibold text-[#071642] tracking-normal">Skydrops</span>
-          <span className="inline-block size-1 rounded-full bg-[#CBD5E1]" aria-hidden="true" />
-          <span>All rights reserved.</span>
-        </p>
-      </div>
+      {/* Static Copyright without year or new Date() */}
+      <p className="mt-6 text-center text-[13px] text-(--muted) select-none">
+        © Skydrops. All rights reserved.
+      </p>
     </footer>
   );
 }
