@@ -24,7 +24,8 @@
     "submissions:verify": "tsx --env-file=.env.local scripts/verify-submissions.ts",
     "uploads:verify": "tsx --env-file=.env.local scripts/verify-uploads.ts",
     "predeploy": "tsx --env-file=.env.local scripts/predeploy-check.ts",
-    "hardening:verify": "tsx --env-file=.env.local scripts/verify-hardening.ts"
+    "hardening:verify": "tsx --env-file=.env.local scripts/verify-hardening.ts",
+    "footer:verify": "tsx --env-file=.env.local scripts/verify-footer.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

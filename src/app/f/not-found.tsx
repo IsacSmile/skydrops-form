@@ -3,7 +3,7 @@ import { brand } from "@/lib/brand";
 
 export default function PublicNotFound() {
   return (
-    <main className="w-full min-h-screen py-10 sm:py-16 px-4 flex flex-col items-center justify-between">
+    <main className="w-full py-10 sm:py-16 px-4 flex flex-col items-center flex-1">
       <div className="w-full max-w-xl mx-auto space-y-6 sm:space-y-8">
         {/* Brand Header */}
         <header className="flex justify-center">
@@ -38,19 +38,6 @@ export default function PublicNotFound() {
           </div>
         </div>
       </div>
-
-      {/* Powered by Skydrops Footer */}
-      <footer className="pt-10 pb-4 flex items-center justify-center gap-2 text-xs font-medium text-[#5B6475] select-none">
-        <Image
-          src={brand.logo.mark}
-          alt=""
-          width={20}
-          height={28}
-          className="h-5 w-auto object-contain opacity-75"
-          aria-hidden="true"
-        />
-        <span>Powered by Skydrops</span>
-      </footer>
     </main>
   );
 }

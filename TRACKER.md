@@ -73,6 +73,12 @@ File upload --> Vercel Blob (client upload) --> URL stored in submission
 **Build order:** C0 > C1 > C2 > C3 > C4a > C4b > C5 > C6 > C8 > C7 > C9 > C10a > C10b
 (Sheets before file upload, so the core flow works end to end first.)
 
+## 4b. UI Polish
+
+| ID  | Component                                                                                                                                           | Status |
+| --- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| U1  | Parent brands footer: replace "Powered by" with semantic "Our brands" footer displaying Skydrops Water and Skydrops Technologies on all `/f/*` pages | ✅     |
+
 ## 5. Milestones
 
 - **M1: Admin can create a form with fields** (C0-C4)
@@ -105,3 +111,5 @@ File upload --> Vercel Blob (client upload) --> URL stored in submission
 | 2026-10-26 | C9 completed: Admin responses view per form (/admin/forms/[id]/submissions), stats cards, sync status badges, retry actions, answer detail dialog, Google Sheets link, verify-submissions suite |
 | 2026-10-26 | C7 completed: Vercel Blob client upload, upload route, server validation + head check, progress bar & file picker, warning banner, best-effort blob deletion, uploads:verify suite |
 | 2026-10-26 | C10a completed: Rate limiting in Neon, cron maintenance job, orphan blob cleanup, security headers, robots.txt, predeploy checks, verify-hardening suite |
+| 2026-10-26 | U1 completed: Parent brands footer with Skydrops Water and Skydrops Technologies links, responsive layout, verify-footer suite |
+

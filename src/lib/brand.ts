@@ -27,6 +27,18 @@ export const brand = {
     mark: "/brand/skydrops-mark.png",
     markSize: [512, 714] as const,
   },
+  parentBrands: [
+    {
+      name: "Skydrops Water",
+      href: "https://skydropswater.com/",
+      display: "skydropswater.com",
+    },
+    {
+      name: "Skydrops Technologies",
+      href: "https://www.skydropstechnologies.com/",
+      display: "skydropstechnologies.com",
+    },
+  ] as const,
 } as const;
 
 export type Brand = typeof brand;

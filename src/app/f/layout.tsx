@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { brand } from "@/lib/brand";
+import { BrandFooter } from "@/components/public/brand-footer";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -24,7 +25,7 @@ export default function PublicFormLayout({
 }) {
   return (
     <div
-      className={`${plusJakartaSans.className} min-h-screen antialiased`}
+      className={`${plusJakartaSans.className} min-h-screen antialiased flex flex-col justify-between`}
       style={
         {
           colorScheme: "light",
@@ -49,7 +50,8 @@ export default function PublicFormLayout({
         } as React.CSSProperties
       }
     >
-      {children}
+      <div className="flex-1 flex flex-col">{children}</div>
+      <BrandFooter />
     </div>
   );
 }
