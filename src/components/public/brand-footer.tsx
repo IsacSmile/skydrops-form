@@ -61,9 +61,14 @@ export function BrandFooter() {
       </nav>
 
       {/* Copyright */}
-      <p className="mt-6 text-center text-xs text-muted">
-        © Skydrops. All rights reserved.
-      </p>
+      <div className="mt-7 sm:mt-8 flex items-center justify-center select-none">
+        <p className="inline-flex items-center gap-2 text-[11.5px] sm:text-xs font-medium text-[#64748B] tracking-[0.02em]">
+          <span>&copy; 2026</span>
+          <span className="font-semibold text-[#071642] tracking-normal">Skydrops</span>
+          <span className="inline-block size-1 rounded-full bg-[#CBD5E1]" aria-hidden="true" />
+          <span>All rights reserved.</span>
+        </p>
+      </div>
     </footer>
   );
 }
