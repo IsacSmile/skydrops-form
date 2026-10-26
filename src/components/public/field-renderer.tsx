@@ -110,24 +110,25 @@ function FileFieldControl({
   if (isPreview) {
     return (
       <div className="space-y-1.5">
-        <div className="min-h-19 rounded-lg border-[1.5px] border-dashed border-[#BFD0EA] p-3.5 bg-[#F8FAFE] opacity-75 cursor-not-allowed flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="size-10 rounded-lg bg-(--primary-soft,#F2F7FF) text-(--primary,#0B5BFF) flex items-center justify-center shrink-0">
-              <UploadCloud className="size-5" />
+        <div className="rounded-lg border-[1.5px] border-dashed border-[#BFD0EA] p-2.5 sm:p-3.5 bg-[#F8FAFE] opacity-75 cursor-not-allowed flex items-center justify-between gap-2.5 sm:gap-3">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
+            <div className="size-9 sm:size-10 rounded-lg bg-(--primary-soft,#F2F7FF) text-(--primary,#0B5BFF) flex items-center justify-center shrink-0">
+              <UploadCloud className="size-4.5 sm:size-5" />
             </div>
-            <div>
-              <span className="text-[15px] font-semibold text-(--text,#1B2433) block leading-snug">
+            <div className="min-w-0 flex-1">
+              <span className="text-sm sm:text-[15px] font-semibold text-(--text,#1B2433) block leading-snug truncate">
                 Choose a file
               </span>
-              <span className="text-[13px] text-(--muted,#5B6475) block leading-snug">
-                JPG, PNG, WebP, PDF, DOC or DOCX &bull; Max 5 MB
+              <span className="text-xs sm:text-[13px] text-(--muted,#5B6475) block leading-snug truncate">
+                <span className="sm:hidden">Max 5 MB &bull; PDF, PNG, JPG</span>
+                <span className="hidden sm:inline">JPG, PNG, WebP, PDF, DOC or DOCX &bull; Max 5 MB</span>
               </span>
             </div>
           </div>
           <button
             type="button"
             disabled
-            className="h-9 px-4 rounded-lg border border-(--border,#D5DEEC) bg-white text-[13px] font-semibold text-(--muted,#5B6475) cursor-not-allowed"
+            className="h-8 sm:h-9 px-3 sm:px-4 rounded-lg border border-(--border,#D5DEEC) bg-white text-xs sm:text-[13px] font-semibold text-(--muted,#5B6475) cursor-not-allowed shrink-0"
           >
             Browse
           </button>
@@ -386,34 +387,33 @@ function FileFieldControl({
               handleFileSelected(f);
             }
           }}
-          className={`min-h-19 rounded-lg border-[1.5px] border-dashed p-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 cursor-pointer transition-all ${
+          className={`rounded-lg border-[1.5px] border-dashed p-2.5 sm:p-3.5 flex items-center justify-between gap-2.5 sm:gap-3 cursor-pointer transition-all ${
             isDragging
               ? "border-(--primary,#0B5BFF) bg-(--primary-soft,#F2F7FF)"
               : "border-[#BFD0EA] bg-[#F8FAFE] hover:border-(--primary,#0B5BFF) hover:bg-(--primary-soft,#F2F7FF)"
           } ${error ? "border-(--danger,#D92D20)" : ""}`}
         >
-          <div className="flex items-center gap-3 w-full sm:w-auto">
-            <div className="size-10 rounded-lg bg-(--primary-soft,#F2F7FF) text-(--primary,#0B5BFF) flex items-center justify-center shrink-0">
-              <UploadCloud className="size-5" />
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
+            <div className="size-9 sm:size-10 rounded-lg bg-(--primary-soft,#F2F7FF) text-(--primary,#0B5BFF) flex items-center justify-center shrink-0">
+              <UploadCloud className="size-4.5 sm:size-5" />
             </div>
-            <div>
-              <span className="text-[15px] font-semibold text-(--text,#1B2433) block leading-snug">
+            <div className="min-w-0 flex-1">
+              <span className="text-sm sm:text-[15px] font-semibold text-(--text,#1B2433) block leading-snug truncate">
                 Choose a file
               </span>
-              <span className="text-[13px] text-(--muted,#5B6475) block leading-snug">
-                JPG, PNG, WebP, PDF, DOC or DOCX &bull; Max 5 MB
+              <span className="text-xs sm:text-[13px] text-(--muted,#5B6475) block leading-snug truncate">
+                <span className="sm:hidden">Max 5 MB &bull; PDF, PNG, JPG</span>
+                <span className="hidden sm:inline">JPG, PNG, WebP, PDF, DOC or DOCX &bull; Max 5 MB</span>
               </span>
             </div>
           </div>
-          <div className="w-full sm:w-auto">
-            <button
-              type="button"
-              tabIndex={-1}
-              className="w-full sm:w-auto h-9 px-4 rounded-lg border border-(--border,#D5DEEC) bg-white text-[13px] font-semibold text-(--text,#1B2433) hover:border-(--border-hover,#A9BAD6) hover:bg-(--primary-soft,#F2F7FF) pointer-events-none transition-colors"
-            >
-              Browse
-            </button>
-          </div>
+          <button
+            type="button"
+            tabIndex={-1}
+            className="h-8 sm:h-9 px-3 sm:px-4 rounded-lg border border-(--border,#D5DEEC) bg-white text-xs sm:text-[13px] font-semibold text-(--text,#1B2433) hover:border-(--border-hover,#A9BAD6) hover:bg-(--primary-soft,#F2F7FF) pointer-events-none transition-colors shrink-0 shadow-xs"
+          >
+            Browse
+          </button>
         </div>
       )}
     </div>
