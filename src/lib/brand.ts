@@ -72,6 +72,8 @@ export const brand = {
     lockupWhiteSize: [1000, 726] as const,
     full: "/brand/skydrops-logo-full.png",
     fullSize: [1200, 999] as const,
+    fullWhite: "/brand/skydrops-logo-full-white.png",
+    fullWhiteSize: [1200, 999] as const,
     mark: "/brand/skydrops-mark.png",
     markSize: [512, 714] as const,
     markWhite: "/brand/skydrops-mark-white.png",

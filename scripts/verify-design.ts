@@ -124,6 +124,7 @@ async function run() {
     const html = await resPublished.text();
 
     const hasHeaderLogo =
+      html.includes("skydrops-logo-full-white.png") ||
       html.includes("skydrops-logo-full.png") ||
       html.includes("skydrops-logo-lockup-white.png");
     const hasSkFormClass = html.includes("sk-form");
@@ -171,7 +172,8 @@ async function run() {
     const closedHasBand =
       htmlClosed.includes("sk-header-band") &&
       htmlClosed.includes("This form is closed") &&
-      (htmlClosed.includes("skydrops-logo-full.png") ||
+      (htmlClosed.includes("skydrops-logo-full-white.png") ||
+        htmlClosed.includes("skydrops-logo-full.png") ||
         htmlClosed.includes("skydrops-logo-lockup-white.png"));
 
     if (resClosed.status === 200 && closedHasBand) {

@@ -45,10 +45,10 @@ export function FormHeaderBand({
 
       {/* Content */}
       <div className="relative z-10">
-        {/* Top row: Full Brand Logo */}
+        {/* Top row: Full White Brand Logo */}
         <div className="mb-6 sm:mb-7 flex items-center">
           <Image
-            src={brand.logo.full}
+            src={brand.logo.fullWhite}
             alt="Skydrops"
             width={1200}
             height={999}
