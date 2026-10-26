@@ -433,11 +433,11 @@ export function SubmissionsManager({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[180px]">Submitted</TableHead>
+                  <TableHead className="w-45">Submitted</TableHead>
                   <TableHead className="w-[45%]">Answers Preview</TableHead>
-                  <TableHead className="w-[140px]">Sync Status</TableHead>
+                  <TableHead className="w-35">Sync Status</TableHead>
                   <TableHead>Sync Details</TableHead>
-                  <TableHead className="text-right w-[140px]">Actions</TableHead>
+                  <TableHead className="text-right w-35">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -516,7 +516,7 @@ export function SubmissionsManager({
                       <TableCell>
                         {row.syncError ? (
                           <p
-                            className="text-xs text-destructive line-clamp-2 break-words"
+                            className="text-xs text-destructive line-clamp-2 wrap-break-word"
                             title={row.syncError}
                           >
                             {row.syncError}
@@ -632,7 +632,7 @@ export function SubmissionsManager({
                         preview.map((ans, idx) => (
                           <div
                             key={idx}
-                            className="text-xs leading-snug break-words"
+                            className="text-xs leading-snug wrap-break-word"
                           >
                             <span className="font-medium text-foreground">
                               {ans.label}:
@@ -652,7 +652,7 @@ export function SubmissionsManager({
 
                     {/* Stored Error message if failed */}
                     {row.syncError && (
-                      <div className="rounded-md border border-destructive/20 bg-destructive/10 p-2 text-xs text-destructive break-words">
+                      <div className="rounded-md border border-destructive/20 bg-destructive/10 p-2 text-xs text-destructive wrap-break-word">
                         {row.syncError}
                       </div>
                     )}
@@ -806,7 +806,7 @@ export function SubmissionsManager({
                   <span className="text-xs font-semibold text-destructive">
                     Google Sheets sync error:
                   </span>
-                  <p className="text-xs text-destructive break-words">
+                  <p className="text-xs text-destructive wrap-break-word">
                     {detailSubmission.syncError}
                   </p>
                 </div>
@@ -829,7 +829,7 @@ export function SubmissionsManager({
                         <div className="text-xs font-semibold text-foreground">
                           {ans.label}
                         </div>
-                        <div className="text-sm text-foreground/90 whitespace-pre-wrap break-words leading-relaxed">
+                        <div className="text-sm text-foreground/90 whitespace-pre-wrap wrap-break-word leading-relaxed">
                           {ans.value}
                         </div>
                       </div>
