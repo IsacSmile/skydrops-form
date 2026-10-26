@@ -13,21 +13,21 @@ export function BrandFooter() {
     >
       {/* Brand Navigation */}
       <nav aria-label="Skydrops brands" className="w-full">
-        <div className="grid grid-cols-1 min-[480px]:grid-cols-2 gap-3.5 sm:gap-4 items-stretch">
+        <div className="grid grid-cols-2 gap-2 sm:gap-3.5 items-stretch">
           {brand.parentBrands.map((b) => (
             <a
               key={b.name}
               href={b.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative flex items-center gap-3.5 sm:gap-4 px-5 py-3 sm:px-6 sm:py-3.5 rounded-[10px] bg-white border border-[#E0EAFA] shadow-[0_2px_14px_rgba(31,161,255,0.08),0_1px_3px_rgba(8,24,76,0.04)] hover:border-[#1FA1FF]/60 hover:shadow-[0_6px_22px_rgba(31,161,255,0.18)] hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--primary-ring) transition-all duration-200 motion-reduce:transition-none"
+              className="group relative flex items-center gap-2 sm:gap-3.5 px-2.5 py-2.5 sm:px-5 sm:py-3.5 rounded-[10px] bg-white border border-[#E0EAFA] shadow-[0_2px_14px_rgba(31,161,255,0.08),0_1px_3px_rgba(8,24,76,0.04)] hover:border-[#1FA1FF]/60 hover:shadow-[0_6px_22px_rgba(31,161,255,0.18)] hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--primary-ring) transition-all duration-200 motion-reduce:transition-none"
             >
               {/* Brand Logo */}
               <div
                 className={
                   b.name === "Skydrops Water"
-                    ? "w-22 sm:w-26 h-11 sm:h-12 flex items-center justify-center shrink-0"
-                    : "w-12 sm:w-14 h-11 sm:h-12 flex items-center justify-center shrink-0"
+                    ? "w-12 sm:w-22 h-9 sm:h-11 flex items-center justify-center shrink-0"
+                    : "w-8 sm:w-12 h-9 sm:h-11 flex items-center justify-center shrink-0"
                 }
               >
                 <Image
@@ -37,18 +37,18 @@ export function BrandFooter() {
                   height={b.logoHeight}
                   className={
                     b.name === "Skydrops Water"
-                      ? "h-5.5 sm:h-6.5 w-auto max-w-25 sm:max-w-30 object-contain transition-transform duration-200 group-hover:scale-105"
-                      : "h-9 sm:h-10 w-auto max-w-12 sm:max-w-13.5 object-contain transition-transform duration-200 group-hover:scale-105"
+                      ? "h-4.5 sm:h-6.5 w-auto max-w-12 sm:max-w-25 object-contain transition-transform duration-200 group-hover:scale-105"
+                      : "h-7 sm:h-9.5 w-auto max-w-8 sm:max-w-12 object-contain transition-transform duration-200 group-hover:scale-105"
                   }
                 />
               </div>
 
               {/* Brand Title (2 lines) */}
               <div className="flex flex-col text-left justify-center min-w-0">
-                <span className="text-[13px] sm:text-sm font-bold text-[#071642] group-hover:text-primary transition-colors leading-tight">
+                <span className="text-[11px] sm:text-sm font-bold text-[#071642] group-hover:text-primary transition-colors leading-tight">
                   {b.titleLine1}
                 </span>
-                <span className="text-[13px] sm:text-sm font-bold text-[#071642] group-hover:text-primary transition-colors leading-tight">
+                <span className="text-[11px] sm:text-sm font-bold text-[#071642] group-hover:text-primary transition-colors leading-tight">
                   {b.titleLine2}
                 </span>
                 <span className="sr-only">
