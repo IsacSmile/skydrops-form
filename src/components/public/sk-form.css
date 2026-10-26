@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@1..144,1..1000&display=swap');
+
 /**
  * Deep Sky form design system - scoped to .sk-form wrapper
  */
@@ -186,6 +188,13 @@
   border-radius: var(--radius-control);
   background-color: var(--primary);
   color: #FFFFFF;
+  font-family: "Google Sans Flex", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings:
+    "slnt" 0,
+    "wdth" 100,
+    "ROND" 0;
   font-size: 15px;
   font-weight: 600;
   letter-spacing: 0.12em;
