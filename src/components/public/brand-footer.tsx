@@ -1,10 +1,9 @@
 import Image from "next/image";
-import { ArrowUpRight } from "lucide-react";
 import { brand } from "@/lib/brand";
 
 /**
- * Public parent brands footer displaying Skydrops Water and Skydrops Technologies.
- * Restyled for U2: contained to 640px column, 1px divider, radius 8px hover tiles.
+ * Public parent brands footer displaying Skydrops Technologies and Skydrops Product website.
+ * Styled as pill-shaped cards with soft blue glow matching brand design.
  */
 export function BrandFooter() {
   return (
@@ -12,55 +11,48 @@ export function BrandFooter() {
       className="w-full mt-10 border-t border-(--divider) pt-7"
       style={{ paddingBottom: "max(24px, env(safe-area-inset-bottom, 24px))" }}
     >
-      {/* Label */}
-      <p className="text-center text-[11px] font-semibold tracking-[0.14em] uppercase text-muted mb-3">
-        OUR BRANDS
-      </p>
-
       {/* Brand Navigation */}
       <nav aria-label="Skydrops brands" className="w-full">
-        <div className="relative grid grid-cols-1 min-[360px]:grid-cols-2 gap-3 sm:gap-4 items-stretch">
-          {/* 1px Vertical divider on screens >= 360px */}
-          <div
-            className="hidden min-[360px]:block absolute left-1/2 top-2 bottom-2 w-px -translate-x-1/2 bg-(--divider)"
-            aria-hidden="true"
-          />
-
+        <div className="grid grid-cols-1 min-[480px]:grid-cols-2 gap-3.5 sm:gap-4 items-stretch">
           {brand.parentBrands.map((b) => (
             <a
               key={b.name}
               href={b.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative flex flex-col items-center justify-between min-h-11 py-3 px-3 sm:py-3.5 sm:px-4 rounded-lg text-center bg-transparent hover:bg-white hover:border hover:border-(--divider) border border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--primary-ring) transition-all motion-reduce:transition-none duration-150"
+              className="group relative flex items-center gap-3.5 sm:gap-4 px-5 py-3 sm:px-6 sm:py-3.5 rounded-full bg-white border border-[#E0EAFA] shadow-[0_2px_14px_rgba(31,161,255,0.08),0_1px_3px_rgba(8,24,76,0.04)] hover:border-[#1FA1FF]/60 hover:shadow-[0_6px_22px_rgba(31,161,255,0.18)] hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--primary-ring) transition-all duration-200 motion-reduce:transition-none"
             >
               {/* Brand Logo */}
-              <div className="h-9 sm:h-10 w-full flex items-center justify-center mb-2">
+              <div
+                className={
+                  b.name === "Skydrops Water"
+                    ? "w-20 sm:w-24 h-11 sm:h-12 flex items-center justify-center shrink-0"
+                    : "w-12 sm:w-14 h-11 sm:h-12 flex items-center justify-center shrink-0"
+                }
+              >
                 <Image
                   src={b.logo}
-                  alt={b.name}
+                  alt=""
                   width={b.logoWidth}
                   height={b.logoHeight}
                   className={
                     b.name === "Skydrops Water"
-                      ? "h-6 sm:h-7 w-auto max-w-32.5 sm:max-w-37.5 object-contain transition-transform duration-200 group-hover:scale-[1.03]"
-                      : "h-8 sm:h-9 w-auto max-w-16.25 sm:max-w-18.75 object-contain transition-transform duration-200 group-hover:scale-[1.03]"
+                      ? "h-5 sm:h-6 w-auto max-w-[85px] sm:max-w-[100px] object-contain transition-transform duration-200 group-hover:scale-105"
+                      : "h-9 sm:h-10 w-auto max-w-[48px] sm:max-w-[54px] object-contain transition-transform duration-200 group-hover:scale-105"
                   }
                 />
               </div>
 
-              {/* Brand Name & Domain */}
-              <div className="flex flex-col items-center">
-                <span className="inline-flex items-center text-[13px] sm:text-sm font-semibold text-(--ink) group-hover:text-primary group-focus-visible:text-primary transition-colors motion-reduce:transition-none">
-                  {b.name}
-                  <ArrowUpRight
-                    className="size-3.5 ml-1 shrink-0 text-muted group-hover:text-primary group-focus-visible:text-primary transition-colors motion-reduce:transition-none"
-                    aria-hidden="true"
-                  />
-                  <span className="sr-only"> (opens in a new tab)</span>
+              {/* Brand Title (2 lines) */}
+              <div className="flex flex-col text-left justify-center min-w-0">
+                <span className="text-[13px] sm:text-[14px] font-bold text-[#071642] group-hover:text-primary transition-colors leading-[1.25]">
+                  {b.titleLine1}
                 </span>
-                <span className="mt-0.5 text-xs font-normal text-muted group-hover:text-(--primary)/80 transition-colors">
-                  {b.display}
+                <span className="text-[13px] sm:text-[14px] font-bold text-[#071642] group-hover:text-primary transition-colors leading-[1.25]">
+                  {b.titleLine2}
+                </span>
+                <span className="sr-only">
+                  {b.name} ({b.display}) (opens in a new tab)
                 </span>
               </div>
             </a>
@@ -69,7 +61,7 @@ export function BrandFooter() {
       </nav>
 
       {/* Copyright */}
-      <p className="mt-5 text-center text-xs text-muted">
+      <p className="mt-6 text-center text-xs text-muted">
         © Skydrops. All rights reserved.
       </p>
     </footer>

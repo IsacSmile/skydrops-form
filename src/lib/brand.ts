@@ -82,20 +82,24 @@ export const brand = {
 
   parentBrands: [
     {
-      name: "Skydrops Water",
-      href: "https://skydropswater.com/",
-      display: "skydropswater.com",
-      logo: "/brand/skydrops-water-logo.png",
-      logoWidth: 410,
-      logoHeight: 109,
-    },
-    {
       name: "Skydrops Technologies",
+      titleLine1: "Skydrops’",
+      titleLine2: "Technologies website",
       href: "https://www.skydropstechnologies.com/",
       display: "skydropstechnologies.com",
       logo: "/brand/skydrops-tech-logo.png",
       logoWidth: 569,
       logoHeight: 471,
+    },
+    {
+      name: "Skydrops Water",
+      titleLine1: "Skydrops’",
+      titleLine2: "Product website",
+      href: "https://skydropswater.com/",
+      display: "skydropswater.com",
+      logo: "/brand/skydrops-water-logo.png",
+      logoWidth: 410,
+      logoHeight: 109,
     },
   ] as const,
 } as const;
