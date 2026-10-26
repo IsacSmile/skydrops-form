@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import type { Form, Field } from "@/types/form";
+import { brand } from "@/lib/brand";
 import { FieldRenderer } from "./field-renderer";
 import { FormHeaderBand } from "./form-header-band";
 import { Layers } from "lucide-react";
@@ -70,9 +72,17 @@ export function FormPreview({ form, fields }: FormPreviewProps) {
                 <button
                   type="button"
                   disabled
-                  className="sk-submit-btn opacity-80 cursor-not-allowed"
+                  className="sk-submit-btn opacity-80 cursor-not-allowed group"
                 >
-                  Submit
+                  <Image
+                    src={brand.logo.markWhite}
+                    alt=""
+                    width={18}
+                    height={25}
+                    className="w-4 h-auto object-contain shrink-0"
+                    aria-hidden="true"
+                  />
+                  <span>Submit</span>
                 </button>
               </div>
             </div>

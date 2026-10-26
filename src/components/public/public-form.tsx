@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useRef } from "react";
+import Image from "next/image";
 import { Loader2, AlertCircle, RotateCcw, Check } from "lucide-react";
 import type { Field } from "@/types/form";
+import { brand } from "@/lib/brand";
 import { FieldRenderer } from "./field-renderer";
 import { FormHeaderBand } from "./form-header-band";
 
@@ -336,15 +338,25 @@ export function PublicForm({
           <button
             type="submit"
             disabled={isSubmitting || isAnyFileUploading}
-            className="sk-submit-btn"
+            className="sk-submit-btn group"
           >
             {isSubmitting ? (
               <>
-                <Loader2 className="size-4 animate-spin" />
+                <Loader2 className="size-4 animate-spin shrink-0" />
                 <span>Submitting...</span>
               </>
             ) : (
-              <span>Submit</span>
+              <>
+                <Image
+                  src={brand.logo.markWhite}
+                  alt=""
+                  width={18}
+                  height={25}
+                  className="w-4 h-auto object-contain shrink-0 transition-transform duration-200 ease-out group-hover:scale-110 group-hover:-translate-y-0.5 motion-reduce:transform-none"
+                  aria-hidden="true"
+                />
+                <span>Submit</span>
+              </>
             )}
           </button>
           {isAnyFileUploading && (
