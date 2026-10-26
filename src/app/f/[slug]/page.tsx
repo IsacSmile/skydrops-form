@@ -86,7 +86,7 @@ export default async function PublicFormPage({ params }: FormPageProps) {
           description="This form is no longer accepting new responses."
         />
         <div className="px-5 pt-6 pb-7 sm:px-10 sm:pt-9 sm:pb-10 text-center">
-          <p className="text-[15px] leading-6 text-[var(--muted)]">
+          <p className="text-[15px] leading-6 text-muted">
             This form is currently closed to new submissions. Please contact the organizer if you believe this is in error.
           </p>
         </div>

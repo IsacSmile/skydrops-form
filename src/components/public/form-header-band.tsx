@@ -17,7 +17,7 @@ export function FormHeaderBand({
   priorityLogo = true,
 }: FormHeaderBandProps) {
   return (
-    <div className="sk-header-band relative px-5 pt-7 pb-[26px] sm:px-10 sm:pt-9 sm:pb-8">
+    <div className="sk-header-band relative px-5 pt-7 pb-6.5 sm:px-10 sm:pt-9 sm:pb-8">
       {/* Decorative Layer 1: Soft Glow */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -38,7 +38,7 @@ export function FormHeaderBand({
           alt=""
           width={600}
           height={836}
-          className="w-[150px] sm:w-[220px] h-auto object-contain"
+          className="w-37.5 sm:w-55 h-auto object-contain"
           aria-hidden="true"
         />
       </div>
@@ -53,12 +53,12 @@ export function FormHeaderBand({
             width={1000}
             height={726}
             priority={priorityLogo}
-            className="w-[104px] sm:w-[124px] h-auto object-contain"
+            className="w-26 sm:w-31 h-auto object-contain"
           />
         </div>
 
         {/* Title */}
-        <h1 className="sk-title text-[28px] leading-[34px] sm:text-[32px] sm:leading-[38px] font-bold text-white tracking-[-0.02em] line-clamp-3">
+        <h1 className="sk-title text-[28px] leading-8.5 sm:text-[32px] sm:leading-9.5 font-bold text-white tracking-[-0.02em] line-clamp-3">
           {title}
         </h1>
 
@@ -72,7 +72,7 @@ export function FormHeaderBand({
 
       {/* Bottom Accent Line */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-[3px]"
+        className="absolute bottom-0 left-0 right-0 h-0.75"
         style={{
           background: "linear-gradient(90deg, #1FA1FF 0%, #0B5BFF 100%)",
         }}

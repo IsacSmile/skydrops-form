@@ -38,19 +38,19 @@ export function FormPreview({ form, fields }: FormPreviewProps) {
         <div className="px-5 pt-6 pb-7 sm:px-10 sm:pt-9 sm:pb-10 bg-white space-y-6 sm:space-y-7">
           {hasRequiredField && (
             <div className="flex justify-end -mt-1 mb-6">
-              <span className="text-xs text-[var(--muted)] font-normal">
-                <span className="text-[var(--danger)] mr-1">*</span>Required
+              <span className="text-xs text-muted font-normal">
+                <span className="text-(--danger) mr-1">*</span>Required
               </span>
             </div>
           )}
 
           {fields.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 text-center text-[var(--muted)] space-y-3">
-              <div className="p-3 bg-[var(--page)] rounded-full">
-                <Layers className="size-6 text-[var(--muted)]" />
+            <div className="flex flex-col items-center justify-center py-12 text-center text-muted space-y-3">
+              <div className="p-3 bg-(--page) rounded-full">
+                <Layers className="size-6 text-muted" />
               </div>
-              <p className="text-sm font-medium text-[var(--text)]">No fields yet</p>
-              <p className="text-xs text-[var(--muted)] max-w-xs">
+              <p className="text-sm font-medium text-(--text)">No fields yet</p>
+              <p className="text-xs text-muted max-w-xs">
                 Add fields in the Build tab to preview how respondents will experience your form.
               </p>
             </div>

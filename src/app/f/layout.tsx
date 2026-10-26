@@ -34,7 +34,7 @@ export default function PublicFormLayout({
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="w-full max-w-[640px] mx-auto px-4 sm:px-6 pt-8 sm:pt-14 pb-12 flex-1 flex flex-col justify-between">
+      <div className="w-full max-w-160 mx-auto px-4 sm:px-6 pt-8 sm:pt-14 pb-12 flex-1 flex flex-col justify-between">
         <main className="flex-1 flex flex-col">{children}</main>
         <BrandFooter />
       </div>

@@ -110,16 +110,16 @@ function FileFieldControl({
   if (isPreview) {
     return (
       <div className="space-y-1.5">
-        <div className="min-h-[76px] rounded-lg border-[1.5px] border-dashed border-[#BFD0EA] p-3.5 bg-[#F8FAFE] opacity-75 cursor-not-allowed flex items-center justify-between">
+        <div className="min-h-19 rounded-lg border-[1.5px] border-dashed border-[#BFD0EA] p-3.5 bg-[#F8FAFE] opacity-75 cursor-not-allowed flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="size-10 rounded-lg bg-[var(--primary-soft,#F2F7FF)] text-[var(--primary,#0B5BFF)] flex items-center justify-center shrink-0">
+            <div className="size-10 rounded-lg bg-(--primary-soft,#F2F7FF) text-(--primary,#0B5BFF) flex items-center justify-center shrink-0">
               <UploadCloud className="size-5" />
             </div>
             <div>
-              <span className="text-[15px] font-semibold text-[var(--text,#1B2433)] block leading-snug">
+              <span className="text-[15px] font-semibold text-(--text,#1B2433) block leading-snug">
                 Choose a file
               </span>
-              <span className="text-[13px] text-[var(--muted,#5B6475)] block leading-snug">
+              <span className="text-[13px] text-(--muted,#5B6475) block leading-snug">
                 JPG, PNG, WebP, PDF, DOC or DOCX &bull; Max 5 MB
               </span>
             </div>
@@ -127,7 +127,7 @@ function FileFieldControl({
           <button
             type="button"
             disabled
-            className="h-9 px-4 rounded-lg border border-[var(--border,#D5DEEC)] bg-white text-[13px] font-semibold text-[var(--muted,#5B6475)] cursor-not-allowed"
+            className="h-9 px-4 rounded-lg border border-(--border,#D5DEEC) bg-white text-[13px] font-semibold text-(--muted,#5B6475) cursor-not-allowed"
           >
             Browse
           </button>
@@ -258,19 +258,19 @@ function FileFieldControl({
 
       {/* Uploading State */}
       {status === "uploading" && (
-        <div className="p-3.5 rounded-lg border border-[var(--divider,#E6ECF5)] bg-white space-y-2.5">
-          <div className="flex items-center justify-between text-xs text-[var(--muted,#5B6475)]">
-            <span className="font-medium text-[var(--text,#1B2433)] truncate max-w-50 sm:max-w-xs">
+        <div className="p-3.5 rounded-lg border border-(--divider,#E6ECF5) bg-white space-y-2.5">
+          <div className="flex items-center justify-between text-xs text-(--muted,#5B6475)">
+            <span className="font-medium text-(--text,#1B2433) truncate max-w-50 sm:max-w-xs">
               Uploading {fileMeta?.name}...
             </span>
             <div className="flex items-center gap-3">
-              <span className="font-semibold text-[var(--primary,#0B5BFF)]">
+              <span className="font-semibold text-(--primary,#0B5BFF)">
                 {Math.round(progress)}%
               </span>
               <button
                 type="button"
                 onClick={handleCancel}
-                className="text-xs font-semibold text-[var(--muted,#5B6475)] hover:text-[var(--danger,#D92D20)] cursor-pointer"
+                className="text-xs font-semibold text-(--muted,#5B6475) hover:text-(--danger,#D92D20) cursor-pointer"
               >
                 Cancel
               </button>
@@ -278,7 +278,7 @@ function FileFieldControl({
           </div>
           <div className="w-full bg-[#E6ECF5] rounded-[3px] h-1.5 overflow-hidden">
             <div
-              className="h-full bg-[var(--primary,#0B5BFF)] transition-all duration-150 ease-out rounded-[3px]"
+              className="h-full bg-(--primary,#0B5BFF) transition-all duration-150 ease-out rounded-[3px]"
               style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
             />
           </div>
@@ -287,17 +287,17 @@ function FileFieldControl({
 
       {/* Uploaded State */}
       {status === "uploaded" && (
-        <div className="flex items-center justify-between p-3.5 rounded-lg border border-[#ABEFC6] bg-[var(--success-soft,#ECFDF3)]">
+        <div className="flex items-center justify-between p-3.5 rounded-lg border border-[#ABEFC6] bg-(--success-soft,#ECFDF3)">
           <div className="flex items-center gap-2.5 min-w-0 pr-2">
             <div className="size-8 rounded-full bg-white flex items-center justify-center shrink-0 shadow-xs">
-              <Check className="size-4 text-[var(--success,#12B76A)] stroke-[2.5]" />
+              <Check className="size-4 text-(--success,#12B76A) stroke-[2.5]" />
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-medium text-[var(--text,#1B2433)] truncate">
+              <p className="text-sm font-medium text-(--text,#1B2433) truncate">
                 {fileMeta?.name ?? "Uploaded file"}
               </p>
               {fileMeta?.size && (
-                <p className="text-xs text-[var(--muted,#5B6475)]">
+                <p className="text-xs text-(--muted,#5B6475)">
                   {formatBytes(fileMeta.size)}
                 </p>
               )}
@@ -308,18 +308,18 @@ function FileFieldControl({
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={disabled}
-              className="text-xs font-semibold text-[var(--primary,#0B5BFF)] hover:underline cursor-pointer disabled:opacity-50"
+              className="text-xs font-semibold text-(--primary,#0B5BFF) hover:underline cursor-pointer disabled:opacity-50"
             >
               Replace
             </button>
-            <span className="text-[var(--divider,#E6ECF5)]" aria-hidden="true">
+            <span className="text-(--divider,#E6ECF5)" aria-hidden="true">
               |
             </span>
             <button
               type="button"
               onClick={handleRemove}
               disabled={disabled}
-              className="text-xs font-semibold text-[var(--danger-text,#B42318)] hover:underline cursor-pointer disabled:opacity-50"
+              className="text-xs font-semibold text-(--danger-text,#B42318) hover:underline cursor-pointer disabled:opacity-50"
             >
               Remove
             </button>
@@ -329,11 +329,11 @@ function FileFieldControl({
 
       {/* Error State */}
       {status === "error" && (
-        <div className="p-3.5 rounded-lg border border-[var(--danger-border,#FECDCA)] bg-[var(--danger-soft,#FEF3F2)] space-y-2">
+        <div className="p-3.5 rounded-lg border border-(--danger-border,#FECDCA) bg-(--danger-soft,#FEF3F2) space-y-2">
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-start gap-2">
-              <AlertCircle className="size-4 text-[var(--danger,#D92D20)] shrink-0 mt-0.5" />
-              <span className="text-xs text-[var(--danger-text,#B42318)] font-medium leading-relaxed">
+              <AlertCircle className="size-4 text-(--danger,#D92D20) shrink-0 mt-0.5" />
+              <span className="text-xs text-(--danger-text,#B42318) font-medium leading-relaxed">
                 {errorMessage || "Upload failed."}
               </span>
             </div>
@@ -344,7 +344,7 @@ function FileFieldControl({
                 setStatus("idle");
                 fileInputRef.current?.click();
               }}
-              className="text-xs font-semibold text-[var(--primary,#0B5BFF)] hover:underline shrink-0 cursor-pointer"
+              className="text-xs font-semibold text-(--primary,#0B5BFF) hover:underline shrink-0 cursor-pointer"
             >
               Try again
             </button>
@@ -386,21 +386,21 @@ function FileFieldControl({
               handleFileSelected(f);
             }
           }}
-          className={`min-h-[76px] rounded-lg border-[1.5px] border-dashed p-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 cursor-pointer transition-all ${
+          className={`min-h-19 rounded-lg border-[1.5px] border-dashed p-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 cursor-pointer transition-all ${
             isDragging
-              ? "border-[var(--primary,#0B5BFF)] bg-[var(--primary-soft,#F2F7FF)]"
-              : "border-[#BFD0EA] bg-[#F8FAFE] hover:border-[var(--primary,#0B5BFF)] hover:bg-[var(--primary-soft,#F2F7FF)]"
-          } ${error ? "border-[var(--danger,#D92D20)]" : ""}`}
+              ? "border-(--primary,#0B5BFF) bg-(--primary-soft,#F2F7FF)"
+              : "border-[#BFD0EA] bg-[#F8FAFE] hover:border-(--primary,#0B5BFF) hover:bg-(--primary-soft,#F2F7FF)"
+          } ${error ? "border-(--danger,#D92D20)" : ""}`}
         >
           <div className="flex items-center gap-3 w-full sm:w-auto">
-            <div className="size-10 rounded-lg bg-[var(--primary-soft,#F2F7FF)] text-[var(--primary,#0B5BFF)] flex items-center justify-center shrink-0">
+            <div className="size-10 rounded-lg bg-(--primary-soft,#F2F7FF) text-(--primary,#0B5BFF) flex items-center justify-center shrink-0">
               <UploadCloud className="size-5" />
             </div>
             <div>
-              <span className="text-[15px] font-semibold text-[var(--text,#1B2433)] block leading-snug">
+              <span className="text-[15px] font-semibold text-(--text,#1B2433) block leading-snug">
                 Choose a file
               </span>
-              <span className="text-[13px] text-[var(--muted,#5B6475)] block leading-snug">
+              <span className="text-[13px] text-(--muted,#5B6475) block leading-snug">
                 JPG, PNG, WebP, PDF, DOC or DOCX &bull; Max 5 MB
               </span>
             </div>
@@ -409,7 +409,7 @@ function FileFieldControl({
             <button
               type="button"
               tabIndex={-1}
-              className="w-full sm:w-auto h-9 px-4 rounded-lg border border-[var(--border,#D5DEEC)] bg-white text-[13px] font-semibold text-[var(--text,#1B2433)] hover:border-[var(--border-hover,#A9BAD6)] hover:bg-[var(--primary-soft,#F2F7FF)] pointer-events-none transition-colors"
+              className="w-full sm:w-auto h-9 px-4 rounded-lg border border-(--border,#D5DEEC) bg-white text-[13px] font-semibold text-(--text,#1B2433) hover:border-(--border-hover,#A9BAD6) hover:bg-(--primary-soft,#F2F7FF) pointer-events-none transition-colors"
             >
               Browse
             </button>
@@ -438,12 +438,12 @@ export function FieldRenderer({
       {/* Field Label with Required Asterisk */}
       <label
         htmlFor={inputId}
-        className="block text-sm leading-5 font-semibold text-[var(--text,#1B2433)] mb-2"
+        className="block text-sm leading-5 font-semibold text-(--text,#1B2433) mb-2"
       >
         <span>{field.label}</span>
         {field.required && (
           <span
-            className="text-[var(--danger,#D92D20)] font-normal ml-0.5"
+            className="text-(--danger,#D92D20) font-normal ml-0.5"
             aria-hidden="true"
           >
             *
@@ -564,12 +564,12 @@ export function FieldRenderer({
                 >
                   <SelectValue placeholder={field.placeholder || "Select an option..."} />
                 </SelectTrigger>
-                <SelectContent className="bg-white border border-[var(--border,#D5DEEC)] rounded-lg shadow-[0_12px_32px_-8px_rgba(8,24,76,0.18)] p-1 max-h-[280px]">
+                <SelectContent className="bg-white border border-(--border,#D5DEEC) rounded-lg shadow-[0_12px_32px_-8px_rgba(8,24,76,0.18)] p-1 max-h-70">
                   {options.map((opt, i) => (
                     <SelectItem
                       key={i}
                       value={opt}
-                      className="h-10 rounded-md text-sm text-[var(--text,#1B2433)] focus:bg-[var(--primary-soft,#F2F7FF)] focus:text-[var(--primary,#0B5BFF)] cursor-pointer"
+                      className="h-10 rounded-md text-sm text-(--text,#1B2433) focus:bg-(--primary-soft,#F2F7FF) focus:text-(--primary,#0B5BFF) cursor-pointer"
                     >
                       {opt}
                     </SelectItem>
@@ -613,18 +613,18 @@ export function FieldRenderer({
                         />
                         {/* 18px Radio Indicator */}
                         <span
-                          className={`size-[18px] shrink-0 rounded-full border flex items-center justify-center transition-colors ${
+                          className={`size-4.5 shrink-0 rounded-full border flex items-center justify-center transition-colors ${
                             isSelected
-                              ? "border-[var(--primary,#0B5BFF)] border-[1.5px] bg-white"
-                              : "border-[var(--border-hover,#A9BAD6)] border-[1.5px] bg-white"
+                              ? "border-(--primary,#0B5BFF) border-[1.5px] bg-white"
+                              : "border-(--border-hover,#A9BAD6) border-[1.5px] bg-white"
                           }`}
                           aria-hidden="true"
                         >
                           {isSelected && (
-                            <span className="size-2 rounded-full bg-[var(--primary,#0B5BFF)]" />
+                            <span className="size-2 rounded-full bg-(--primary,#0B5BFF)" />
                           )}
                         </span>
-                        <span className="text-[15px] font-medium text-[var(--text,#1B2433)] flex-1 leading-snug">
+                        <span className="text-[15px] font-medium text-(--text,#1B2433) flex-1 leading-snug">
                           {opt}
                         </span>
                       </label>
@@ -675,20 +675,21 @@ export function FieldRenderer({
                           disabled={disabled}
                           className="sr-only"
                         />
-                        {/* 18px Checkbox Indicator */}
+                        {/* 18px Checkbox Indicator with strict 4px radius */}
                         <span
-                          className={`size-[18px] shrink-0 rounded-[4px] border flex items-center justify-center transition-colors ${
+                          style={{ borderRadius: "4px" }}
+                          className={`size-4.5 shrink-0 border flex items-center justify-center transition-colors ${
                             isChecked
-                              ? "bg-[var(--primary,#0B5BFF)] border-[var(--primary,#0B5BFF)]"
-                              : "border-[var(--border-hover,#A9BAD6)] border-[1.5px] bg-white"
+                              ? "bg-(--primary,#0B5BFF) border-(--primary,#0B5BFF)"
+                              : "border-(--border-hover,#A9BAD6) border-[1.5px] bg-white"
                           }`}
                           aria-hidden="true"
                         >
                           {isChecked && (
-                            <Check className="size-3.5 text-white stroke-[3]" />
+                            <Check className="size-3.5 text-white stroke-3" />
                           )}
                         </span>
-                        <span className="text-[15px] font-medium text-[var(--text,#1B2433)] flex-1 leading-snug">
+                        <span className="text-[15px] font-medium text-(--text,#1B2433) flex-1 leading-snug">
                           {opt}
                         </span>
                       </label>
@@ -720,8 +721,8 @@ export function FieldRenderer({
 
       {/* Error Message with Icon */}
       {error && (
-        <p className="text-[13px] leading-[18px] text-[var(--danger-text,#B42318)] flex items-center gap-1.5 font-medium mt-1.5">
-          <AlertCircle className="size-3.5 shrink-0 text-[var(--danger,#D92D20)]" />
+        <p className="text-[13px] leading-4.5 text-(--danger-text,#B42318) flex items-center gap-1.5 font-medium mt-1.5">
+          <AlertCircle className="size-3.5 shrink-0 text-(--danger,#D92D20)" />
           <span>{error}</span>
         </p>
       )}

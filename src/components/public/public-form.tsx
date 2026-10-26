@@ -233,11 +233,11 @@ export function PublicForm({
 
         {/* Success Body */}
         <div className="px-5 pt-8 pb-10 sm:px-10 sm:pt-10 sm:pb-12 text-center flex flex-col items-center space-y-5">
-          <div className="size-14 rounded-full bg-[var(--success-soft)] flex items-center justify-center">
-            <Check className="size-7 text-[var(--success)]" strokeWidth={2.5} />
+          <div className="size-14 rounded-full bg-(--success-soft) flex items-center justify-center">
+            <Check className="size-7 text-(--success)" strokeWidth={2.5} />
           </div>
 
-          <p className="text-[15px] text-[var(--muted)]">
+          <p className="text-[15px] text-muted">
             Thank you for taking the time to complete this form.
           </p>
 
@@ -245,9 +245,9 @@ export function PublicForm({
             <button
               type="button"
               onClick={handleReset}
-              className="h-11 px-6 rounded-lg border border-[var(--border)] text-sm font-semibold text-[var(--text)] hover:bg-[var(--primary-soft)] hover:border-[var(--border-hover)] flex items-center gap-2 cursor-pointer transition-colors"
+              className="h-11 px-6 rounded-lg border border-border text-sm font-semibold text-(--text) hover:bg-(--primary-soft) hover:border-(--border-hover) flex items-center gap-2 cursor-pointer transition-colors"
             >
-              <RotateCcw className="size-4 text-[var(--muted)]" />
+              <RotateCcw className="size-4 text-muted" />
               Submit another response
             </button>
           </div>
@@ -285,8 +285,8 @@ export function PublicForm({
         {/* Required indicator caption at top right */}
         {hasRequiredField && (
           <div className="flex justify-end -mt-1 mb-6">
-            <span className="text-xs text-[var(--muted)] font-normal">
-              <span className="text-[var(--danger)] mr-1">*</span>Required
+            <span className="text-xs text-muted font-normal">
+              <span className="text-(--danger) mr-1">*</span>Required
             </span>
           </div>
         )}
@@ -296,15 +296,15 @@ export function PublicForm({
           <div
             ref={errorSummaryRef}
             role="alert"
-            className="rounded-lg border border-[var(--danger-border)] bg-[var(--danger-soft)] p-3 sm:p-3.5 text-[14px] text-[var(--danger-text)] flex items-start gap-2.5 leading-relaxed"
+            className="rounded-lg border border-(--danger-border) bg-(--danger-soft) p-3 sm:p-3.5 text-[14px] text-(--danger-text) flex items-start gap-2.5 leading-relaxed"
           >
-            <AlertCircle className="size-4 shrink-0 mt-0.5 text-[var(--danger)]" />
+            <AlertCircle className="size-4 shrink-0 mt-0.5 text-(--danger)" />
             <div>
-              <p className="font-semibold text-[var(--danger-text)]">
+              <p className="font-semibold text-(--danger-text)">
                 Please fix the highlighted fields
               </p>
               {submitError && (
-                <p className="text-xs text-[var(--danger-text)]/90 mt-0.5">
+                <p className="text-xs text-(--danger-text)/90 mt-0.5">
                   {submitError}
                 </p>
               )}
@@ -348,7 +348,7 @@ export function PublicForm({
             )}
           </button>
           {isAnyFileUploading && (
-            <p className="text-[13px] text-[var(--muted)] text-center mt-2 font-medium">
+            <p className="text-[13px] text-muted text-center mt-2 font-medium">
               Wait for the upload to finish
             </p>
           )}
