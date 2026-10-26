@@ -32,11 +32,17 @@ export const brand = {
       name: "Skydrops Water",
       href: "https://skydropswater.com/",
       display: "skydropswater.com",
+      logo: "/brand/skydrops-water-logo.png",
+      logoWidth: 410,
+      logoHeight: 109,
     },
     {
       name: "Skydrops Technologies",
       href: "https://www.skydropstechnologies.com/",
       display: "skydropstechnologies.com",
+      logo: "/brand/skydrops-tech-logo.png",
+      logoWidth: 569,
+      logoHeight: 471,
     },
   ] as const,
 } as const;

@@ -106,7 +106,10 @@ async function run() {
     const hasTechName = htmlPublished.includes("Skydrops Technologies");
     const hasWaterDisplay = htmlPublished.includes("skydropswater.com");
     const hasTechDisplay = htmlPublished.includes("skydropstechnologies.com");
-    const hasOurBrands = htmlPublished.includes("OUR BRANDS");
+    const hasBrandsHeadingOrLogos =
+      htmlPublished.includes("OUR BRANDS") ||
+      (htmlPublished.includes("skydrops-water-logo.png") &&
+        htmlPublished.includes("skydrops-tech-logo.png"));
     const hasBlank = htmlPublished.includes('target="_blank"');
     const hasNoopener = htmlPublished.includes("noopener");
     const hasNoreferrer = htmlPublished.includes("noreferrer");
@@ -122,7 +125,7 @@ async function run() {
       hasTechName &&
       hasWaterDisplay &&
       hasTechDisplay &&
-      hasOurBrands &&
+      hasBrandsHeadingOrLogos &&
       hasBlank &&
       hasNoopener &&
       hasNoreferrer &&
@@ -133,7 +136,7 @@ async function run() {
         2,
         "Published page /f/<slug> footer elements",
         "PASS",
-        "Both hrefs, names, displays, 'OUR BRANDS', target=_blank, rel=noopener noreferrer, exactly 1 footer"
+        "Both hrefs, names, displays, brand logos, target=_blank, rel=noopener noreferrer, exactly 1 footer"
       );
     } else {
       record(
@@ -194,7 +197,8 @@ async function run() {
     const notFoundHasFooterElement =
       notFoundFooterMatches.length === 1 ||
       htmlNotFound.includes('["$","footer"') ||
-      htmlNotFound.includes("OUR BRANDS");
+      htmlNotFound.includes("OUR BRANDS") ||
+      htmlNotFound.includes("skydrops-water-logo.png");
 
     if (notFoundHasWater && notFoundHasTech && notFoundHasFooterElement) {
       record(
