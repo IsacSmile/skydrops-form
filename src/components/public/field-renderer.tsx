@@ -229,7 +229,7 @@ function FileFieldControl({
       {status === "uploading" && (
         <div className="p-4 rounded-xl border border-[#DCE6F5] bg-card space-y-3">
           <div className="flex items-center justify-between text-xs text-[#5B6475]">
-            <span className="font-medium text-[#111014] truncate max-w-[200px] sm:max-w-xs">
+            <span className="font-medium text-[#111014] truncate max-w-50 sm:max-w-xs">
               Uploading {fileMeta?.name}...
             </span>
             <div className="flex items-center gap-3">
