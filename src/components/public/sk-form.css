@@ -217,7 +217,9 @@
 }
 
 .sk-form .sk-select-trigger:focus-visible,
-.sk-form .sk-select-trigger[data-popup-open="true"] {
+.sk-form .sk-select-trigger[data-popup-open],
+.sk-form .sk-select-trigger[data-popup-open="true"],
+.sk-form .sk-select-trigger[aria-expanded="true"] {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px var(--primary-ring);
   outline: none;
@@ -237,6 +239,7 @@
   flex-shrink: 0;
 }
 
+.sk-form .sk-select-trigger[data-popup-open] .sk-select-chevron,
 .sk-form .sk-select-trigger[data-popup-open="true"] .sk-select-chevron,
 .sk-form .sk-select-trigger[aria-expanded="true"] .sk-select-chevron {
   transform: rotate(180deg);
@@ -389,6 +392,19 @@
 
 /* Dropdown Popover Menu (portalled to body outside .sk-form) */
 .sk-select-popover,
+[data-slot="select-content"] {
+  width: var(--anchor-width) !important;
+  min-width: var(--anchor-width) !important;
+  box-sizing: border-box !important;
+  background-color: #FFFFFF !important;
+  border: 1px solid var(--border, #C9D6EA) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 12px 32px -8px rgba(8, 24, 76, 0.14) !important;
+  padding: 6px !important;
+  z-index: 50 !important;
+}
+
+.sk-select-popover,
 .sk-select-popover *,
 [data-slot="select-content"],
 [data-slot="select-content"] *,
@@ -400,7 +416,29 @@
 
 .sk-select-popover [data-slot="select-item"],
 [data-slot="select-item"] {
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 8px;
   color: var(--ink, #0B1B4A);
   font-weight: 500;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 100ms ease, color 100ms ease;
 }
+
+.sk-select-popover [data-slot="select-item"]:hover,
+.sk-select-popover [data-slot="select-item"][data-highlighted],
+[data-slot="select-item"]:hover,
+[data-slot="select-item"][data-highlighted] {
+  background-color: var(--primary-soft, #F2F7FF) !important;
+  color: var(--primary, #0B5BFF) !important;
+}
+
+.sk-select-popover [data-slot="select-item"] svg,
+[data-slot="select-item"] svg {
+  color: var(--primary, #0B5BFF);
+}
+
 

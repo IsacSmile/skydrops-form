@@ -637,13 +637,17 @@ export function FieldRenderer({
                   </SelectPrimitive.Trigger>
                 </div>
                 <SelectContent
-                  className={`${plusJakartaSans.variable} ${plusJakartaSans.className} sk-form sk-select-popover bg-white border border-border rounded-lg shadow-[0_12px_32px_-8px_rgba(8,24,76,0.18)] p-1 max-h-70 font-sans`}
+                  align="start"
+                  side="bottom"
+                  sideOffset={6}
+                  alignItemWithTrigger={false}
+                  className={`${plusJakartaSans.variable} ${plusJakartaSans.className} sk-form sk-select-popover bg-white border border-[#C9D6EA] rounded-xl shadow-[0_12px_32px_-8px_rgba(8,24,76,0.14)] p-1.5 max-h-70 font-sans`}
                 >
                   {options.map((opt, i) => (
                     <SelectItem
                       key={i}
                       value={opt}
-                      className="h-10 rounded-md text-sm text-(--ink) focus:bg-(--primary-soft) focus:text-primary cursor-pointer font-medium font-sans"
+                      className="h-10 px-3.5 rounded-lg text-sm text-(--ink) hover:bg-(--primary-soft) hover:text-primary data-highlighted:bg-(--primary-soft) data-highlighted:text-primary cursor-pointer font-medium font-sans"
                     >
                       {opt}
                     </SelectItem>
