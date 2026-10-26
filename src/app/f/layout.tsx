@@ -17,6 +17,13 @@ export const metadata: Metadata = {
     template: `%s | ${brand.name}`,
   },
   description: brand.tagline,
+  icons: {
+    icon: [
+      { url: "/icon.png", type: "image/png" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    apple: "/apple-icon.png",
+  },
 };
 
 export default function PublicFormLayout({
