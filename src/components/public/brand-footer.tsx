@@ -27,7 +27,7 @@ export function BrandFooter() {
               href={b.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative flex flex-col items-center justify-between py-3.5 px-3 sm:py-4 sm:px-5 rounded-2xl text-center bg-transparent hover:bg-white/90 hover:shadow-[0_2px_12px_rgba(11,91,255,0.06)] border border-transparent hover:border-[#DCE6F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B5BFF]/35 transition-all motion-reduce:transition-none duration-150"
+              className="group relative flex flex-col items-center justify-between min-h-11 py-3.5 px-3 sm:py-4 sm:px-5 rounded-2xl text-center bg-transparent hover:bg-white/90 hover:shadow-[0_2px_12px_rgba(11,91,255,0.06)] border border-transparent hover:border-[#DCE6F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0B5BFF]/35 transition-all motion-reduce:transition-none duration-150"
             >
               {/* Brand Logo */}
               <div className="h-10 sm:h-12 w-full flex items-center justify-center mb-2.5">
