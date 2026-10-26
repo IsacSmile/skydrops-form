@@ -4,7 +4,7 @@ import { forms, fields, submissions } from "@/db/schema";
 import type { Form, FormStatus, Field } from "@/types/form";
 import { canTransition } from "./form-status";
 import { generateSlug } from "./slug";
-import { FILE_UPLOADS_ENABLED } from "./feature-flags";
+import { isFileUploadsEnabled } from "./feature-flags";
 
 const UUID_REGEX =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -392,7 +392,7 @@ export async function getPublicFormBySlug(
     .where(eq(fields.formId, formRow.id))
     .orderBy(asc(fields.position));
 
-  const filteredFields = FILE_UPLOADS_ENABLED
+  const filteredFields = isFileUploadsEnabled()
     ? formFields
     : formFields.filter((f) => f.type !== "file");
 

@@ -1,5 +1,5 @@
 import type { Field } from "@/types/form";
-import { FILE_UPLOADS_ENABLED } from "./feature-flags";
+import { isOwnBlobUrl } from "./upload-policy";
 
 export type SubmissionAnswers = Record<string, string | string[] | number | null>;
 
@@ -14,6 +14,11 @@ export interface ValidationFailure {
 }
 
 export type ValidationResult = ValidationSuccess | ValidationFailure;
+
+export interface ValidateSubmissionOptions {
+  fileUploadsEnabled?: boolean;
+  formId?: string;
+}
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_REGEX = /^[0-9\s+\-().]{7,20}$/;
@@ -55,17 +60,21 @@ function isValidCalendarDate(str: string): boolean {
  * - date: strict YYYY-MM-DD real calendar date.
  * - dropdown / radio: must match one of field.options exactly.
  * - checkbox: array of unique valid options; duplicates deduped; invalid options rejected.
- * - file: skipped while FILE_UPLOADS_ENABLED is false.
+ * - file: skipped while fileUploadsEnabled is false. When true, validates isOwnBlobUrl.
  * - Unknown keys in answers are dropped; only real field keys are stored.
  */
 export function validateSubmission(
   fields: Field[],
-  answers: Record<string, unknown>
+  answers: Record<string, unknown>,
+  options?: ValidateSubmissionOptions
 ): ValidationResult {
   const data: SubmissionAnswers = {};
   const fieldErrors: Record<string, string> = {};
 
-  const activeFields = FILE_UPLOADS_ENABLED
+  const fileUploadsEnabled = options?.fileUploadsEnabled ?? false;
+  const formId = options?.formId ?? "";
+
+  const activeFields = fileUploadsEnabled
     ? fields
     : fields.filter((f) => f.type !== "file");
 
@@ -226,8 +235,22 @@ export function validateSubmission(
         break;
       }
 
+      case "file": {
+        if (typeof raw !== "string") {
+          fieldErrors[key] = "Please upload the file again.";
+          break;
+        }
+        const val = raw.trim();
+        if (!isOwnBlobUrl(val, formId, field.key)) {
+          fieldErrors[key] = "Please upload the file again.";
+          break;
+        }
+        data[key] = val;
+        break;
+      }
+
       default:
-        // Other types (e.g. file when disabled) are ignored
+        // Other types are ignored
         break;
     }
   }

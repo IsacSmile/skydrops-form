@@ -20,6 +20,7 @@ interface FormBuilderProps {
   fields: Field[];
   origin: string;
   submissionsCount?: number;
+  fileUploadsEnabled?: boolean;
 }
 
 export function FormBuilder({
@@ -27,6 +28,7 @@ export function FormBuilder({
   fields,
   origin,
   submissionsCount = 0,
+  fileUploadsEnabled = false,
 }: FormBuilderProps) {
   // Optimistic fields state synced with server props
   const [fieldsState, setFieldsState] = useState(fields);
@@ -140,6 +142,8 @@ export function FormBuilder({
             fieldsCount={fieldsState.length}
             origin={origin}
             submissionsCount={submissionsCount}
+            hasFileField={fieldsState.some((f) => f.type === "file")}
+            fileUploadsEnabled={fileUploadsEnabled}
           />
           <BuilderHeader form={form} />
           <FieldList

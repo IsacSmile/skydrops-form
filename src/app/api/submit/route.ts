@@ -1,9 +1,12 @@
 import { after, NextResponse } from "next/server";
 import { z } from "zod";
+import { head, BlobNotFoundError } from "@vercel/blob";
 import { getPublicFormBySlug } from "@/lib/forms-data";
 import { validateSubmission } from "@/lib/submission-validation";
 import { createSubmission } from "@/lib/submissions-data";
 import { afterSubmissionCreated } from "@/lib/submission-hooks";
+import { isFileUploadsEnabled } from "@/lib/feature-flags";
+import { MAX_FILE_BYTES, ALL_ALLOWED_MIME_TYPES } from "@/lib/upload-policy";
 
 const MAX_BODY_BYTES = 100 * 1024; // 100 KB
 
@@ -107,7 +110,11 @@ export async function POST(request: Request) {
   }
 
   // 6. Validate submission answers against form's current fields
-  const validation = validateSubmission(fields, answers);
+  const fileUploadsEnabled = isFileUploadsEnabled();
+  const validation = validateSubmission(fields, answers, {
+    fileUploadsEnabled,
+    formId: form.id,
+  });
   if (!validation.ok) {
     return jsonResponse(
       {
@@ -119,7 +126,69 @@ export async function POST(request: Request) {
     );
   }
 
-  // 7. Store submission in database with syncStatus 'pending'
+  // 7. Verify all file URLs exist in Blob storage with valid metadata
+  const fileFieldKeys = fields
+    .filter((f) => f.type === "file")
+    .map((f) => f.key);
+
+  const fileChecks = fileFieldKeys
+    .filter((key) => typeof validation.data[key] === "string" && validation.data[key])
+    .map((key) => ({ key, url: validation.data[key] as string }));
+
+  if (fileChecks.length > 0) {
+    const fileErrors: Record<string, string> = {};
+
+    try {
+      const results = await Promise.all(
+        fileChecks.map(async ({ key, url }) => {
+          try {
+            const blob = await head(url);
+            if (
+              blob.size > MAX_FILE_BYTES ||
+              !ALL_ALLOWED_MIME_TYPES.includes(blob.contentType)
+            ) {
+              return { key, error: "Please upload the file again." };
+            }
+            return { key, error: null };
+          } catch (err) {
+            if (
+              err instanceof BlobNotFoundError ||
+              (err as { code?: string })?.code === "not_found" ||
+              (err as { status?: number })?.status === 404
+            ) {
+              return { key, error: "Please upload the file again." };
+            }
+            console.error("Blob service error during head check:", (err as Error)?.name);
+            throw err;
+          }
+        })
+      );
+
+      for (const res of results) {
+        if (res.error) {
+          fileErrors[res.key] = res.error;
+        }
+      }
+    } catch {
+      return jsonResponse(
+        { ok: false, message: "File check failed. Please try again." },
+        503
+      );
+    }
+
+    if (Object.keys(fileErrors).length > 0) {
+      return jsonResponse(
+        {
+          ok: false,
+          fieldErrors: fileErrors,
+          message: "Please check your answers and try again.",
+        },
+        422
+      );
+    }
+  }
+
+  // 8. Store submission in database with syncStatus 'pending'
   try {
     const submission = await createSubmission(form.id, validation.data);
 

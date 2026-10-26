@@ -10,6 +10,8 @@ import { brand } from "@/lib/brand";
 
 interface PublicFormProps {
   slug: string;
+  formId?: string;
+  fileUploadsEnabled?: boolean;
   title: string;
   description: string | null;
   fields: Field[];
@@ -19,14 +21,20 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function PublicForm({
   slug,
+  formId,
+  fileUploadsEnabled = false,
   title,
   description,
   fields,
 }: PublicFormProps) {
+  const visibleFields = fileUploadsEnabled
+    ? fields
+    : fields.filter((f) => f.type !== "file");
+
   // Initialize values
   const [answers, setAnswers] = useState<Record<string, unknown>>(() => {
     const initial: Record<string, unknown> = {};
-    for (const f of fields) {
+    for (const f of visibleFields) {
       initial[f.key] = f.type === "checkbox" ? [] : "";
     }
     return initial;
@@ -37,8 +45,23 @@ export function PublicForm({
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [uploadingFields, setUploadingFields] = useState<Set<string>>(new Set());
 
   const errorSummaryRef = useRef<HTMLDivElement>(null);
+
+  function handleUploadingChange(fieldKey: string, uploading: boolean) {
+    setUploadingFields((prev) => {
+      const next = new Set(prev);
+      if (uploading) {
+        next.add(fieldKey);
+      } else {
+        next.delete(fieldKey);
+      }
+      return next;
+    });
+  }
+
+  const isAnyFileUploading = uploadingFields.size > 0;
 
   function handleFieldChange(fieldKey: string, val: unknown) {
     setAnswers((prev) => ({
@@ -59,7 +82,7 @@ export function PublicForm({
   function validateClient(): Record<string, string> {
     const newErrors: Record<string, string> = {};
 
-    for (const f of fields) {
+    for (const f of visibleFields) {
       const val = answers[f.key];
 
       if (f.type === "checkbox") {
@@ -71,6 +94,13 @@ export function PublicForm({
       }
 
       const strVal = typeof val === "string" ? val.trim() : "";
+
+      if (f.type === "file") {
+        if (f.required && (val === undefined || val === null || strVal === "")) {
+          newErrors[f.key] = "This field is required.";
+        }
+        continue;
+      }
 
       if (f.required && (val === undefined || val === null || strVal === "")) {
         newErrors[f.key] = "This field is required.";
@@ -94,7 +124,7 @@ export function PublicForm({
     if (errorKeys.length === 0) return;
 
     // Find the first field in position order that has an error
-    const firstInvalidField = fields.find((f) => errorKeys.includes(f.key));
+    const firstInvalidField = visibleFields.find((f) => errorKeys.includes(f.key));
     if (!firstInvalidField) return;
 
     const elId = `field-${firstInvalidField.key || firstInvalidField.id}`;
@@ -173,13 +203,14 @@ export function PublicForm({
 
   function handleReset() {
     const initial: Record<string, unknown> = {};
-    for (const f of fields) {
+    for (const f of visibleFields) {
       initial[f.key] = f.type === "checkbox" ? [] : "";
     }
     setAnswers(initial);
     setWebsite("");
     setErrors({});
     setSubmitError(null);
+    setUploadingFields(new Set());
     setIsSuccess(false);
   }
 
@@ -288,7 +319,7 @@ export function PublicForm({
 
       {/* Form Fields */}
       <div className="space-y-6">
-        {fields.map((field) => (
+        {visibleFields.map((field) => (
           <FieldRenderer
             key={field.id}
             field={field}
@@ -296,6 +327,11 @@ export function PublicForm({
             onChange={(val) => handleFieldChange(field.key, val)}
             error={errors[field.key]}
             disabled={isSubmitting}
+            slug={slug}
+            formId={formId}
+            onUploadingChange={(uploading) =>
+              handleUploadingChange(field.key, uploading)
+            }
           />
         ))}
       </div>
@@ -304,19 +340,22 @@ export function PublicForm({
       <div className="pt-2">
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || isAnyFileUploading}
           className="w-full h-13 rounded-xl text-base font-semibold text-white transition-colors duration-150 flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(11,91,255,0.35)] focus-visible:ring-offset-2"
           style={{
-            backgroundColor: isSubmitting ? brand.primaryHover : brand.primary,
-            opacity: isSubmitting ? 0.85 : 1,
+            backgroundColor:
+              isSubmitting || isAnyFileUploading
+                ? brand.primaryHover
+                : brand.primary,
+            opacity: isSubmitting || isAnyFileUploading ? 0.8 : 1,
           }}
           onMouseEnter={(e) => {
-            if (!isSubmitting) {
+            if (!isSubmitting && !isAnyFileUploading) {
               e.currentTarget.style.backgroundColor = brand.primaryHover;
             }
           }}
           onMouseLeave={(e) => {
-            if (!isSubmitting) {
+            if (!isSubmitting && !isAnyFileUploading) {
               e.currentTarget.style.backgroundColor = brand.primary;
             }
           }}
@@ -330,6 +369,11 @@ export function PublicForm({
             <span>Submit</span>
           )}
         </button>
+        {isAnyFileUploading && (
+          <p className="text-xs text-[#5B6475] text-center mt-2 font-medium">
+            Wait for the upload to finish
+          </p>
+        )}
       </div>
     </form>
   );

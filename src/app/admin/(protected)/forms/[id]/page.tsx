@@ -4,6 +4,7 @@ import { getForm } from "@/lib/forms-data";
 import { listFields } from "@/lib/fields-data";
 import { getSubmissionStats } from "@/lib/submissions-data";
 import { getAppOrigin } from "@/lib/short-link";
+import { isFileUploadsEnabled } from "@/lib/feature-flags";
 import { FormBuilder } from "@/components/admin/builder/form-builder";
 
 export const instant = false;
@@ -29,12 +30,15 @@ export default async function AdminFormBuilderPage({
     getSubmissionStats(id),
   ]);
 
+  const fileUploadsEnabled = isFileUploadsEnabled();
+
   return (
     <FormBuilder
       form={form}
       fields={fields}
       origin={origin}
       submissionsCount={stats.total}
+      fileUploadsEnabled={fileUploadsEnabled}
     />
   );
 }

@@ -250,7 +250,9 @@ function FieldFormInner({
       {type === "file" && (
         <div className="flex items-center gap-2 p-3 rounded-md bg-muted/60 border text-xs text-muted-foreground">
           <Info className="size-4 shrink-0 text-muted-foreground" />
-          <span>Respondents will upload a file (set up later).</span>
+          <span>
+            Respondents can upload one file (JPG, PNG, WebP, PDF, DOC or DOCX, up to 5 MB).
+          </span>
         </div>
       )}
 

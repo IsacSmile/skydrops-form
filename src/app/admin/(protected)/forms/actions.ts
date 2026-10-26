@@ -10,6 +10,7 @@ import {
   deleteForm,
 } from "@/lib/forms-data";
 import { formInputSchema } from "@/lib/validation";
+import { cleanupFormBlobs } from "@/lib/blob-cleanup";
 
 export interface ActionResponse {
   success?: boolean;
@@ -118,6 +119,14 @@ export async function deleteFormAction(
     if (!deleted) {
       return { error: "Form not found or could not be deleted." };
     }
+
+    // Best-effort blob cleanup; failure never aborts deletion
+    try {
+      await cleanupFormBlobs(id);
+    } catch (cleanupErr: unknown) {
+      console.error("deleteFormAction blob cleanup error:", (cleanupErr as Error)?.name || "BlobError");
+    }
+
     revalidatePath("/admin");
     return { success: true };
   } catch (err) {

@@ -92,10 +92,38 @@ function truncateString(str: string, maxLength: number = 60): string {
   return str.slice(0, maxLength) + "…";
 }
 
+function isValidHttpsUrl(str: unknown): boolean {
+  if (typeof str !== "string") return false;
+  try {
+    const u = new URL(str.trim());
+    return u.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function parseBlobFileName(url: string): string {
+  try {
+    const parsed = new URL(url);
+    const pathname = decodeURIComponent(parsed.pathname);
+    const last = pathname.split("/").filter(Boolean).pop() || "";
+    const match = last.match(/^(.*)-[A-Za-z0-9_-]{8,}\.([a-zA-Z0-9]+)$/);
+    if (match) {
+      return `${match[1]}.${match[2]}`;
+    }
+    return last || "file";
+  } catch {
+    return "file";
+  }
+}
+
 interface FormattedAnswer {
   key: string;
   label: string;
   value: string;
+  fieldType?: string;
+  fileUrl?: string | null;
+  fileName?: string | null;
 }
 
 function getSubmissionAnswers(
@@ -105,25 +133,41 @@ function getSubmissionAnswers(
   const answers = data || {};
   const seenKeys = new Set<string>();
   const results: FormattedAnswer[] = [];
+  const fieldMap = new Map(fields.map((f) => [f.key, f]));
 
   for (const field of fields) {
     seenKeys.add(field.key);
     if (field.key in answers) {
       const raw = answers[field.key];
+      const isFile = field.type === "file";
+      const isHttps = isValidHttpsUrl(raw);
+      const urlStr = typeof raw === "string" ? raw.trim() : "";
+
       results.push({
         key: field.key,
         label: field.label || field.key,
         value: formatAnswerValue(raw),
+        fieldType: field.type,
+        fileUrl: isFile && isHttps ? urlStr : null,
+        fileName: isFile && isHttps ? parseBlobFileName(urlStr) : null,
       });
     }
   }
 
   for (const [key, raw] of Object.entries(answers)) {
     if (!seenKeys.has(key)) {
+      const field = fieldMap.get(key);
+      const isFile = field?.type === "file";
+      const isHttps = isValidHttpsUrl(raw);
+      const urlStr = typeof raw === "string" ? raw.trim() : "";
+
       results.push({
         key,
-        label: key,
+        label: field?.label || key,
         value: formatAnswerValue(raw),
+        fieldType: field?.type || "unknown",
+        fileUrl: isFile && isHttps ? urlStr : null,
+        fileName: isFile && isHttps ? parseBlobFileName(urlStr) : null,
       });
     }
   }
@@ -473,9 +517,27 @@ export function SubmissionsManager({
                                 <span className="font-medium text-foreground">
                                   {ans.label}:
                                 </span>{" "}
-                                <span className="text-muted-foreground">
-                                  {truncateString(ans.value, 60)}
-                                </span>
+                                {ans.fieldType === "file" && ans.fileUrl ? (
+                                  <a
+                                    href={ans.fileUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="inline-flex items-center gap-1 text-primary hover:underline font-medium"
+                                  >
+                                    <span>Open file</span>
+                                    {ans.fileName && (
+                                      <span className="text-muted-foreground font-normal">
+                                        ({ans.fileName})
+                                      </span>
+                                    )}
+                                    <ExternalLink className="size-3 shrink-0" />
+                                  </a>
+                                ) : (
+                                  <span className="text-muted-foreground">
+                                    {truncateString(ans.value, 60)}
+                                  </span>
+                                )}
                               </div>
                             ))
                           )}
@@ -637,9 +699,27 @@ export function SubmissionsManager({
                             <span className="font-medium text-foreground">
                               {ans.label}:
                             </span>{" "}
-                            <span className="text-muted-foreground">
-                              {truncateString(ans.value, 60)}
-                            </span>
+                            {ans.fieldType === "file" && ans.fileUrl ? (
+                              <a
+                                href={ans.fileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                                className="inline-flex items-center gap-1 text-primary hover:underline font-medium"
+                              >
+                                <span>Open file</span>
+                                {ans.fileName && (
+                                  <span className="text-muted-foreground font-normal">
+                                    ({ans.fileName})
+                                  </span>
+                                )}
+                                <ExternalLink className="size-3 shrink-0" />
+                              </a>
+                            ) : (
+                              <span className="text-muted-foreground">
+                                {truncateString(ans.value, 60)}
+                              </span>
+                            )}
                           </div>
                         ))
                       )}
@@ -829,9 +909,28 @@ export function SubmissionsManager({
                         <div className="text-xs font-semibold text-foreground">
                           {ans.label}
                         </div>
-                        <div className="text-sm text-foreground/90 whitespace-pre-wrap wrap-break-word leading-relaxed">
-                          {ans.value}
-                        </div>
+                        {ans.fieldType === "file" && ans.fileUrl ? (
+                          <div className="pt-0.5">
+                            <a
+                              href={ans.fileUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 text-primary hover:underline font-medium text-sm"
+                            >
+                              <span>Open file</span>
+                              {ans.fileName && (
+                                <span className="text-muted-foreground font-normal">
+                                  ({ans.fileName})
+                                </span>
+                              )}
+                              <ExternalLink className="size-3.5 shrink-0" />
+                            </a>
+                          </div>
+                        ) : (
+                          <div className="text-sm text-foreground/90 whitespace-pre-wrap wrap-break-word leading-relaxed">
+                            {ans.value}
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>

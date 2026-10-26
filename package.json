@@ -21,11 +21,13 @@
     "submit:verify": "tsx scripts/verify-submit.ts",
     "sheets:check": "tsx --env-file=.env.local scripts/sheets-check.ts",
     "sheets:verify": "tsx --env-file=.env.local scripts/verify-sheets.ts",
-    "submissions:verify": "tsx --env-file=.env.local scripts/verify-submissions.ts"
+    "submissions:verify": "tsx --env-file=.env.local scripts/verify-submissions.ts",
+    "uploads:verify": "tsx --env-file=.env.local scripts/verify-uploads.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
     "@neondatabase/serverless": "^1.2.0",
+    "@vercel/blob": "^2.8.2",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.5.0",
     "drizzle-orm": "^0.45.4",

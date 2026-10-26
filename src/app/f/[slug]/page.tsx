@@ -5,6 +5,7 @@ import Image from "next/image";
 import { getPublicFormBySlug, SLUG_REGEX } from "@/lib/forms-data";
 import { getAppOrigin } from "@/lib/short-link";
 import { brand } from "@/lib/brand";
+import { isFileUploadsEnabled } from "@/lib/feature-flags";
 import { PublicForm } from "@/components/public/public-form";
 
 export const instant = false;
@@ -75,6 +76,7 @@ export default async function PublicFormPage({ params }: FormPageProps) {
   }
 
   const { form, fields } = data;
+  const fileUploadsEnabled = isFileUploadsEnabled();
 
   return (
     <main className="w-full min-h-screen py-10 sm:py-16 px-4 flex flex-col items-center justify-between">
@@ -115,6 +117,8 @@ export default async function PublicFormPage({ params }: FormPageProps) {
         ) : (
           <PublicForm
             slug={normalized}
+            formId={form.id}
+            fileUploadsEnabled={fileUploadsEnabled}
             title={form.title}
             description={form.description}
             fields={fields}

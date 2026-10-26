@@ -36,6 +36,8 @@ interface PublishingCardProps {
   fieldsCount: number;
   origin: string;
   submissionsCount?: number;
+  hasFileField?: boolean;
+  fileUploadsEnabled?: boolean;
 }
 
 export function PublishingCard({
@@ -43,6 +45,8 @@ export function PublishingCard({
   fieldsCount,
   origin,
   submissionsCount = 0,
+  hasFileField = false,
+  fileUploadsEnabled = false,
 }: PublishingCardProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -91,6 +95,17 @@ export function PublishingCard({
 
   return (
     <div className="rounded-xl border bg-card p-4 sm:p-5 shadow-xs space-y-4">
+      {/* File Storage Warning (does not block publishing) */}
+      {hasFileField && !fileUploadsEnabled && (
+        <div className="flex items-start gap-2.5 p-3 rounded-lg border border-amber-500/30 bg-amber-500/10 text-xs text-amber-900 dark:text-amber-200">
+          <AlertTriangle className="size-4 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
+          <span>
+            This form has a file upload field, but file storage is not configured,
+            so the field will be hidden on the public form.
+          </span>
+        </div>
+      )}
+
       {/* Top row: Status header + Action buttons */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">

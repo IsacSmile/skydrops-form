@@ -1,6 +1,8 @@
 /**
  * Application feature flags.
- * FILE_UPLOADS_ENABLED: While false, fields of type 'file' are NOT rendered on the public
- * form and are ignored by server validation. C7 will flip this flag.
+ * isFileUploadsEnabled(): Returns true only when process.env.BLOB_READ_WRITE_TOKEN is set and non-empty.
  */
-export const FILE_UPLOADS_ENABLED = false;
+export function isFileUploadsEnabled(): boolean {
+  const token = process.env.BLOB_READ_WRITE_TOKEN?.trim();
+  return Boolean(token && token.length > 0);
+}
